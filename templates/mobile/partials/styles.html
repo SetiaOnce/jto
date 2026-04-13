@@ -1,0 +1,28 @@
+{% load static %}
+<!--begin::Fonts(mandatory for all pages)-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>
+<!--end::Fonts-->
+<!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+
+<link rel="stylesheet" href="{% static 'dist/plugins/global/plugins.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/css/style.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/css/style.init.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/plugins/custom/datatables/datatables.bundle.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/plugins/bootstrap-select/css/bootstrap-select.min.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/plugins/Magnific-Popup/magnific-popup.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/plugins/summernote/summernote-lite.min.css' %}" />
+<link rel="stylesheet" href="{% static 'dist/plugins/dropify-master/css/dropify.min.css' %}" />
+
+<!--end::Global Stylesheets Bundle-->
+<!-- Base Route JS -->
+<script type="text/javascript">
+    const base_url = "{{ request.scheme }}://{{ request.get_host }}/";
+    var static_url = "{% static '' %}";
+</script>
+<script>
+    // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking)
+    if (window.top != window.self) {
+        window.top.location.replace(window.self.location.href);
+    }
+</script>

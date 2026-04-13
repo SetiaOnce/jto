@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ID">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="robots" content="index, follow, noodp, noydir" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>
+        {{ title|default:"Unknown"  }} - {{ app_name }}
+    </title>
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'dist/img/favicon/apple-touch-icon.png' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'dist/img/favicon/favicon-32x32.png' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dist/img/favicon/favicon-16x16.png' %}" />
+    <link rel="manifest" href="{% static 'dist/img/favicon/site.webmanifest' %}" />
+    <link rel="mask-icon" href="{% static 'dist/img/favicon/safari-pinned-tab.svg' %}" color="#26296e" />
+    <meta name="msapplication-TileColor" content="#061824" />
+    <meta name="theme-color" content="#26296e" />
+
+    {% include 'backend/partials/styles.html' %}
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_app_body"
+    data-kt-app-header-fixed="true"
+    data-kt-app-header-fixed-mobile="true"
+    data-kt-app-toolbar-enabled="true"
+    data-kt-sticky-app-header-sticky="on"
+    data-kt-app-header-sticky="on"
+    data-kt-scrolltop="on"
+    class="app-default">
+    <!--begin::Theme mode setup on page load-->
+    <script>
+        var defaultThemeMode = "light";
+        var themeMode;
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
+    </script>
+    <!--end::Theme mode setup on page load-->
+    <!--begin::App-->
+    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+        <!--begin::Page-->
+        <div class="app-page flex-column flex-column-fluid " id="kt_app_page">
+            {% include 'backend/partials/header.html' %}
+            <!--begin::Wrapper-->
+            <div class="app-wrapper flex-column flex-row-fluid " id="kt_app_wrapper">
+                <!--begin::Wrapper container-->
+                <div class="justify-content-center px-6">
+                    <!--begin::Main-->
+                    <div class="app-main flex-column flex-row-fluid " id="kt_app_main">
+                        <!--begin::Content wrapper-->
+                        <div class="d-flex flex-column flex-column-fluid">
+                            <!--begin::Content-->
+                            <div id="kt_app_content" class="app-content ">
+                                {% block mainContent %}
+                                {% endblock mainContent %}
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Content wrapper-->
+                    </div>
+                    <!--end:::Main-->
+                </div>
+                <!--end::Wrapper container-->
+            </div>
+            <!--end::Wrapper-->
+            {% include 'backend/partials/footer.html' %}
+        </div>
+        <!--end::Page-->
+    </div>
+    <!--end::App-->
+    {% include 'backend/partials/engage.html' %}
+    {% include 'backend/partials/scripts.html' %}
+    {% block script %}
+    {% endblock %}
+</body>
+<!--end::Body-->
+</html>

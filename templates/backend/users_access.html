@@ -1,0 +1,225 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="d-flex flex-column flex-lg-row">
+    <div class="d-none d-lg-flex flex-column flex-lg-row-auto w-100 w-lg-275px" data-kt-drawer="true" data-kt-drawer-name="inbox-aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_inbox_aside_toggle"> 
+        <!--begin::Sticky aside-->
+        <div class="card card-flush mb-0 shadow" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '100px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="100px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+            <!--begin::Aside content-->
+            <div class="card-body">
+                {% include 'backend/partials/site_menus.html' %}
+            </div>
+            <!--end::Aside content-->
+        </div>
+        <!--end::Sticky aside-->
+    </div>
+    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+        <!--begin::Card Form-->
+        <div class="card" id="card-formUser" style="display: none;">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <div class="card-title"></div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-bg-light btn-color-danger btn-active-light-danger" id="btn-closeFormUser" onclick="_closeCard('form_user');"><i class="fas fa-times fs-3 me-1"></i>Tutup</button>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <!--begin::Form-->
+            <form id="form-user" class="form" onsubmit="return false">
+                <input type="hidden" name="id" /><input type="hidden" name="oldRole_id" />
+                <!--begin::Card body-->
+                <div class="card-body">
+                    <!--begin::Row-->
+                    <div class="row g-5">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <div class="mb-3" id="iGroup-role">
+                                        <label class="col-form-label required fw-bold fs-6" for="role">Group Pengguna</label>
+                                        <select class="show-tick form-select-solid" data-width="100%" data-style="btn-sm btn-light" name="role" id="role" data-container="body" title="Pilih Level Pengguna ..."></select>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label required fw-bold fs-6" for="username">Username</label>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text"><i class="las la-user fs-1"></i></span>
+                                        <input type="text" class="form-control no-space" name="username" id="username" maxlength="50" placeholder="Isikan username ..." />
+                                    </div>
+                                    <div class="form-text">*) Tanpa spasi, contoh: <code>setiaonce123</code></div>
+                                    <!--end::Input group-->
+                                </div>
+                            </div>
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-pegawai">
+                                <label class="col-form-label required fw-bold fs-6" for="fid_sdm">Pegawai</label>
+                                <select class="show-tick form-select-solid" data-width="100%" data-style="btn-sm btn-light" data-live-search="true" name="fid_sdm" id="fid_sdm" data-container="body" title="Pilih Pegawai ..."></select>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row p-2" id="detailPegawai"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <div class="mb-3 password-group">
+                                <label class="col-form-label required fw-bold fs-6" for="pass_user">Password</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="password" class="form-control form-control-sm no-space password" name="pass_user" id="pass_user" minlength="6" placeholder="Isikan password user ..." />
+                                    <span class="input-group-text cursor-pointer btn-showPass" title="Sembunyikan password"><i class="las la-eye-slash fs-1"></i></span>
+                                </div>
+                                <div class="form-text">*) Tanpa spasi, Panjang karakter minimal 6 | contoh: <code>User.123456</code></div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="mb-3 password-group">
+                                <label class="col-form-label required fw-bold fs-6" for="repass_user">Ulangi Password</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="password" class="form-control form-control-sm no-space password" name="repass_user" id="repass_user" minlength="6" placeholder="Ulangi password user ..." />
+                                    <span class="input-group-text cursor-pointer btn-showPass" title="Sembunyikan password"><i class="las la-eye-slash fs-1"></i></span>
+                                </div>
+                                <div class="form-text">*) Tanpa spasi, Panjang karakter minimal 6 | contoh: <code>User.123456</code></div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-isActive" style="display: none;">
+                                <label class="col-form-label fw-bold fs-6" for="is_active">Status User</label>
+                                <div class="form-check form-switch form-check-custom form-check-solid">
+                                    <input class="form-check-input cursor-pointer" type="checkbox" id="is_active" name="is_active" />
+                                    <label class="form-check-label" for="is_active"></label>
+                                </div>
+                                <div class="form-text">*) Jika <code>Tidak Aktif</code>, Pengguna tidak bisa login ke sistem</div>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                </div>
+                <!--end::Card body-->
+                <!--begin::Actions-->
+                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2" id="btn-reset" onclick="_clearFormUser();"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="btn-save">
+                        <span class="indicator-label">
+                            <i class="las la-save fs-3 me-1"></i>Simpan
+                        </span>
+                        <span class="indicator-progress">
+                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+                <!--end::Actions-->
+            </form>
+            <!--end::Form-->
+        </div>
+        <!--end::Card Form-->
+        <!--begin::List Table Data-->
+        <div class="card shadow" id="card-dtUsers">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="fw-bolder fs-2 text-gray-900">
+                        <i class="fas fa-th-list fs-2 text-gray-900 me-2"></i>Data Akses Pengguna
+                    </h3>
+                </div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-primary" id="btn-addUser" onclick="_addUser();"><i class="las la-plus fs-3 me-1"></i> Tambah</button>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mb-5">
+                    <div class="ms-auto">
+                        <!--begin::Search-->
+                        <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                            <select class="show-tick form-select-solid me-2" data-live-search="false" data-width="100%" data-style="btn-sm btn-light" name="filter_shift" id="filter_shift" data-container="body" title="Filter Shift ..."></select>
+                            <select class="show-tick form-select-solid me-2" data-live-search="false" data-width="100%" data-style="btn-sm btn-light" name="filter_regu" id="filter_regu" data-container="body" title="Filter Regu ..."></select>
+                            <select class="show-tick form-select-solid me-2" data-live-search="false" data-width="100%" data-style="btn-sm btn-light" name="filter_roles" id="filter_roles" data-container="body" title="Filter Level ..."></select>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="las la-search fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm form-control form-control-sm-sm" name="search-dtUsers" id="search-dtUsers" placeholder="Pencarian..." />
+                                <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchDtUsers" style="display: none;">
+                                    <i class="las la-times fs-3"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!--end::Search-->
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-rounded align-middle table-row-bordered border" id="dt-users">
+                        <thead>
+                            <tr class="fw-bolder text-uppercase bg-light">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Active</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Group</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Pengguna</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Regu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Shift</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">NIP</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        
+                        </tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::List Table Data-->
+<!--begin::Modal Form Dimentions-->
+<div class="modal fade" tabindex="-1" id="mdl-resetPassword" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="bi bi-pencil-square fs-2 me-2 text-dark align-middle"></i>Reset Password User</h3>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-md fs-2x"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+                <form id="form-resetPassword" class="form" onsubmit="return false">
+                    <input type="hidden" name="is_resetpass" value="1">
+                    <input type="hidden" name="idp_user" value="1">
+                    <div class="row mt-n20px">
+                        <label class="col-form-label required fs-8" for="new_password">
+                            <span>Password Baru</span>
+                        </label>
+                        <div class="input-group flex-grow-1 mt-n10px">
+                            <input type="text" class="form-control no-space number-only bg-light" name="new_password" id="new_password" maxlength="100" placeholder="Masukkan Password Baru ...">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-light btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btn-saveResetPassword">
+                    <span class="indicator-label">
+                        <i class="las la-save fs-3 me-1"></i> Simpan
+                    </span>
+                    <span class="indicator-progress">
+                        Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Form Dimentions-->
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/users_access.init.js' %}"></script>
+{% endblock %}

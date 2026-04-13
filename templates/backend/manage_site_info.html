@@ -1,0 +1,748 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="d-flex flex-column flex-lg-row">
+    <div class="d-none d-lg-flex flex-column flex-lg-row-auto w-100 w-lg-275px" data-kt-drawer="true" data-kt-drawer-name="inbox-aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_inbox_aside_toggle"> 
+        <!--begin::Sticky aside-->
+        <div class="card card-flush mb-0 shadow" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '100px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="100px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+            <!--begin::Aside content-->
+            <div class="card-body">
+                {% include 'backend/partials/site_menus.html' %}
+            </div>
+            <!--end::Aside content-->
+        </div>
+        <!--end::Sticky aside-->
+    </div>
+    <!--begin::Content-->
+    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+        <!--begin:::Tabs-->
+        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8" id="institutionTabMenu">
+            <li class="nav-item">
+                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#profileUppkb-tab">Profil UPPKB</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#profileAplikasi-tab">Profil Aplikasi</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kejaksaan-tab">Kejaksaan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#pengadilan-tab">Pengadilan</a>
+            </li>
+        </ul>
+        <!--end:::Tabs-->
+        <!--begin:::Tab content-->
+        <div class="tab-content" id="institutionTabContent">
+            <!--begin:::Head Of Center Tab panel-->
+            <div class="tab-pane fade show active" id="profileUppkb-tab" role="tabpanel">
+                <div class="card shadow card-api">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-tools text-dark fs-2 me-3"></i>URL Sinkronisasi Data Pusat</h3>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-primary ms-3" onclick="openFormModal('api')"><i class="la la-edit fs-3 me-1"></i>Ubah URL API</a>
+                        </div>
+                        <div class="row body-content">
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Sinkronisasi URL</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-4 card-api-balai">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-tools text-dark fs-2 me-3"></i>URL Sinkronisasi Data Balai</h3>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-primary ms-3" onclick="openFormModal('api-balai')"><i class="la la-edit fs-3 me-1"></i>Ubah URL API</a>
+                        </div>
+                        <div class="row body-content">
+                            <div class="row d-flex justify-content-between">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Sinkronisasi URL</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-4 card-uppkb">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-home text-dark fs-2 me-3"></i>UPPKB</h3>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-primary ms-3" onclick="openFormModal('uppkb')"><i class="la la-edit fs-3 me-1"></i>Ubah UPPKB</a>
+                        </div>
+                        <div class="row body-content">
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start"> 
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Nama UPPKB</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Kode UPPKB</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Alamat UPPKB</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Koordinat</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-4 card-wilayah">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-map-marker-alt text-dark fs-2 me-3"></i>Wilayah</h3>
+                        </div>
+                        <div class="row body-content">
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start"> 
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Provinsi</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Kota /Kabupaten</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">BPTD</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-4 card-korsatpel">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-user text-dark fs-2 me-3"></i>Wasatpel</h3>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-primary ms-3" onclick="openFormModal('korsatpel')"><i class="la la-edit fs-3 me-1"></i>Ubah Wasatpel</a>
+                        </div>
+                        <div class="row body-content">
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start"> 
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Nama</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">NIP</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Pangkat / Golongan</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-4 card-toleransi">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-globe text-dark fs-2 me-3"></i>Toleransi</h3>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-primary ms-3" onclick="openFormModal('toleransi')"><i class="la la-edit fs-3 me-1"></i>Ubah Toleransi</a>
+                        </div>
+                        <div class="row body-content">
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start"> 
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Toleransi Berat (%)</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Toleransi Panjang (mm)</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"><strong></strong></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Toleransi Lebar (mm)</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-between border-bottom">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 text-gray-500">Toleransi Tinggi (mm)</label>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <span class="fs-5"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Head Of Center Tab panel-->
+            <!--begin:::Profile Tab panel-->
+            <div class="tab-pane fade" id="profileAplikasi-tab" role="tabpanel">
+                <!--begin::Profile Card-->
+                <div class="card mb-5 mb-xl-10 shadow">
+                    <!--begin::Edit-->
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                            <h3 class="fw-bolder m-0 mb-3"><i class="las la-pen text-dark fs-2 me-3"></i>Edit Informasi Aplikasi</h3>
+                        </div>
+                        <!--begin::Form-->
+                        <form id="form-editSiteInfo" class="form" onsubmit="return false">
+                            <input type="hidden" name="is_update_siteinfo" value="1">
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="name">Nama Instansi</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="name" id="name" class="form-control mb-3 mb-lg-0" maxlength="255" placeholder="Isikan nama situs ..." />
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="short_name">Nama Alias/ Nama Pendek</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="short_name" id="short_name" class="form-control mb-3 mb-lg-0" maxlength="60" placeholder="Isikan nama alias / nama pendek situs ..." />
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="description">Deskripsi</label>
+                                <div class="col-lg-8">
+                                    <textarea name="description" id="description" class="form-control mb-3 mb-lg-0" rows="2" maxlength="160" placeholder="Isikan deskripsi singkat situs ..."></textarea>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="address">Alamat Lengkap</label>
+                                <div class="col-lg-8">
+                                    <textarea name="address" id="address" class="form-control mb-3 mb-lg-0" rows="2" maxlength="160" placeholder="Isikan alamat instansi ..."></textarea>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="copyright">Copyright</label>
+                                <div class="col-lg-8">
+                                    <textarea name="copyright" id="copyright" class="form-control mb-3 mb-lg-0 summernote"></textarea>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6">Background</label>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <!-- <div class="col-md-6">
+                                            <div class="mb-3" id="iGroup-login_logo">
+                                                <label class="col-form-label required fw-bold fs-6" for="login_logo">Login Logo</label>
+                                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="login_logo" name="login_logo" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                                            </div>
+                                        </div> -->
+                                        <div class="col-md-12">
+                                            <!--begin::Input group-->
+                                            <div class="mb-3" id="iGroup-login_bg">
+                                                <label class="col-form-label required fw-bold fs-6" for="login_bg">Login Background</label>
+                                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="login_bg" name="login_bg" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6">Logo Header Backend</label>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3" id="iGroup-headbackend_logo">
+                                                <label class="col-form-label required fw-bold fs-6" for="headbackend_logo">Light Mode</label>
+                                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="headbackend_logo" name="headbackend_logo" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 dropify-custom-dark" id="iGroup-headbackend_logo_dark">
+                                                <label class="col-form-label required fw-bold fs-6" for="headbackend_logo_dark">Dark Mode</label>
+                                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="headbackend_logo_dark" name="headbackend_logo_dark" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6">Icon Header Backend</label>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3" id="iGroup-headbackend_icon">
+                                                <label class="col-form-label required fw-bold fs-6" for="headbackend_icon">Light Mode</label>
+                                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="headbackend_icon" name="headbackend_icon" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 dropify-custom-dark" id="iGroup-headbackend_icon_dark">
+                                                <label class="col-form-label required fw-bold fs-6" for="headbackend_icon_dark">Dark Mode</label>
+                                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="headbackend_icon_dark" name="headbackend_icon_dark" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="row mt-5">
+                                <div class="col-lg-12 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2" id="btn-resetFormSiteInfo"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                                    <button type="button" class="btn btn-sm btn-primary" id="btn-saveSiteInfo">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Simpan
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Edit-->
+                </div>
+                <!--end::Profile-->
+            </div>
+            <!--end::Profile Tab panel-->
+            <!--begin:::Kejaksaan Tab panel-->
+            <div class="tab-pane fade" id="kejaksaan-tab" role="tabpanel">
+                <!--begin::Card Form-->
+                <div class="card" id="card-form-kejaksaan" style="display: none;">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <div class="card-title"></div>
+                        <div class="card-toolbar">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-bg-light btn-color-danger btn-active-light-danger" id="btn-closeFormUser" onclick="_closeCardKejaksaan('form_data');"><i class="fas fa-times fs-3 me-1"></i>Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Form-->
+                    <form id="form-data-kejaksaan" class="form" onsubmit="return false">
+                        <input type="hidden" name="id_kejaksaan"/>
+                        <input type="hidden" name="is_form_kejaksaan" value="1"/>
+                        <!--begin::Card body-->
+                        <div class="card-body">
+                            <!--begin::Row-->
+                            <div class="row g-5">
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label required fw-bold fs-6" for="kode_kejaksaan">Kode Kejaksaan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control no-space" name="kode_kejaksaan" id="kode_kejaksaan" maxlength="10" placeholder="Isikan kode kejaksaan ..." />
+                                    </div>
+                                    <span>*) Misal : KJN1</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label fw-bold fs-6" for="nama_kejaksaan">Nama Kejaksaan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="nama_kejaksaan" id="nama_kejaksaan" maxlength="250" placeholder="Isikan nama kejaksaan ..." />
+                                    </div>
+                                    <span>*) Misal : Kejaksaan Tinggi Jawa Barat</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label fw-bold fs-6" for="no_telepon">No.Telepon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="las la-phone fs-1"></i></span>
+                                        <input type="text" class="form-control no-space" name="no_telepon" id="no_telepon" maxlength="20" placeholder="Isikan nomor telepon ..." />
+                                    </div>
+                                    <span>*) Misal : 0810923923212</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label required fw-bold fs-6" for="tipe">Tipe</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control no-space" name="tipe" id="tipe" placeholder="Isikan tipe ..." />
+                                    </div>
+                                    <span>*) Misal : NEGERI</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-12">
+                                    <!--begin::Input group-->
+                                    <div class="mb-3">
+                                        <label class="col-form-label fw-bold fs-6" for="alamat">Alamat</label>
+                                        <textarea name="alamat" id="alamat" class="form-control mb-3 mb-lg-0" rows="2" maxlength="250" placeholder="Isikan alamat ..."></textarea>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-4">
+                                    <!--begin::Input group-->
+                                    <div class="mb-3" id="iGroup-isActiveKejaksaan" style="display: none;">
+                                        <label class="col-form-label fw-bold fs-6" for="is_active_kejaksaan">Status</label>
+                                        <div class="form-check form-switch form-check-custom form-check-solid">
+                                            <input class="form-check-input cursor-pointer" type="checkbox" id="is_active_kejaksaan" name="is_active_kejaksaan" />
+                                            <label class="form-check-label" for="is_active_kejaksaan"></label>
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                            </div>
+                            <!--end::Row-->
+                        </div>
+                        <!--end::Card body-->
+                        <!--begin::Actions-->
+                        <div class="card-footer d-flex justify-content-end py-6 px-9">
+                            <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2" id="btn-reset-kejaksaan" onclick="_clearFormDataKejaksaan();"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                            <button type="button" class="btn btn-sm btn-primary" id="btn-save-kejaksaan">
+                                <span class="indicator-label">
+                                    <i class="las la-save fs-3 me-1"></i>Simpan
+                                </span>
+                                <span class="indicator-progress">
+                                    Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </button>
+                        </div>
+                        <!--end::Actions-->
+                    </form>
+                    <!--end::Form-->
+                </div>
+                <!--end::Card Form-->
+                <!--begin::List Table Data-->
+                <div class="card shadow" id="card-data-kejaksaan">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="fw-bolder fs-2 text-gray-900">
+                                <i class="fas fa-th-list fs-2 text-gray-900 me-2"></i>Data Kejaksaan
+                            </h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-primary me-2" id="btn-addData" onclick="_addDataKejaksaan();"><i class="las la-plus fs-3 me-1"></i> Tambah</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <!--begin::Table-->
+                            <table class="table table-rounded align-middle table-row-bordered border nowrap" id="dt-kejaksaan">
+                                <thead>
+                                    <tr class="fw-bolder text-uppercase bg-light">
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Status</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Provinsi</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kota/Kab</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kode</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Nama</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Tipe</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Telpn</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Alamat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                
+                                </tbody>
+                            </table>
+                            <!--end::Table-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::List Table Data-->
+            </div>
+            <!--end::Kejaksaan Tab panel-->
+            <!--begin:::Pengadilan Tab panel-->
+            <div class="tab-pane fade" id="pengadilan-tab" role="tabpanel">
+                <!--begin::Card Form-->
+                <div class="card" id="card-form-pengadilan" style="display: none;">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <div class="card-title"></div>
+                        <div class="card-toolbar">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-bg-light btn-color-danger btn-active-light-danger" id="btn-closeFormUser" onclick="_closeCardPengadilan('form_data');"><i class="fas fa-times fs-3 me-1"></i>Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Form-->
+                    <form id="form-data-pengadilan" class="form" onsubmit="return false">
+                        <input type="hidden" name="id_pengadilan"/>
+                        <input type="hidden" name="is_form_pengadilan" value="1"/>
+                        <!--begin::Card body-->
+                        <div class="card-body">
+                            <!--begin::Row-->
+                            <div class="row g-5">
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label required fw-bold fs-6" for="kode_pengadilan">Kode Pengadilan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control no-space" name="kode_pengadilan" id="kode_pengadilan" maxlength="10" placeholder="Isikan kode pengadilan ..." />
+                                    </div>
+                                    <span>*) Misal : PNG1</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label fw-bold fs-6" for="nama_pengadilan">Nama Pengadilan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="nama_pengadilan" id="nama_pengadilan" maxlength="250" placeholder="Isikan nama pengadilan ..." />
+                                    </div>
+                                    <span>*) Misal : Pengadilan Tinggi Jawa Barat</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label fw-bold fs-6" for="no_telepon_pengadilan">No.Telepon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="las la-phone fs-1"></i></span>
+                                        <input type="text" class="form-control no-space" name="no_telepon_pengadilan" id="no_telepon_pengadilan" maxlength="20" placeholder="Isikan nomor telepon ..." />
+                                    </div>
+                                    <span>*) Misal : 0810923923212</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <div class="mb-3">
+                                        <label class="col-form-label fw-bold fs-6" for="alamat_pengadilan">Alamat</label>
+                                        <textarea name="alamat_pengadilan" id="alamat_pengadilan" class="form-control mb-3 mb-lg-0" rows="2" maxlength="250" placeholder="Isikan alamat ..."></textarea>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label fw-bold fs-6" for="koordinat_bujur">Koordinat Bujur</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="las la-phone fs-1"></i></span>
+                                        <input type="text" class="form-control no-space" name="koordinat_bujur" id="koordinat_bujur" maxlength="20" placeholder="Isikan koordinat bujur ..." />
+                                    </div>
+                                    <span>*) Misal : -7.405653388582179</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-6">
+                                    <!--begin::Input group-->
+                                    <label class="col-form-label fw-bold fs-6" for="koordinat_lintang">Koordinat lintang</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="las la-phone fs-1"></i></span>
+                                        <input type="text" class="form-control no-space" name="koordinat_lintang" id="koordinat_lintang" maxlength="20" placeholder="Isikan koordinat lintang ..." />
+                                    </div>
+                                    <span>*) Misal : 111.43256806931313</span>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-md-4">
+                                    <!--begin::Input group-->
+                                    <div class="mb-3" id="iGroup-isActivePengadilan" style="display: none;">
+                                        <label class="col-form-label fw-bold fs-6" for="is_active_pengadilan">Status</label>
+                                        <div class="form-check form-switch form-check-custom form-check-solid">
+                                            <input class="form-check-input cursor-pointer" type="checkbox" id="is_active_pengadilan" name="is_active_pengadilan" />
+                                            <label class="form-check-label" for="is_active_pengadilan"></label>
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                            </div>
+                            <!--end::Row-->
+                        </div>
+                        <!--end::Card body-->
+                        <!--begin::Actions-->
+                        <div class="card-footer d-flex justify-content-end py-6 px-9">
+                            <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2" id="btn-reset-pengadilan" onclick="_clearFormDataPengadilan();"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                            <button type="button" class="btn btn-sm btn-primary" id="btn-save-pengadilan">
+                                <span class="indicator-label">
+                                    <i class="las la-save fs-3 me-1"></i>Simpan
+                                </span>
+                                <span class="indicator-progress">
+                                    Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </button>
+                        </div>
+                        <!--end::Actions-->
+                    </form>
+                    <!--end::Form-->
+                </div>
+                <!--end::Card Form-->
+                <!--begin::List Table Data-->
+                <div class="card shadow" id="card-data-pengadilan">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="fw-bolder fs-2 text-gray-900">
+                                <i class="fas fa-th-list fs-2 text-gray-900 me-2"></i>Data Pengadilan
+                            </h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-primary me-2" id="btn-addData" onclick="_addDataPengadilan();"><i class="las la-plus fs-3 me-1"></i> Tambah</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <!--begin::Table-->
+                            <table class="table table-rounded align-middle table-row-bordered border nowrap" id="dt-pengadilan">
+                                <thead>
+                                    <tr class="fw-bolder text-uppercase bg-light">
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Status</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Provinsi</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kota/Kab</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kode</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Nama</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Telpn</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Koordinat Bujur</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Koordinat Lintang</th>
+                                        <th class="align-middle px-2 border-bottom-2 border-gray-200">Alamat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                
+                                </tbody>
+                            </table>
+                            <!--end::Table-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::List Table Data-->
+            </div>
+            <!--end::Pengadilan Tab panel-->
+        </div>
+        <!--end:::Tab content-->
+    </div>
+    <!--end::Content-->
+</div>
+<!--begin::Modal UPPKB-->
+<div class="modal fade" id="mdl-uppkb" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="la la-edit fs-1 text-dark align-middle"></i> Edit UPPKB</h3>
+            </div>
+            <div class="modal-body body-content">
+                <div class="row d-flex justify-content-between mt-5">
+                    <div class="col-md-6 d-flex justify-content-start">
+                        <label class="col-lg-4 col-form-label fw-bold fs-4">Pilih UPPKB Anda</label>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text"><i class="las la-search fs-3"></i></span>
+                            <input type="text" class="form-control form-control-sm form-control form-control-sm-sm" name="search-data" id="search-data" placeholder="Pencarian nama UPPKB..." />
+                            <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchData" style="display: none;">
+                                <i class="las la-times fs-3"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-rounded align-middle table-row-bordered border nowrap mt-4" id="dt-uppkb">
+                        <thead>
+                            <tr class="fw-bolder text-uppercase bg-light">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">BPTD</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kota/Kab</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kode</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Nama UPPKB</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Alamat</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Koordinat</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-light btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal UPPKB-->
+<!--begin::Modal Print Struk-->
+<div class="modal fade" id="mdl-form" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="ki-solid ki-delivery fs-1 text-dark align-middle"></i> Pratinjau Struk Penilangan</h3>
+            </div>
+            <div class="modal-body body-content">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-light btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btn-saveApi">
+                    <span class="indicator-label">
+                        <i class="las la-save fs-3 me-1"></i>Simpan
+                    </span>
+                    <span class="indicator-progress">
+                        Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Print Struk-->
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/manage_site_info.init.js' %}"></script>
+{% endblock %}

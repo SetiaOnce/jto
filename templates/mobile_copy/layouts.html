@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="robots" content="index, follow, noodp, noydir" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>
+        {{ title|default:"Unknown"  }} - {{ app_name }}
+    </title>
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'dist/img/favicon/apple-touch-icon.png' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'dist/img/favicon/favicon-32x32.png' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dist/img/favicon/favicon-16x16.png' %}" />
+    <link rel="manifest" href="{% static 'dist/img/favicon/site.webmanifest' %}" />
+    <link rel="mask-icon" href="{% static 'dist/img/favicon/safari-pinned-tab.svg' %}" color="#26296e" />
+    <meta name="msapplication-TileColor" content="#061824" />
+    <meta name="theme-color" content="#26296e" />
+
+    {% include 'mobile/partials/styles.html' %}
+</head>   
+<body class="body-bg2">
+	<div class="page-wrapper">
+		<!-- Preloader -->
+		<div id="preloader">
+			<div class="loader">
+				<div class="load-circle"><div></div><div></div></div>
+			</div>
+		</div>
+		<!-- Preloader end-->
+        {% block mainContent %}
+        {% endblock mainContent %}
+        {% include 'mobile/partials/menu.html' %}
+	</div>  
+<!--**********************************
+Scripts
+***********************************-->
+{% include 'mobile/partials/scripts.html' %}
+{% block script %}
+{% endblock %}
+</body>
+</html>

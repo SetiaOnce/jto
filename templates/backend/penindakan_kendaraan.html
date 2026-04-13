@@ -1,0 +1,647 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<form id="form-penindakan" class="form" onsubmit="return false">
+    <div class="row mt-n10px" id="section-penimbangan">
+        
+        <input id="scanInput" type="text"
+       autocomplete="off" autocapitalize="off" spellcheck="false"
+       style="position:fixed; left:-9999px; top:-9999px;" />
+        <div class="col-lg-3 col-xxl-3"> 
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2" id="iGroup-nomorKendaraan">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1">
+                    <i class="ki-solid ki-delivery fs-2 me-2 text-light align-middle"></i>Nomor Kendaraan <span class="badge badge-outline badge-light text-bolder" id="jml-kendaraan">0</span>
+                    <span class="badge badge-light cursor-pointer text-dark" style="float: right;" id="btn-check-history"><i class="bi bi-arrow-clockwise fs-4 me-1 text-dark align-middle"></i>Riwayat Penindakan</span>
+                </div>
+                <div class="p-4">
+                    <div class="row">
+                        <select class="form-select form-select-sm" name="no_kendaraan" id="no_kendaraan"></select>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>INFORMASI PENIMBANGAN</div>
+                <div class="card-body">
+                    <input type="hidden" name="idp_penimbangan">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 mt-n30px">
+                            <div class="row" id="iGroup-kepemilikan">
+                                <label class="col-form-label required fs-8" for="kepemilikan_id">
+                                    <span>Kepemilikan</span>
+                                </label>
+                                <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="kepemilikan_id" id="kepemilikan_id" data-container="body" title="-" disabled></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 mt-n30px">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="nama_pemilik">
+                                    <span>Nama Pemilik</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="nama_pemilik" id="nama_pemilik" maxlength="100" placeholder="" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="row">   
+                                <label class="col-form-label required fs-8" for="alamat_pemilik">
+                                    <span>Alamat Pemilik</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <textarea name="alamat_pemilik" id="alamat_pemilik" rows="2" cols="2" class="form-control form-control-sm text-uppercase" placeholder="" disabled></textarea>
+                                </div>
+                            </div>
+                            <div class="row" id="iGroup-jenisKendaraan">
+                                <label class="col-form-label required fs-8" for="jenis_kendaraan_id">
+                                    <span>Jenis Kendaraan</span>
+                                </label>
+                                <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="jenis_kendaraan_id" id="jenis_kendaraan_id" data-container="body" title="-" disabled></select>
+                                </div>
+                            </div>
+                            <div class="row" id="iGroup-sumbu">
+                                <label class="col-form-label required fs-8" for="sumbu_id">
+                                    <span>Jumlah Sumbu</span>
+                                </label>
+                                <select class="show-tick form-select-solid me-2 dt-filter mt-n10px selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="sumbu_id" id="sumbu_id" data-container="body" title="-" disabled></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="no_uji">
+                                    <span>Nomor Uji</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space text-uppercase" name="no_uji" id="no_uji" maxlength="100" placeholder="" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="jbi">
+                                    <span>JBI</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space number-only" name="jbi" id="jbi" maxlength="100" placeholder="" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row" id="iGroup-masaBerlakuUji">
+                                <label class="col-form-label required fs-8" for="masa_berlaku_uji">
+                                    <span>Masa Berlaku Uji</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space masa_berlaku_uji" name="masa_berlaku_uji" id="masa_berlaku_uji" maxlength="100" placeholder="" disabled>
+                                    <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="ki-solid ki-calendar-2 fs-3"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="jbki">
+                                    <span>JBKI</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space number-only" name="jbki" id="jbki" maxlength="100" placeholder="" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="berat_timbang">
+                                    <span>Berat Timbang</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space" name="berat_timbang" id="berat_timbang" maxlength="100" disabled>
+                                    <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        Kg
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="kelebihan_berat">
+                                    <span>Berat Lebih</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space" name="kelebihan_berat" id="kelebihan_berat" maxlength="100" disabled>
+                                    <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        Kg
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="persentase_kelebihan">
+                                    <span>Persen Lebih</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space" name="persentase_kelebihan" id="persentase_kelebihan" maxlength="100" disabled>
+                                    <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        %
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>INFORMASI KOMODITI & ASAL TUJUAN</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 mt-n30px">
+                            <div class="row" id="iGroup-komoditi">
+                                <label class="col-form-label fs-8" for="komoditi_id">
+                                    <span>Komoditi</span>
+                                </label>
+                                <select class="form-select form-select-sm" name="komoditi_id" id="komoditi_id" disabled></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label fs-8" for="asal_kota_id">
+                                    <span>Asal Kendaraan</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <select class="form-select form-select-sm" name="asal_kota_id" id="asal_kota_id" disabled></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label fs-8" for="tujuan_kota_id">
+                                    <span>Tujuan Kendaraan</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <select class="form-select form-select-sm" name="tujuan_kota_id" id="tujuan_kota_id" disabled></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+        </div>
+        <div class="col-lg-9 col-xxl-9"> 
+            <div class="row">
+                <div class="col-md-7">
+                    <!--begin::Card-->
+                    <div class="card card-fluit shadow mb-2">
+                        <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="bi bi-aspect-ratio fs-2 me-2 text-light align-middle"></i>INFORMASI PENGUKURAN DIMENSI</div>
+                        <div class="p-4">
+                        <!--begin::Table-->
+                        <table class="table table-rounded align-middle nowrap" id="dimentions-results">
+                            <thead>
+                                <tr class="fw-bolder text-uppercase bg-light">
+                                    <th class="align-middle px-2 fs-7 text-center"></th>
+                                    <th class="align-middle px-2 fs-7 border-bottom-2 border-gray-200 text-center">DI IZINKAN</th>
+                                    <th class="align-middle px-2 fs-7 border-bottom-2 border-gray-200 text-center">PENGUKURAN</th>
+                                    <th class="align-middle px-2 fs-7 border-bottom-2 border-gray-200 text-center">TOLERANSI</th>
+                                    <th class="align-middle px-2 fs-7 border-bottom-2 border-gray-200 text-center text-danger">KELEBIHAN</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody-of-table">
+                                <tr>
+                                    <td class="fw-bolder text-uppercase bg-light fs-7 align-middle px-2 border-right-2 border-gray-200 text-center">PANJANG</td>
+                                    <td class="text-center fs-8 text-bolder panjang-kendaraan">0 mm</td>
+                                    <td class="text-center fs-8 text-bolder panjang-pengukuran">0 mm</td>
+                                    <td class="text-center fs-8 text-bolder panjang-toleransi">0 mm</td>
+                                    <td class="text-center text-danger fs-8 text-bolder panjang-kelebihan">0 mm</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bolder text-uppercase bg-light fs-7 align-middle px-2 border-right-2 border-gray-200 text-center">LEBAR</td>
+                                    <td class="text-center fs-8 text-bolder lebar-kendaraan">0 mm</td>
+                                    <td class="text-center fs-8 text-bolder lebar-pengukuran">0 mm</td>
+                                    <td class="text-center fs-8 text-bolder lebar-toleransi">0 mm</td>
+                                    <td class="text-center text-danger fs-8 text-bolder lebar-kelebihan">0 mm</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bolder text-uppercase bg-light fs-7 align-middle px-2 border-right-2 border-gray-200 text-center">TINGGI</td>
+                                    <td class="text-center fs-8 text-bolder tinggi-kendaraan">0 mm</td>
+                                    <td class="text-center fs-8 text-bolder tinggi-pengukuran">0 mm</td>
+                                    <td class="text-center fs-8 text-bolder tinggi-toleransi">0 mm</td>
+                                    <td class="text-center text-danger fs-8 text-bolder tinggi-kelebihan">0 mm</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--end::Table-->
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                    <!--begin::Card-->
+                    <div class="card card-fluit shadow mb-2">
+                        <div class="bg-danger rounded-top fw-semibold text-light p-1"><i class="bi bi-exclamation-circle-fill fs-2 me-2 text-light align-middle"></i>PELANGGARAN</div>
+                        <div class="row p-3 mt-1">
+                            <select class="form-select form-select-sm" data-control="select2" data-close-on-select="false" multiple="multiple" name="pelanggaran_id" id="pelanggaran_id" disabled></select>
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                    <!--begin::Card-->
+                    <div class="card card-fluit shadow mb-2">
+                        <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>PENGEMUDI</div>
+                        <div class="card-body">
+                            <div class="row mt-n30px">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="nama_pengemudi">
+                                            <span>Nama Pengemudi</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" name="nama_pengemudi" id="nama_pengemudi" maxlength="100" placeholder="-">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8 col-md-8">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="alamat_pengemudi">
+                                            <span>Alamat Pengemudi</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" name="alamat_pengemudi" id="alamat_pengemudi" maxlength="150" placeholder="-">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="jenis_kelamin_pengemudi">
+                                            <span>Jenis Kelamin</span>
+                                        </label>
+                                        <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                            <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="jenis_kelamin_pengemudi" id="jenis_kelamin_pengemudi" data-container="body" title="-">
+                                                <option value="LAKI-LAKI">LAKI-LAKI</option>
+                                                <option value="PEREMPUAN">PEREMPUAN</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="umur_pengemudi">
+                                            <span>Umur Pengemudi</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm number-only" name="umur_pengemudi" id="umur_pengemudi" maxlength="3" placeholder="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="no_telepon">
+                                            <span>No Telepon</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm number-only" name="no_telepon" id="no_telepon" maxlength="100" placeholder="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="warna_kendaraan">
+                                            <span>Warna Kendaraan</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" name="warna_kendaraan" id="warna_kendaraan" maxlength="100" placeholder="-">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="gol_sim_id">
+                                            <span>Golongan SIM/Identitas</span>
+                                        </label>
+                                        <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                            <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="gol_sim_id" id="gol_sim_id" data-container="body" title="-"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="no_identitas">
+                                            <span>No SIM/Identitas</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm number-only" name="no_identitas" id="no_identitas" maxlength="100" placeholder="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                </div>
+                <div class="col-md-5">
+                    <!--begin::Card-->
+                    <div class="card card-fluit shadow mb-2">
+                        <div class=" bg-primary rounded-top fw-semibold text-light p-1">
+                            <i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>PENINDAKAN
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 mt-n30px">
+                                    <div class="bg-danger rounded fw-semibold text-light p-1 mt-4 px-2" id="tilang_information" style="display: none;"><i class="bi bi-exclamation-circle-fill fs-4 me-2 text-light align-middle"></i>Kendaraan sudah di beri peringatan 2 kali, dan selanjutnya harus di beri tindakan tilang!</div>
+                                    <div class="row" id="iGroup-komoditi">
+                                        <label class="col-form-label fs-8 required" for="sanksi_id">
+                                            <span>Sanksi</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <select class="form-select form-select-sm" data-control="select2" data-close-on-select="true" data-allow-clear="true" name="sanksi_id" id="sanksi_id" readonly></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-form-label fs-8" for="pasal_id">
+                                            <span>Pasal</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <select class="form-select form-select-sm" data-control="select2" data-close-on-select="false" data-allow-clear="true" multiple="multiple" name="pasal_id" id="pasal_id" readonly></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="hiddenFormTilang" style="display: none;">
+                                    <div class="col-sm-12 col-md-12">
+                                        <div class="row">
+                                            <label class="col-form-label fs-8" for="sub_sanksi_id">
+                                                <span>Sanksi Tambahan</span>
+                                            </label>
+                                            <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                                <select class="form-select form-select-sm" data-control="select2" data-close-on-select="false" data-allow-clear="true" multiple="multiple" name="sub_sanksi_id" id="sub_sanksi_id" readonly></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-form-label fs-8" for="sitaan_id">
+                                                <span>Sitaan</span>
+                                            </label>
+                                            <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                                <select class="form-select form-select-sm" data-control="select2" data-close-on-select="false" data-allow-clear="true" multiple="multiple" name="sitaan_id" id="sitaan_id" readonly></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="row">
+                                            <label class="col-form-label fs-8" for="tanggal_sidang">
+                                                <span>Tanggal Sidang</span>
+                                            </label>
+                                            <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                                <input type="text" class="form-control form-control-sm no-space tanggal_sidang" name="tanggal_sidang" id="tanggal_sidang" maxlength="100" placeholder="dd/mm/yyyy">
+                                                <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <i class="ki-solid ki-calendar-2 fs-3"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="row">
+                                            <label class="col-form-label fs-8" for="jam_sidang">
+                                                <span>Jam Sidang</span>
+                                            </label>
+                                            <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                                <input type="text" class="form-control form-control-sm no-space jam_sidang" name="jam_sidang" id="jam_sidang" maxlength="100" placeholder="H:i">
+                                                <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <i class="ki-solid ki-calendar-2 fs-3"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12">               
+                                        <div class="row">
+                                            <label class="col-form-label fs-8" for="pengadilan_id">
+                                                <span>Pengadilan</span>
+                                            </label>
+                                            <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                                <select class="form-select form-select-sm" name="pengadilan_id" id="pengadilan_id" title="-"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-form-label fs-8" for="kejaksaan_id">
+                                                <span>Kejaksaan</span>
+                                            </label>
+                                            <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                                <select class="form-select form-select-sm" name="kejaksaan_id" id="kejaksaan_id" title="-"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12  col-md-12">
+                                    <label class="col-form-label required fs-8" for="kat_jenis_kendaraan">
+                                        <span>Kat. Jenis Kendaraan </span>
+                                    </label>
+                                    <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                        {% comment %} <select class="form-select form-select-sm" data-control="select2" data-close-on-select="true" data-allow-clear="true" name="kat_jenis_kendaraan" id="kat_jenis_kendaraan" readonly></select> {% endcomment %}
+                                        <select class="form-select form-select-sm" name="kat_jenis_kendaraan" id="kat_jenis_kendaraan" title="-"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="row" id="iGroup-PpnsId">
+                                        <label class="col-form-label required fs-8" for="ppns_id">
+                                            <span>Nama PPNS</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="hidden" name="nama_ppns" id="nama_ppns" readonly>
+                                            <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="ppns_id" id="ppns_id" data-container="body" title="-"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="row">
+                                        <label class="col-form-label required fs-8" for="no_skep">
+                                            <span>Nomor SKEP</span>
+                                        </label>
+                                        <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                            <input type="text" class="form-control form-control-sm no-space" name="no_skep" id="no_skep" maxlength="100" placeholder="-" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-form-label fs-8">Keterangan Penindakan</label>
+                                    <div style="display: flex; gap: 12px; width: 100%;">
+                                        <div style="flex: 0 0 35%;">
+                                        <label style="font-size: 12px; font-weight: 500; display: block; margin-bottom: 6px; color: #666;">Pilih opsi</label>
+                                        <select id="choice_segment" class="form-control form-control-sm selectpicker" style="text-transform: uppercase;" onchange="applyChoice(this.value)" data-width="200px">
+                                            <option value="">-- Pilih --</option>
+                                            <option value="PENANDAAN KELEBIHAN DIMENSI">PENANDAAN KELEBIHAN DIMENSI</option>
+                                            <option value="PENYESUAIAN TATA CARA MUAT">PENYESUAIAN TATA CARA MUAT</option>
+                                            <option value="PENYESUAIAN MUATAN / TRANSFER MUAT">PENYESUAIAN MUATAN / TRANSFER MUAT</option>
+                                            <option value="PENYESUAIAN PERSYARATAN TEKNIS">PENYESUAIAN PERSYARATAN TEKNIS</option>
+                                            <option value="PUTAR BALIK">PUTAR BALIK</option>
+                                            <option value="PENUNDAAN PERJALANAN">PENUNDAAN PERJALANAN</option>
+                                        </select>
+                                        </div>
+
+                                        <!-- Segment Typing (Kanan) -->
+                                        <div style="flex: 1;">
+                                            <label style="font-size: 12px; font-weight: 500; display: block; margin-bottom: 6px; color: #666;">Ketik atau edit</label>
+                                            <textarea name="keterangan_penindakan"  id="keterangan_penindakan"  rows="4" class="form-control form-control-sm text-uppercase" placeholder="Isi dengan - jika tidak ada"></textarea>
+                                            <small class="text-muted d-block mt-1">*) Isi dengan <code>-</code> jika tidak ada</small>
+                                        </div>
+                                    </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row mt-2">
+                            <!--begin::Actions-->
+                            <div class="card-footer d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-danger btn-active-danger-danger me-2 w-100" id="btn-reset" onclick="_clearFormPenindakan();"><i class="las la-redo-alt fs-3 me-2"></i>Batal</button>
+                                <button type="button" class="btn btn-sm btn-primary w-100" id="btn-save">
+                                    <span class="indicator-label">
+                                        <i class="las la-save fs-3 me-2"></i> Simpan
+                                    </span>
+                                    <span class="indicator-progress">
+                                        Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--begin::Modal Penimbangan-->
+<div class="modal fade" tabindex="-1" id="mdl-penimbangan" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="ki-duotone ki-tablet-text-down  fs-1 me-1 text-dark align-middle">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                        <span class="path4"></span>
+                    </i>
+                    List Kendaraan Sudah ditindak
+                </h3>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-md fs-2x"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mb-5">
+                    <div class="ms-auto">
+                        <!--begin::Search-->
+                        <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                            <div class="input-group input-group-sm flex-grow-1 me-2">
+                                <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="filter_sanksi" id="filter_sanksi" data-container="body" title="Filter sanksi"></select>
+                            </div>
+                            <div class="input-group input-group-sm flex-grow-1 me-2">
+                                <input type="text" class="form-control form-control-sm no-space" name="filter_date" id="filter_date" maxlength="100" placeholder="dd/mm/yyyy" value="{{ today }}">
+                                <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                    <i class="ki-solid ki-calendar-2 fs-3"></i>
+                                </span>
+                            </div>
+                            <div class="input-group input-group-sm me-2">
+                                <span class="input-group-text cursor-pointer text-hover-primary" id="click-searchDt"><i class="las la-search fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm" name="search-dt" id="search-dt" placeholder="Pencarian..." autofocus/>
+                                <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchDt" style="display: none;">
+                                    <i class="las la-times fs-3"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!--end::Search-->
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-rounded align-middle table-row-bordered border" id="dt-penindakanKendaraan">
+                        <thead class="bg-light">
+                            <tr class="fw-bolder text-uppercase bg-light fs-8">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Ken</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Waktu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Uji</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Pemilik</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200">Pelanggaran</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Sanksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody-of-table fs-8"></tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Penimbangan-->
+<!--begin::Modal Print Struk-->
+<div class="modal fade" id="mdl-printStruk" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body body-content" id="print-struk-area">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-light btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="_printStruk('N', 0)"><i class="ki-solid ki-printer fs-3"></i> Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Print Struk-->
+<!--begin::Modal History-->
+<div class="modal fade" tabindex="-1" id="mdl-history" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="ki-duotone ki-notification-bing fs-1 me-1 text-dark align-middle">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                    </i>
+                    <span class='heade-content'>Riwayat Penindakan Kendaraan Bermotor</span>
+                </h3>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-md fs-2x"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-between body-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal History-->
+<!--begin::Modal Print Surat Tilang-->
+<div class="modal fade" id="print-surat-tilang" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body body-content"  id="print-tilang-area">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-light btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="_printSuratTilang('N', 0)"><i class="ki-solid ki-printer fs-3"></i> Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Print Surat Tilang-->
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/plugins/qrcode-generator/qrcode.min.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/penindakan_kendaraan.init.js' %}"></script>
+{% endblock %}

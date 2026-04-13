@@ -1,0 +1,305 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="d-flex flex-column flex-lg-row">
+    <div class="d-none d-lg-flex flex-column flex-lg-row-auto w-100 w-lg-275px" data-kt-drawer="true" data-kt-drawer-name="inbox-aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_inbox_aside_toggle"> 
+        <!--begin::Sticky aside-->
+        <div class="card card-flush mb-0 shadow" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '100px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="100px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+            <!--begin::Aside content-->
+            <div class="card-body">
+                {% include 'backend/partials/site_menus.html' %}
+            </div>
+            <!--end::Aside content-->
+        </div>
+        <!--end::Sticky aside-->
+    </div>
+    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+        <!--begin::Card Form-->
+        <div class="card" id="card-form" style="display: none;">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <div class="card-title"></div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-bg-light btn-color-danger btn-active-light-danger" id="btn-closeFormUser" onclick="_closeCard('form_data');"><i class="fas fa-times fs-3 me-1"></i>Tutup</button>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <!--begin::Form-->
+            <form id="form-data" class="form" onsubmit="return false">
+                <input type="hidden" name="id"/>
+                <!--begin::Card body-->
+                <div class="card-body">
+                    <!--begin::Row-->
+                    <div class="row g-5">
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label required fw-bold fs-6" for="nama">Nama</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="nama" id="nama" maxlength="250" placeholder="Isikan nama ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label fw-bold fs-6" for="nip">NIP</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control no-space" name="nip" id="nip" maxlength="20" placeholder="Isikan NIP ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label fw-bold fs-6" for="no_telepon">No.Telepon</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="las la-phone fs-1"></i></span>
+                                <input type="text" class="form-control no-space" name="no_telepon" id="no_telepon" maxlength="20" placeholder="Isikan nomor telepon ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label required fw-bold fs-6" for="email">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="las la-envelope fs-1"></i></span>
+                                <input type="text" class="form-control no-space" name="email" id="email" placeholder="Isikan email ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-regu">
+                                <label class="col-form-label required fw-bold fs-6" for="regu_id">Regu</label>
+                                <select class="show-tick form-select-solid" data-width="100%" data-style="btn-sm btn-light" name="regu_id" id="regu_id" data-container="body" title="Pilih regu ..."></select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-shift">
+                                <label class="col-form-label required fw-bold fs-6" for="shift_id">Shift</label>
+                                <select class="show-tick form-select-solid" data-width="100%" data-style="btn-sm btn-light" name="shift_id" id="shift_id" data-container="body" title="Pilih shift ..."></select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label required fw-bold fs-6" for="pangkat">Pangkat</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="pangkat" id="pangkat" maxlength="50" placeholder="Isikan pangkat ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label required fw-bold fs-6" for="jabatan">Jabatan</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="jabatan" id="jabatan" maxlength="50" placeholder="Isikan jabatan ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-IsPpns">
+                                <label class="col-form-label  fw-bold fs-6" for="is_ppns">PPNS?</label>
+                                <select class="show-tick form-select-solid selectpicker" data-width="100%" data-style="btn-sm btn-light" name="is_ppns" id="is_ppns" data-container="body">
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label fw-bold fs-6" for="no_skep">No. SKEP</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="no_skep" id="no_skep" maxlength="20" placeholder="Isikan nomor SKEP ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-ttdppns" style="display: none;">
+                                <label class="col-form-label fw-bold fs-6" for="ttdppns">TTD PPNS</label>
+                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="ttdppns" name="ttdppns" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                <div class="form-text">*) Dimensi: <code>500pxl X 500pxl</code></div>
+                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-IsPenguji">
+                                <label class="col-form-label  fw-bold fs-6" for="is_penguji">Penguji?</label>
+                                <select class="show-tick form-select-solid selectpicker" data-width="100%" data-style="btn-sm btn-light" name="is_penguji" id="is_penguji" data-container="body">
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-6">
+                            <!--begin::Input group-->
+                            <label class="col-form-label fw-bold fs-6" for="no_reg_penguji">No. Reg Penguji</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="no_reg_penguji" id="no_reg_penguji" maxlength="20" placeholder="Isikan nomor Reg Penguji ..." />
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-4">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-IsKorsatpel">
+                                <label class="col-form-label  fw-bold fs-6" for="is_korsatpel">Wasatpel?</label>
+                                <select class="show-tick form-select-solid selectpicker" data-width="100%" data-style="btn-sm btn-light" name="is_korsatpel" id="is_korsatpel" data-container="body">
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-4">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-IsKetuaRegu">
+                                <label class="col-form-label fw-bold fs-6" for="is_danru">Ketua Regu?</label>
+                                <select class="show-tick form-select-solid selectpicker" data-width="100%" data-style="btn-sm btn-light" name="is_danru" id="is_danru" data-container="body">
+                                    <option value="0" class="fw-bold text-danger"> Tidak</option>
+                                    <option value="1" class="fw-bold text-success">Ya</option>
+                                </select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-4">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-isActive" style="display: none;">
+                                <label class="col-form-label fw-bold fs-6" for="is_active">Status</label>
+                                <div class="form-check form-switch form-check-custom form-check-solid">
+                                    <input class="form-check-input cursor-pointer" type="checkbox" id="is_active" name="is_active" />
+                                    <label class="form-check-label" for="is_active"></label>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-4">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-ttdwasatpel" style="display: none;">
+                                <label class="col-form-label fw-bold fs-6" for="ttdwasatpel">TTD Wasatpel</label>
+                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="ttdwasatpel" name="ttdwasatpel" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                <div class="form-text">*) Dimensi: <code>500pxl X 500pxl</code></div>
+                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-4">
+                            <!--begin::Input group-->
+                            <div class="mb-3" id="iGroup-ttddandru" style="display: none;">
+                                <label class="col-form-label fw-bold fs-6" for="ttddandru">TTD Ketua Regu</label>
+                                <input type="file" class="dropify-upl mb-3 mb-lg-0" id="ttddandru" name="ttddandru" accept=".png, .jpg, .jpeg" data-show-remove="false" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" />
+                                <div class="form-text">*) Type file: <code>*.jpeg | *.jpeg | *.png</code></div>
+                                <div class="form-text">*) Dimensi: <code>500pxl X 500pxl</code></div>
+                                <div class="form-text">*) Max. size file: <code>2MB</code></div>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <div class="col-md-12">
+                            <!--begin::Input group-->
+                            <div class="mb-3">
+                                <label class="col-form-label fw-bold fs-6" for="keterangan">Keterangan</label>
+                                <textarea name="keterangan" id="keterangan" class="form-control mb-3 mb-lg-0" rows="2" maxlength="250" placeholder="Isikan keterangan ..."></textarea>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <!--end::Row-->
+                </div>
+                <!--end::Card body-->
+                <!--begin::Actions-->
+                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2" id="btn-reset" onclick="_clearFormData();"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="btn-save">
+                        <span class="indicator-label">
+                            <i class="las la-save fs-3 me-1"></i>Simpan
+                        </span>
+                        <span class="indicator-progress">
+                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+                <!--end::Actions-->
+            </form>
+            <!--end::Form-->
+        </div>
+        <!--end::Card Form-->
+        <!--begin::List Table Data-->
+        <div class="card shadow" id="card-data">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="fw-bolder fs-2 text-gray-900">
+                        <i class="fas fa-th-list fs-2 text-gray-900 me-2"></i>Data SDM
+                    </h3>
+                </div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-primary me-2" id="btn-addData" onclick="_addData();"><i class="las la-plus fs-3 me-1"></i> Tambah</button>
+                    </div>
+                    {% comment %} <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-success" id="btn-sincrone" onclick="_sincroneSdm();"><i class="ki-solid ki-arrows-loop  fs-3 me-1"></i> Sinkronisasi Data</button>
+                    </div> {% endcomment %}
+                </div>
+            </div>
+            <!--end::Card header-->
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mb-5">
+                    <div class="ms-auto">
+                        <!--begin::Search-->
+                        <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="las la-search fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm form-control form-control-sm-sm" name="search-data" id="search-data" placeholder="Pencarian..." />
+                                <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchData" style="display: none;">
+                                    <i class="las la-times fs-3"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!--end::Search-->
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-rounded align-middle table-row-bordered border nowrap" id="dt-sdm">
+                        <thead>
+                            <tr class="fw-bolder text-uppercase bg-light">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Status</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Regu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Nama</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Email</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Pangkat</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Jabatan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Ketua Regu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">PPNS</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Penguji</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Wasatpel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        
+                        </tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+            </div>
+        </div>
+        <!--end::List Table Data-->
+    </div>
+</div>
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/data_sdm.init.js' %}"></script>
+{% endblock %}

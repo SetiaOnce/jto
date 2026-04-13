@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Laporan Komoditi</title>
+
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 12mm 10mm;
+  }
+
+  body {
+    font-family: "Arial", "DejaVu Sans", sans-serif;
+    font-size: 9px;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* HEADER ----------------------------------------------------------- */
+  .header {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .header-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .header-table td {
+    vertical-align: middle;
+    padding: 5px;
+  }
+
+  .logo {
+    height: 55px;
+    display: block;
+  }
+
+  .judul-utama {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 3px 0;
+    text-transform: uppercase;
+    color: #2c3e50;
+  }
+
+  .judul-sub {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    color: #444;
+  }
+
+  .divider {
+    margin: 8px 0 12px 0;
+    border: 0;
+    border-top: 2px solid #ff8c2f;
+  }
+
+  /* INFO BOX --------------------------------------------------------- */
+.info-box {
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    background: #fefefe;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;   /* ↓ ke bawah */
+    gap: 5px;
+}
+
+
+  .info-label {
+    font-weight: 700;
+    margin-right: 4px;
+    color: #444;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .info-value {
+    font-weight: 600;
+    color: #333;
+  }
+
+  /* TABLE ----------------------------------------------------------- */
+.table-wrapper { width: 100%; }
+
+table.data{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;      /* penting untuk PDF */
+  background: #ffffff;
+  font-size: 9px;
+}
+
+table.data th,
+table.data td{
+  border: 1px solid #d9d9d9;
+  padding: 6px 6px;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+
+table.data thead th{
+  background: #ff7b1a;
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  border-color: #e06d12;    /* biar header border tetap orange */
+}
+
+/* zebra row (opsional, aman untuk PDF) */
+table.data tbody tr:nth-child(even){
+  background: #fafafa;
+}
+
+table.data td:first-child,
+table.data th:first-child{
+  padding-left: 10px !important;
+  padding-right: 6px !important;
+}
+
+/* baris judul kategori */
+.group-row td{
+  background: #f5f5f5;
+  font-weight: 700;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* total per kategori */
+.total-row td{
+  font-weight: 700;
+}
+
+/* grand total */
+.grand-row td{
+  font-weight: 800;
+}
+
+/* pemisah antar grup */
+.spacer td{
+  border: none;
+  height: 6px;
+  padding: 0;
+}
+
+  /* ALIGN CLASS */
+  .c { text-align: center; }
+  .r { text-align: right; }
+  .l { text-align: left; }
+  .nowrap { white-space: nowrap; }
+
+  /* BADGE ----------------------------------------------------------- */
+  .badge {
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 7.3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-danger { background: #d63031; color: #fff; }
+  .badge-success { background: #218c74; color: #fff; }
+
+  /* FOOTER ----------------------------------------------------------- */
+  .footer {
+      margin-top: 20px;
+      width: 100%;
+      page-break-inside: avoid;
+      position: relative;
+  }
+
+  /* kotak tanda tangan */
+  .signature-box {
+      float: right;
+      width: 260px;
+      text-align: center;
+      font-size: 9px;
+  }
+
+  /* gambar tanda tangan */
+  .signature-box img {
+      display: block;
+      margin: 6px auto 4px auto;
+      width: 180px;      /* 🔥 perbesar TTD */
+      height: 80px;
+      object-fit: contain;
+  }
+
+  /* sembunyikan kalau src kosong */
+  .signature-box img[src=""] {
+      display: none;
+  }
+
+  .signature-date {
+      font-weight: 700;
+      margin-bottom: 8px;
+  }
+
+  .signature-name {
+      font-weight: 700;
+      margin-top: 4px;
+  }
+
+  .signature-nip {
+      font-size: 8px;
+      color: #444;
+  }
+  .signature-box {
+    float: right;
+    width: 260px;
+    text-align: center;
+    font-size: 9px;
+}
+
+.signature-box img {
+    display: block;
+    margin: 6px auto 4px auto;
+    width: 100px;   /* perbesar */
+    height: 40px;
+    object-fit: contain;
+}
+</style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <table class="header-table">
+            <tr>
+                <td width="15%" style="text-align: left;">
+                <img class="logo" src="{{ gambar.logo1 }}" />
+                </td>
+
+                <td width="70%" align="center">
+                <div class="judul-utama">LAPORAN PENIMBANGAN</div>
+                <div class="judul-sub" style="padding-top: -10px;">{{ lokasi }}</div>
+                </td>
+
+                <td width="15%" style="text-align: right;">
+                <img class="logo" src="{{ gambar.logo2 }}" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr class="divider">
+    <!-- INFO BOX -->
+    <div class="info-box">
+        <div class="info-item"><span class="info-label">PERIODE:</span> <span class="info-value">{{ periode_name }}</span></div><br>
+    </div>
+    <!-- TABLE -->
+    <div class="table-wrapper">
+        <table class="data">
+            <thead>
+                <tr>
+                    <th class="c" style="width:10%;">NO</th>
+                    <th class="l" style="width:70%;">KOMODITI</th>
+                    <th class="c" style="width:20%;">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for g in data.groups %}
+                    <!-- Judul kategori: colspan 4 -->
+                    <tr class="group-row">
+                    <td class="l" colspan="3"><b>{{ g.title|upper }}</b></td>
+                    </tr>
+
+                    {% for it in g.items %}
+                    <tr>
+                    <!-- KEL: tampil hanya di baris pertama item (tanpa rowspan biar PDF aman) -->
+                    <!-- <td class="c">{% if forloop.first %}{{ g.code }}{% endif %}</td> -->
+                    <td class="c">{{ it.no }}</td>
+                    <td class="l">{{ it.name|upper }}</td>
+                    <td class="c"><b>{{ it.total }}</b></td>
+                    </tr>
+                    {% endfor %}
+
+                    <!-- Total per kategori -->
+                    <tr class="total-row">
+                    <td class="c" colspan="2"><b>TOTAL {{ g.title }}</b></td>
+                    <td class="c"><b>{{ g.total }}</b></td>
+                    </tr>
+
+                    <!-- spacer tipis -->
+                    <tr class="spacer"><td colspan="3"></td></tr>
+
+                {% endfor %}
+
+                <!-- Grand total -->
+                <tr class="grand-row">
+                    <td class="c" colspan="2"><b>GRAND TOTAL</b></td>
+                    <td class="c"><b>{{ data.grand_total }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="signature-box">
+          <div>{{ lokasi }}, {{ date_now }}</div>
+          <div style="margin-top:-3px; font-weight:bold;">
+              Wasatpel
+          </div>
+          <!-- Bungkus gambar, atur jarak rapat -->
+          <div style="padding-top:-75px; padding-bottom:-60px; text-align:center;">
+              <img src="{{ korsatpel.ttd }}" width="200">
+          </div>
+          <!-- Nama -->
+          <div style="font-weight:bold; margin-top:-4px;">
+              {{ korsatpel.nama }}
+          </div>
+          <!-- Pangkat -->
+          <div style="font-size:8px; margin-top:-2px;">
+              {{ korsatpel.pangkat }}
+          </div>
+          <!-- NIP -->
+          <div style="font-size:8px; margin-top:-2px;">
+              NIP. {{ korsatpel.nip }}
+          </div>
+      </div>
+    </div>
+</body>
+</html>

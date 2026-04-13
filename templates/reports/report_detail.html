@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Penimbangan Kendaraan</title>
+    <style>
+        @page {
+            size: 594mm 420mm;/* Mengatur ukuran halaman menjadi A4 dengan orientasi landscape */
+            margin: 20mm;      /* Margin halaman */
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        tr {
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+        table th {
+            background-color: #f1f1f2;
+        }
+        table td {
+            vertical-align: top;
+        }
+        .text-start { text-align: left;}
+        .text-center { text-align: center;}
+        .text-end { text-align: right;}
+    </style>
+</head>
+<body>
+    <table style="margin-top: 15px;">
+        <thead>
+            <tr>
+                <th class="text-center">No.</th>
+                <th class="text-start">Jam</th>
+                <th class="text-start">Tanggal</th>
+                <th class="text-center">No Kendaraan</th>
+                <th class="text-center">No Uji</th>
+                <th class="text-center">Exp.Uji</th>
+                <th class="text-center">Konf.Sumbu</th>
+                <th class="text-center">JBI</th>
+                <th class="text-start">Pemilik</th>
+                <th class="text-start">Asal</th>
+                <th class="text-start">Tujuan</th>
+                <th class="text-start">Muatan</th>
+                <th class="text-start">Panjang(Cm)</th>
+                <th class="text-start">Lebar(Cm)</th>
+                <th class="text-start">Tinggi(Cm)</th>
+                <th class="text-center">Berat (Kg)</th>
+                <th class="text-center">Lebih(Kg)</th>
+                <th class="text-center">Lebih(%)</th>
+                <th class="text-center">Keterangan</th>
+                <th class="text-start">Pelanggaran</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rows in data %}
+                <tr class="odd">
+                    {% for row in rows %}
+                        <td class="text-center">{{ row }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

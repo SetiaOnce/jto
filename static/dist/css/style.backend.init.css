@@ -1,0 +1,99 @@
+/*--begin Animated Login Custom--*/
+.loginAnimated-fadeInRight {
+    animation: login_fadeInRight 1s ease-in-out;
+    -webkit-animation: login_fadeInRight 1s ease-in-out;
+}
+@keyframes login_fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(5px);
+        -webkit-transform: translateX(5px);
+        -moz-transform: translateX(5px);
+        -ms-transform: translateX(5px);
+        -o-transform: translateX(5px);
+} to {
+        opacity: 1;
+    }
+}
+/*--end Animated Login Custom--*/
+/*--start Input, Button Custom--*/
+.bootstrap-select .dropdown-toggle:focus, .bootstrap-select .dropdown-toggle:hover,
+.bootstrap-select>select.mobile-device:focus+.dropdown-toggle {
+    outline: none!important;
+    outline-offset: 0;
+}
+/*--end Input, Button Custom--*/
+/*--start Dropify Custom--*/
+.dropify-wrapper {
+    border-radius: .475rem!important;
+}
+.dropify-custom-dark .dropify-preview {
+    background-color: #1a1a27;
+}
+.dropify-custom-dark .dropify-preview .dropify-render img {
+    background-color: #1a1a27;
+}
+/*--end Dropify Custom--*/
+/*--start Summernote Custom--*/
+.note-editor .dropdown-toggle::after {
+    all: unset;
+}
+.note-editor .note-dropdown-menu {
+    box-sizing: content-box;
+}
+.note-editor .note-modal-footer {
+    box-sizing: content-box;
+}
+.note-editor .note-modal-body .checkbox input {
+    margin-right: 5px;
+}
+.note-toolbar .note-btn-group .note-btn i {
+    color: #181c32;
+}
+/*--end Summernote Custom--*/
+/*--begin Handsontable Custom--*/
+.handsontable .ht_clone_top {
+    z-index: 1;
+}
+/*--end Handsontable Custom--*/
+/*--begin Footer Custom--*/
+#copyRight p {
+    padding: 0;
+    margin: 0;
+}
+/*--end Footer Custom--*/
+/*--start FilePond input Custom--*/
+.filepond--item {
+    width: calc(50% - 0.5em);
+}
+@media (min-width: 50em) {
+    .filepond--item {
+        width: calc(25% - 0.5em);
+    }
+}
+.filepond--root .filepond--credits {
+    display: none;
+}
+/*--end FilePond input Custom--*/
+/*--start Magnific-popup Custom--*/
+.mfp-bg{
+	z-index: 99999;
+}
+.mfp-wrap{
+	z-index: 99999;
+}
+/*--end Magnific-popup Custom--*/
+/*--begin Custom--*/
+.bg-gradient-dark-blue {
+    background: linear-gradient(112.14deg, #001935 0%, #0063ff 100%);
+}
+.end--10px {
+    right: -10px !important;
+}
+.datepicker {
+    padding: 1rem .5rem .5rem .5rem;
+}
+table.nowrap th, table.nowrap td {
+    white-space: nowrap;
+}
+/*--end Custom--*/

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Kelebihan Muatan</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 10mm;
+        }
+
+        body {
+            font-family: "Arial", "DejaVu Sans", sans-serif;
+            font-size: 9px;
+            color: #1a1a1a;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HEADER ----------------------------------------------------------- */
+        .header {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-table td {
+            vertical-align: middle;
+            padding: 5px;
+        }
+
+        .logo {
+            height: 55px;
+            display: block;
+        }
+
+        .judul-utama {
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 3px 0;
+            text-transform: uppercase;
+            color: #2c3e50;
+        }
+
+        .judul-sub {
+            font-size: 12px;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .divider {
+            margin: 8px 0 12px 0;
+            border: 0;
+            border-top: 2px solid #3852B4;
+        }
+
+        /* INFO BOX --------------------------------------------------------- */
+        .info-box {
+            border: 1px solid #dcdcdc;
+            padding: 10px;
+            background: #fefefe;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;   /* ↓ ke bawah */
+            gap: 5px;
+        }
+
+
+        .info-label {
+            font-weight: 700;
+            margin-right: 4px;
+            color: #444;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* TABLE ----------------------------------------------------------- */
+        .table-wrapper {
+            width: 100%;
+        }
+
+        table.data {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.5px;
+            background: #ffffff;
+        }
+
+        table.data thead th {
+            background: #3852B4;
+            color: #ffffff;
+            padding: 2px 1px;
+            border: 1px solid #4d63b1;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        table.data tbody td {
+            padding: 1px 1px;
+            border: 1px solid #d9d9d9;
+            vertical-align: middle;
+        }
+
+        table.data tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        table.data tbody tr:hover {
+            background: #fff1dc;
+        }
+        table.data td {
+            vertical-align: middle;
+        }
+        /* ALIGN CLASS */
+        .c { text-align: center; }
+        .r { text-align: right; }
+        .l { text-align: left; }
+        .nowrap { white-space: nowrap; }
+
+        /* BADGE ----------------------------------------------------------- */
+        .badge {
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 7.3px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-danger { background: #d63031; color: #fff; }
+        .badge-success { background: #218c74; color: #fff; }
+
+        /* FOOTER ----------------------------------------------------------- */
+        .footer {
+            margin-top: 20px;
+            width: 100%;
+            page-break-inside: avoid;
+            position: relative;
+        }
+
+        /* kotak tanda tangan */
+        .signature-box {
+            float: right;
+            width: 260px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        /* gambar tanda tangan */
+        .signature-box img {
+            display: block;
+            margin: 6px auto 4px auto;
+            width: 180px;      /* 🔥 perbesar TTD */
+            height: 80px;
+            object-fit: contain;
+        }
+
+        /* sembunyikan kalau src kosong */
+        .signature-box img[src=""] {
+            display: none;
+        }
+
+        .signature-date {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .signature-name {
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .signature-nip {
+            font-size: 8px;
+            color: #444;
+        }
+        .signature-box {
+            float: right;
+            width: 260px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        .signature-box img {
+            display: block;
+            margin: 6px auto 4px auto;
+            width: 100px;   /* perbesar */
+            height: 40px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <table class="header-table">
+            <tr>
+                <td width="15%" style="text-align: left;">
+                <img class="logo" src="{{ gambar.logo1 }}" />
+                </td>
+
+                <td width="70%" align="center">
+                <div class="judul-utama">FORM REKAPITULASI PELANGGARAN KELEBIHAN MUATAN BULANAN</div>
+                <div class="judul-sub" style="padding-top: -10px;">{{ lokasi }} BULAN {{ periode_name }}</div>
+                </td>
+
+                <td width="15%" style="text-align: right;">
+                <img class="logo" src="{{ gambar.logo2 }}" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- <hr class="divider">
+    <div class="info-box">
+        <div class="info-item"><span class="info-label">PERIODE:</span> <span class="info-value">{{ periode_name }}</span></div><br>
+    </div> -->
+
+    <!-- TABEL -->
+    <div class="table-wrapper">
+        <table class="data">
+            <thead>
+                <tr>
+                    <th rowspan="2">NO</th>
+                    <th rowspan="2">TANGGAL</th>
+                    <th rowspan="2">TOTAL <= 5% <br>(TOLERANSI)</th>
+                    <th colspan="{{ tablePersentaseKelebihan|length }}">% KELEBIHAN MUATAN (MELANGGAR)</th>
+                    <th rowspan="2">TOTAL <br> KENDARAAN <br> MELANGGAR</th>
+                </tr>
+                <tr>
+                    {% for kl in tablePersentaseKelebihan %}
+                        <th>{{ kl.name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr {% if row.is_selected_column %} style="background: #ededed;" {% endif %}>
+                        <td class="c">{{ forloop.counter }}</td>
+                        <td class="c">{{ row.time }}</td>
+                        <td class="c">{{ row.kendaraan_under }}</td>
+                        {% for pl in row.dt_kelebihan %}
+                            <td class="c">{{ pl.total }}</td>
+                        {% endfor %}
+                        <td class="c">{{ row.kendaraan_melanggar }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="signature-box">
+            <div>{{ lokasi }}, {{ date_now }}</div>
+            <div style="margin-top:-3px; font-weight:bold;">
+                Pengawas Satuan Pelayanan UPPKB
+            </div>
+            <!-- Bungkus gambar, atur jarak rapat -->
+            <div style="padding-top:-75px; padding-bottom:-60px; text-align:center;">
+                <img src="{{ korsatpel.ttd }}" width="200">
+            </div>
+            <!-- Nama -->
+            <div style="font-weight:bold; margin-top:-4px;">
+                {{ korsatpel.nama }}
+            </div>
+            <!-- Pangkat -->
+            <div style="font-size:8px; margin-top:-2px;">
+                {{ korsatpel.pangkat }}
+            </div>
+            <!-- NIP -->
+            <div style="font-size:8px; margin-top:-2px;">
+                NIP. {{ korsatpel.nip }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

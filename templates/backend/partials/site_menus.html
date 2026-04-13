@@ -1,0 +1,47 @@
+<!--begin::Button-->
+<!-- <a href="{% url 'dashboard' %}" class="btn btn-bg-light btn-color-danger btn-active-light-danger fw-bold w-100 mb-8"><i class="las la-undo fs-3 me-1"></i>Kembali</a> -->
+<!--end::Button-->
+<!--begin::Menu-->
+<div class="menu menu-column menu-rounded menu-state-bg menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary mb-10">
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'manage_site_info' %}" class="menu-link text-dark {% if active_menu == 'instansi' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Instansi</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Marked-->
+        <a href="{% url 'data_sdm' %}" class="menu-link text-dark {% if active_menu == 'data_sdm' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-profile-user fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Pusat Data SDM</span>
+        </a>
+        <!--end::Marked-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Marked-->
+        <a href="{% url 'users_access' %}" class="menu-link text-dark {% if active_menu == 'users_access' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-user-tick fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Akses Pengguna</span>
+        </a>
+        <!--end::Marked-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Marked-->
+        <a href="{% url 'setting_tools' %}" class="menu-link text-dark {% if active_menu == 'setting_tools' %}active{% endif %}">
+            <span class="menu-icon"><i class="bi bi-tools fs-3 me-3"></i></span>
+            <span class="menu-title fw-bold">Konfigurasi Alat</span>
+        </a>
+        <!--end::Marked-->
+    </div>
+    <!--end::Menu item-->
+</div>
+<!--end::Menu-->

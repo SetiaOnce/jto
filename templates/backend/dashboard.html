@@ -1,0 +1,264 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="row d-flex justify-content-between mt-n8">
+    <div class="col-md-8">
+        <div class="card bg-primary p-2 mb-1 px-4">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-6 d-flex align-items-center justify-content-start gap-3">
+                    <div>
+                        <img src="{% static 'dist/img/logo_kemenhub.png' %}" width="72px" alt="logo-kemenhub">
+                    </div>
+                    <div>
+                        <h4 class="text-light mb-0">
+                            KEMENTERIAN PERHUBUNGAN <br>
+                            DIREKTORAT JENDERAL PERHUBUNGAN DARAT <br>
+                            {{ lokasi.bptd }} <br>
+                            {{ lokasi.uppkb }}
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                    <img src="{% static 'dist/img/logo_hubdat.png' %}" width="72px" alt="logo-hubdat">
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-between" id="widget-01">
+            <!--begin::Col-->
+            <div class="col-4 mb-2">
+                <!--begin::Items-->
+                <div class="bg-primary bg-opacity-70 rounded-2 px-6 py-5">
+                    <!--begin::Stats-->
+                    <div class="m-0">
+                        <span class="text-light fw-bolder fs-5">Penimbangan Hari Ini</span>
+                        <div class="d-flex align-items-center justify-content-start gap-3">
+                            <div>
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-30px me-5 mb-2 mt-2">
+                                    <span class="symbol-label">  
+                                        <i class="bi bi-truck fs-1 text-primary"></i>                             
+                                    </span>                
+                                </div>
+                                <!--end::Symbol-->
+                            </div>
+                            <div>
+                                <!--begin::Number-->
+                                <span class="text-light fw-bolder d-block fs-2qx lh-1 ls-n1 mb-2 mt-2 kendaraan_timbang">0</span>
+                                <!--end::Number-->
+                            </div>
+                        </div>
+                        <!--begin::Desc-->
+                        <span class="text-light fw-semibold fs-6">Jumlah Data Penimbangan</span>
+                        <!--end::Desc-->
+                    </div>
+                    <!--end::Stats-->
+                </div>    
+                <!--end::Items-->
+            </div>    
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div class="col-4 mb-2">
+                <!--begin::Items-->
+                <div class="bg-danger bg-opacity-70 rounded-2 px-6 py-5">
+                    <!--begin::Stats-->
+                    <div class="m-0">
+                        <span class="text-light fw-bolder fs-5">Melanggar Hari Ini</span>
+                        <div class="d-flex align-items-center justify-content-start gap-3">
+                            <div>
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-30px me-5 mb-2 mt-2">
+                                    <span class="symbol-label">  
+                                        <i class="bi bi-truck fs-1 text-danger"></i>                             
+                                    </span>                
+                                </div>
+                                <!--end::Symbol-->
+                            </div>
+                            <div>
+                                <!--begin::Number-->
+                                <span class="text-light fw-bolder d-block fs-2qx lh-1 ls-n1 mb-2 mt-2 kendaraan_melanggar">0</span>
+                                <!--end::Number-->
+                            </div>
+                        </div>
+                        <!--begin::Desc-->
+                        <span class="text-light fw-semibold fs-6">Persentase Pelanggaran : <span class="text-bolder fs-5 persentase_kendaraan_melanggar">0%</span></span>
+                        <!--end::Desc-->
+                    </div>
+                    <!--end::Stats-->
+                </div>    
+                <!--end::Items-->
+            </div>    
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div class="col-4 mb-2">
+                <!--begin::Items-->
+                <div class="bg-success bg-opacity-70 rounded-2 px-6 py-5">
+                    <!--begin::Stats-->
+                    <div class="m-0">
+                        <span class="text-light fw-bolder fs-5">Tidak Melanggar Hari Ini</span>
+                        <div class="d-flex align-items-center justify-content-start gap-3">
+                            <div>
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-30px me-5 mb-2 mt-2">
+                                    <span class="symbol-label">  
+                                        <i class="bi bi-truck fs-1 text-success"></i>                             
+                                    </span>                
+                                </div>
+                                <!--end::Symbol-->
+                            </div>
+                            <div>
+                                <!--begin::Number-->
+                                <span class="text-light fw-bolder d-block fs-2qx lh-1 ls-n1 mb-2 mt-2 kendaraan_tidak_melanggar">0</span>
+                                <!--end::Number-->
+                            </div>
+                        </div>
+                        <!--begin::Desc-->
+                        <span class="text-light fw-semibold fs-6">Persentase Tidak Melanggar : <span class="text-bolder fs-5 persentase_kendaraan_tidak_melanggar">0%</span></span>
+                        <!--end::Desc-->
+                    </div>
+                    <!--end::Stats-->
+                </div>    
+                <!--end::Items-->
+            </div>    
+            <!--end::Col-->
+        </div>
+        <div class="row d-flex justify-content-between">
+            <div class="col-md-12">
+                <div class="card bg-primary p-2 mb-1 px-4">
+                    <div class="card-body pb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="chart_trend01"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-primary p-2 mb-1 px-4">
+                    <div class="card-body pb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="chart_trend02"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-primary p-2 mb-1 px-4">
+                    <div class="card-body pb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="chart_trend03"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-primary p-2 mb-1">
+            <!--begin::Details-->
+            <div class="d-flex flex-wrap flex-sm-nowrap">
+                <!--begin: Pic-->
+                <div class="me-7 text-center">
+                    <div class="symbol symbol-100px symbol-fixed position-relative">
+                        <img src="{% static 'dist/img/operator.png' %}" alt="image">
+                        <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
+                    </div>
+                    <span class="text-light"><strong>{{ user.level }}</strong></span>
+                </div>
+                <!--end::Pic-->
+                <!--begin::Info-->
+                <div class="flex-grow-1">
+                    <!--begin::Title-->
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <!--begin::User-->
+                        <div class="d-flex flex-column">
+                            <!--begin::Info-->
+                            <div class="d-flex flex-wrap fw-semibold fs-6 pe-2">
+                                <div class="row">
+                                    <table class="table table-rounded table-row-bordered border text-light">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 40px">Pengguna</td>
+                                                <td style="width: 600px">: {{ user.username }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 40px">Nama</td>
+                                                <td style="width: 600px">: {{ user.nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 40px">Jabatan</td>
+                                                <td style="width: 600px">: {{ user.jabatan }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--end::Info-->
+                        </div>
+                        <!--end::User-->
+                    </div>
+                    <!--end::Title-->
+                </div>
+                <!--end::Info-->
+            </div>
+            <!--end::Details-->
+        </div>
+        <div class="card bg-primary p-2 mb-1">
+            <div class="row d-flex justify-content-between">
+                <div class="text-center text-light">
+                    <span class="fs-3 fw-bolder" id="day_date_and_time">-</span>
+                </div>
+                <hr class="text-light mt-2">
+                <div class="col-md-6">                        
+                    <div class="row d-flex">
+                        <label class="required fw-bold fs-6 text-light text-left" for="shift_id">Shift</label>
+                        <select class="show-tick form-select-solid mb-2 selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-light text-dark" data-container="body" id="shift_id" name="shift_id" title="Pilih Shift ..."></select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row d-flex">
+                        <label class="required fw-bold fs-6 text-light text-left" for="regu_id">Regu</label>
+                        <select class="show-tick form-select-solid mb-2 selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-light text-dark" data-container="body" id="regu_id" name="regu_id" title="Pilih Regu ..."></select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row d-flex">
+                        <label class="required fw-bold fs-6 text-light text-left" for="timbangan_id">Platform Penimbangan</label>
+                        <select class="show-tick form-select-solid me-2 selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-light text-dark" data-container="body" id="timbangan_id" name="timbangan_id" title="Pilih Platform ..."></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-primary p-2">
+            <div class="d-flex flex-column pb-2">
+                <span class="card-label fs-4 fw-bold text-light"><i class="bi bi-app-indicator fs-4 me-1 text-light align-middle"></i>Akses Menu</span>
+            </div>
+            <ul class="nav nav-pills d-flex justify-content-start nav-pills-custom gap-3 mb-6" role="tablist" id="menus-access">     
+                <div class="col-md-2">
+                    <div class="card h-125px text-center mb-4"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-125px text-center mb-4"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-125px text-center mb-4"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-125px text-center mb-4"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-125px text-center mb-4"></div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/dashboard.init.js' %}"></script>
+{% endblock %}

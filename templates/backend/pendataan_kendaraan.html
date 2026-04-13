@@ -1,0 +1,558 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<form id="form-data" class="form" onsubmit="return false">
+    <div class="row">
+        <input type="hidden" id="foto_depan_url" name="foto_depan_url">
+        <input type="hidden" id="foto_belakang_url" name="foto_belakang_url">
+        <input type="hidden" id="foto_kanan_url" name="foto_kanan_url">
+        <input type="hidden" id="foto_kiri_url" name="foto_kiri_url">
+        <input type="hidden" id="jbb_uji" name="jbb_uji">
+        <input type="hidden" id="jbkb_uji" name="jbkb_uji">
+        <input type="hidden" id="mst_uji" name="mst_uji">
+        <input type="hidden" id="jenis_kendaraan_nama" name="jenis_kendaraan_nama">
+        <input type="hidden" id="sumbu_nama" name="sumbu_nama">
+        <input type="hidden" id="tanggal_uji" name="tanggal_uji">
+        <div class="col-lg-4 col-xxl-4 mt-n8"> 
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2" id="card-form">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>INFORMASI KENDARAAN</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 mt-n30px">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="no_kendaraan">
+                                    <span>Nomor Kendaraan</span>
+                                    <span class="ms-1 cursor-pointer" data-bs-toggle="tooltip" data-bs-dismiss="click" aria-label="Tanpa spasi, contoh: B11111TYS" data-bs-original-title="Tanpa spasi, contoh: B11111TYS" data-kt-initialized="1">
+                                        <i class="ki-duotone ki-information fs-7">
+                                            <span class="path1"></span><span class="path2"></span><span class="path3"></span>
+                                        </i>
+                                    </span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space" name="no_kendaraan" id="no_kendaraan" maxlength="100" placeholder="Isi No.Kendaraan ..." style="text-transform: uppercase;">
+                                    <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" id="btn-searchNoken" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" title="Klik, untuk melakukan pengecekan kendaraan pada pusat data kendaraan!">
+                                        <i class="ki-solid ki-magnifier fs-3"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="masa_berlaku_uji">
+                                    <span>Masa Berlaku Uji</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space" name="masa_berlaku_uji" id="masa_berlaku_uji" maxlength="100" placeholder="dd/mm/yyyy">
+                                    <span class="input-group-text cursor-pointer text-hover-primary hide-btnchecksrut" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="ki-solid ki-calendar-2 fs-3"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row" id="iGroup-jenisKendaraan">
+                                <label class="col-form-label required fs-8" for="jenis_kendaraan_id">
+                                    <span>Jenis Kendaraan</span>
+                                </label>
+                                <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="jenis_kendaraan_id" id="jenis_kendaraan_id" data-container="body" title="Pilih Jenis Kendaraan ..."></select>
+                                </div>
+                            </div>
+                            <div class="row" id="iGroup-kepemilikan">
+                                <label class="col-form-label required fs-8" for="kepemilikan_id">
+                                    <span>Kepemilikan</span>
+                                </label>
+                                <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="kepemilikan_id" id="kepemilikan_id" data-container="body" title="Pilih Kepemilikan ..."></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 mt-n30px">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="no_uji">
+                                    <span>Nomor Uji</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space text-uppercase" name="no_uji" id="no_uji" maxlength="100" placeholder="Isi Nomor uji ...">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="jbi">
+                                    <span>JBI</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm no-space number-only" name="jbi" id="jbi" maxlength="100" placeholder="Isi JBI">
+                                </div>
+                            </div>
+                            <div class="row" id="iGroup-sumbu">
+                                <label class="col-form-label required fs-8" for="sumbu_id">
+                                    <span>Jumlah Sumbu</span>
+                                </label>
+                                <select class="show-tick form-select-solid me-2 dt-filter mt-n10px selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-light text-dark" name="sumbu_id" id="sumbu_id" data-container="body" title="Pilih Jumlah sumbu ..."></select>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="nama_pemilik">
+                                    <span>Nama Pemilik</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="nama_pemilik" id="nama_pemilik" maxlength="100" placeholder="Isi nama pemilik ...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-md-8">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="alamat_pemilik">
+                                    <span>Alamat Pemilik</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <textarea name="alamat_pemilik" id="alamat_pemilik" rows="2" cols="2" class="form-control form-control-sm text-uppercase" placeholder="Isi alamat pemilik ..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4">
+                            <div class="row">
+                                <!--begin::Input group-->
+                                <div class="mb-3" id="iGroup-isGandengan">
+                                    <label class="col-form-label fw-bold fs-6" for="gandengan">Gandengan?</label>
+                                    <div class="form-check form-switch form-check-custom form-check-solid">
+                                        <input class="form-check-input cursor-pointer" type="checkbox" id="gandengan" name="gandengan" />
+                                        <label class="form-check-label" for="gandengan">Tidak</label>
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2" id="card-form">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>INFORMASI DIMENSI KENDARAAN</div>
+                <div class="card-body">
+                    <div class="row ">
+                        <div class="row mb-2">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-8 text-center">
+                                <label class="fw-bold d-block">DI IZINKAN</label>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <!-- Baris form -->
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4 text-start">
+                                <label class="fw-bold text-primary">PANJANG *</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="number" name="panjang_utama" id="panjang_utama" class="form-control text-end" value="0">
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4 text-start">
+                                <label>LEBAR *</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="number" name="lebar_utama" id="lebar_utama" class="form-control text-end" value="0">
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4 text-start">
+                                <label>TINGGI *</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="number" name="tinggi_utama" id="tinggi_utama" class="form-control text-end" value="0">
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4 text-start">
+                                <label>FOH *</label>
+                            </div>
+                            <div class="col-md-8 ">
+                                <div class="input-group">
+                                    <input type="number" name="julur_depan" id="julur_depan" class="form-control text-end" value="0">
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4 text-start">
+                                <label>ROH *</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="number" name="julur_belakang" id="julur_belakang" class="form-control text-end" value="0">
+                                    <span class="input-group-text">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+        </div>
+        <div class="col-lg-4 col-xxl-4 mt-n8"> 
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2" id="card-form">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>KOMODITI & ASAL TUJUAN</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 mt-n30px">
+                            <div class="row" id="iGroup-komoditi">
+                                <label class="col-form-label fs-8" for="komoditi_id">
+                                    <span>Komoditi</span>
+                                </label>
+                                <select class="form-select form-select-sm" name="komoditi_id" id="komoditi_id"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label fs-8" for="asal_kota_id">
+                                    <span>Asal Kendaraan</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <select class="form-select form-select-sm" name="asal_kota_id" id="asal_kota_id"></select>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="nomor_surat_jalan">
+                                    <span>Nomor Surat Jalan</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="nomor_surat_jalan" id="nomor_surat_jalan" maxlength="100" placeholder="Isi nomor surat jalan ...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label fs-8" for="tujuan_kota_id">
+                                    <span>Tujuan Kendaraan</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <select class="form-select form-select-sm" name="tujuan_kota_id" id="tujuan_kota_id"></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="pemilik_komoditi">
+                                    <span>Pemilik Komoditi</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="pemilik_komoditi" id="pemilik_komoditi" maxlength="100" placeholder="Isi pemilik komoditi ...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="alamat_pemilik_komoditi">
+                                    <span>Alamat Pemilik Komoditi</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <textarea name="alamat_pemilik_komoditi" id="alamat_pemilik_komoditi" rows="2" cols="2" class="form-control form-control-sm text-uppercase" placeholder="Isi alamat pemilik komoditi..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+                        <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>PENGEMUDI</div>
+                <div class="card-body">
+                    <div class="row mt-n30px">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="nama_pengemudi">
+                                    <span>Nama Pengemudi</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="nama_pengemudi" id="nama_pengemudi" maxlength="100" placeholder="-" value="-">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="alamat_pengemudi">
+                                    <span>Alamat Pengemudi</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="alamat_pengemudi" id="alamat_pengemudi" maxlength="150" placeholder="-" value="-">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="jenis_kelamin_pengemudi">
+                                    <span>Jenis Kelamin</span>
+                                </label>
+                                <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="jenis_kelamin_pengemudi" id="jenis_kelamin_pengemudi" data-container="body" title="-">
+                                        <option value="LAKI-LAKI" selected>LAKI-LAKI</option>
+                                        <option value="PEREMPUAN">PEREMPUAN</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="umur_pengemudi">
+                                    <span>Umur Pengemudi</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm number-only" name="umur_pengemudi" id="umur_pengemudi" maxlength="3" placeholder="0" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="no_telepon">
+                                    <span>No Telepon</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm number-only" name="no_telepon" id="no_telepon" maxlength="100" placeholder="0" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="warna_kendaraan">
+                                    <span>Warna Kendaraan</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm text-uppercase" name="warna_kendaraan" id="warna_kendaraan" maxlength="100" placeholder="-" value="-">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="gol_sim_id">
+                                    <span>Golongan SIM/Identitas</span>
+                                </label>
+                                <div class="form-group form-group-sm flex-grow-1 mt-n10px">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="gol_sim_id" id="gol_sim_id" data-container="body" title="-"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="row">
+                                <label class="col-form-label required fs-8" for="no_identitas">
+                                    <span>No SIM/Identitas</span>
+                                </label>
+                                <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                                    <input type="text" class="form-control form-control-sm number-only" name="no_identitas" id="no_identitas" maxlength="100" placeholder="0" value="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Card-->
+            <!-- <div class="card card-fluit shadow mb-2" id="card-form">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>DOKUMEN</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 ">
+                            <div class="row">
+                                <div class="d-flex flex-stack">
+                                    <div class="form-check form-check form-check-sm">
+                                        <input class="form-check-input checkbox" type="checkbox" value="1" id="is_buku_uji" name="is_buku_uji">
+                                        <label class="form-check-label" for="is_buku_uji">
+                                            <h6 class="text-dark">BUKU UJI</h6>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 ">
+                            <div class="row">
+                                <div class="d-flex flex-stack">
+                                    <div class="form-check form-check form-check-sm">
+                                        <input class="form-check-input checkbox" type="checkbox" value="1" id="is_surat_jalan" name="is_surat_jalan">
+                                        <label class="form-check-label" for="is_surat_jalan">
+                                            <h6 class="text-dark">SURAT JALAN</h6>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm2 col-md-2 ">
+                            <div class="row">
+                                <div class="d-flex flex-stack">
+                                    <div class="form-check form-check form-check-sm">
+                                        <input class="form-check-input checkbox" type="checkbox" value="1" id="is_sim" name="is_sim">
+                                        <label class="form-check-label" for="is_sim">
+                                            <h6 class="text-dark">SIM</h6>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 ">
+                            <div class="row">
+                                <div class="d-flex flex-stack">
+                                    <div class="form-check form-check form-check-sm">
+                                        <input class="form-check-input checkbox" type="checkbox" value="1" id="is_stnk" name="is_stnk">
+                                        <label class="form-check-label" for="is_stnk">
+                                            <h6 class="text-dark">STNK</h6>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!--end::Card-->
+        </div>
+        <div class="col-lg-4 col-xxl-4 mt-n8">
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2">
+                <div class="bg-primary rounded-top fw-semibold text-light p-1"><i class="ki-solid ki-notepad-bookmark fs-2 me-2 text-light align-middle"></i>PELANGGARAN</div>
+                <div class="row p-3 mt-1">
+                    <select class="form-select form-select-sm" data-control="select2" data-close-on-select="false" data-allow-clear="true" multiple="multiple" name="pelanggaran_id" id="pelanggaran_id"></select>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Card-->
+            <div class="row p-3 mt-1" id="gambar-kendaraan">
+                <div class="col-md-3 depan">
+                    <a href="javascript:void(0);">
+                        <img src="{% static 'dist/img/default-img.png' %}" class="rounded" alt="foto-penimbangan1" title="FOTO PENIMBANGAN - 1" width="132px">
+                    </a>
+                    <h6 class="text-gray-700 text-center mt-1 fs-7 ">Foto Depan</h6>
+                </div>
+                <div class="col-md-3 belakang">
+                    <a href="javascript:void(0);">
+                        <img src="{% static 'dist/img/default-img.png' %}" class="rounded" alt="foto-penimbangan1" title="FOTO PENIMBANGAN - 1" width="132px">
+                    </a>
+                    <h6 class="text-gray-700 text-center mt-1 fs-7 ">Foto Belakang</h6>
+                </div>
+                <div class="col-md-3 kiri">
+                    <a href="javascript:void(0);">
+                        <img src="{% static 'dist/img/default-img.png' %}" class="rounded" alt="foto-penimbangan1" title="FOTO PENIMBANGAN - 1" width="132px">
+                    </a>
+                    <h6 class="text-gray-700 text-center mt-1 fs-7 ">Foto Kiri</h6>
+                </div>
+                <div class="col-md-3 kanan">
+                    <a href="javascript:void(0);">
+                        <img src="{% static 'dist/img/default-img.png' %}" class="rounded" alt="foto-penimbangan1" title="FOTO PENIMBANGAN - 1" width="132px">
+                    </a>
+                    <h6 class="text-gray-700 text-center mt-1 fs-7 ">Foto Kanan</h6>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Card-->
+            <div class="card card-fluit shadow mb-2">
+                <div class="row p-3 mt-1">
+                    <div class="col-sm-6 col-md-6">
+                        <h6 class="text-dark">Kendaraan sudah di tilang?</h6>
+                    </div>
+                    <div class="col-sm-6 col-md-4 ">
+                        <!--begin::Input group-->
+                        <div class="mb-3" id="iGroup-isAlreadyTilang">
+                            <div class="form-check form-switch form-check-custom form-check-solid">
+                                <input class="form-check-input cursor-pointer" type="checkbox" id="is_already_tilang" name="is_already_tilang" />
+                                <label class="form-check-label" for="is_already_tilang">Tidak</label>
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                </div>
+                <div class="container mt-n8 mb-2" id="iGroup-isFormSuratTilang" style="display: none;">
+                    <hr>
+                    <div class="row">
+                       <div class="input-group input-group-sm flex-grow-1 mt-n10px">
+                           <input type="text" class="form-control form-control-sm text-uppercase" name="nomor_surat_tilang" id="nomor_surat_tilang" maxlength="100" placeholder="Nomor surat tilang ...">
+                       </div>
+                   </div>
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Actions-->
+            <div class="card-footer d-flex justify-content-end">
+                <button type="button" class="btn btn-sm btn-danger btn-active-danger-danger me-2 w-100" id="btn-reset" onclick="_clearForm();"><i class="las la-redo-alt fs-3 me-2"></i>Batal</button>
+                <button type="button" class="btn btn-sm btn-primary w-100" id="btn-save">
+                    <span class="indicator-label">
+                        <i class="las la-save fs-3 me-2"></i> Simpan
+                    </span>
+                    <span class="indicator-progress">
+                        Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+            <!--end::Actions-->
+        </div> 
+    </div>
+</form>
+<!--begin::Modal Pendataan-->
+<div class="modal fade" tabindex="-1" id="mdl-pendataan" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="ki-duotone ki-tablet-text-down  fs-1 me-1 text-dark align-middle">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                        <span class="path4"></span>
+                    </i>
+                    LIST ANTRIAN KENDARAAN BELUM DITIMBANG
+                </h3>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-md fs-2x"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mb-5">
+                    <div class="ms-auto">
+                        <!--begin::Search-->
+                        <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text cursor-pointer text-hover-primary" id="click-searchDtAntrian"><i class="las la-search fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm" name="search-dt" id="search-dtAntrian" placeholder="Pencarian..." />
+                                <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchDtAntrian" style="display: none;">
+                                    <i class="las la-times fs-3"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!--end::Search-->
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-rounded align-middle table-row-bordered nowrap border" id="dt-antrianKendaraan">
+                        <thead class="bg-light" style="position: sticky; top: 0; z-index: 1;">
+                            <tr class="fw-bolder text-uppercase bg-light fs-8">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Hapus</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Melanggar</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Kendaraan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Uji</th>
+                            </tr>
+                        </thead>
+                        <tbody class="fs-8 tbody-of-table"></tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal Pendataan-->
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/pendataan_kendaraan.init.js' %}"></script>
+{% endblock %}

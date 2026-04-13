@@ -1,0 +1,67 @@
+<!--begin::Button-->
+<!-- <a href="{% url 'dashboard' %}" class="btn btn-bg-light btn-color-danger btn-active-light-danger fw-bold w-100 mb-8"><i class="las la-undo fs-3 me-1"></i>Kembali</a> -->
+<!--end::Button-->
+<!--begin::Menu-->
+<div class="menu menu-column menu-rounded menu-state-bg menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary mb-10">
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'laporan_penimbangan' %}" class="menu-link text-dark {% if active_menu == 'laporan_penimbangan' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Laporan Penimbangan</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'laporan_pengawasan' %}" class="menu-link text-dark {% if active_menu == 'laporan' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Laporan Pengawasan</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'laporan_kelebihan' %}" class="menu-link text-dark {% if active_menu == 'laporan_kelebihan' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Laporan Kelebihan</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'laporan_penindakan' %}" class="menu-link text-dark {% if active_menu == 'laporan_penindakan' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Laporan Penindakan</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'laporan_komoditi' %}" class="menu-link text-dark {% if active_menu == 'laporan_komoditi' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Laporan Komoditi</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Inbox-->
+        <a href="{% url 'laporan_kendaraan_bodong' %}" class="menu-link text-dark {% if active_menu == 'laporan_kendaraan_bodong' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26  fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Kendaraan Bodong</span>
+        </a>
+        <!--end::Inbox-->
+    </div>
+    <!--end::Menu item-->
+</div>
+<!--end::Menu-->

@@ -1,0 +1,185 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<!--begin:::Tabs-->
+<ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8" id="institutionTabMenu">
+    <li class="nav-item">
+        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#send-penimbangan">Pengiriman Penimbangan</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#send-penindakan">Pengiriman Penindakan</a>
+    </li>
+</ul>
+<!--end:::Tabs-->
+<!--begin:::Tab content-->
+<div class="tab-content" id="institutionTabContent">
+    <div class="tab-pane fade show active" id="send-penimbangan" role="tabpanel">
+        <!--begin::List Table Data-->
+        <div class="card shadow" id="card-data">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="fw-bolder fs-2 text-gray-900">
+                        <i class="fas fa-th-list fs-2 text-gray-900 me-2"></i>Data Penimbangan Belum Dikirim
+                    </h3>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mb-5">
+                    <div class="ms-auto">
+                        <!--begin::Search-->
+                        <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                            <div class="row d-flex me-2">
+                                <select class="show-tick form-select-solid selectpicker" data-live-search="false" data-width="150px" data-style="btn-sm btn-light text-dark" data-container="body" id="filter_tujuan" name="filter_tujuan" title="Filter Tujuan ...">
+                                    <option value="BPTD">BPTD</option>
+                                    <option value="KEMENHUB">KEMENHUB</option>
+                                </select>
+                            </div>
+                            <div class="row d-flex me-2">
+                                <select class="show-tick form-select-solid selectpicker" data-live-search="false" data-width="150px" data-style="btn-sm btn-light text-dark" data-container="body" id="filter_regu" name="filter_regu" title="Filter Regu ..."></select>
+                            </div>
+                            <div class="row d-flex me-2">
+                                <select class="show-tick form-select-solid selectpicker" data-live-search="false" data-width="150px" data-style="btn-sm btn-light text-dark" data-container="body" id="filter_shift" name="filter_shift" title="Filter Shift ..."></select>
+                            </div>
+                            <div class="row d-flex me-2">
+                                <select class="show-tick form-select-solid selectpicker" data-live-search="false" data-width="150px" data-style="btn-sm btn-light text-dark" data-container="body" id="filter_timbangan" name="filter_timbangan" title="Filter Timbangan ..."></select>
+                            </div>
+                            <div class="input-group input-group-sm input-group-solid border me-2">
+                                <span class="input-group-text"><i class="bi bi-calendar fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm form-control-solid border-left-0 dt-filter" width="150px" name="filter_date" id="filter_date" value="" placeholder="Filter Range Tanggal"/>
+                            </div>
+                            <div class="input-group input-group-sm me-n20">
+                                <button type="button" class="btn btn-sm btn-primary" id="filter-penimbangan-reload"><i class="bi bi-funnel-fill fs-3"></i> Filter</button>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="las la-search fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm form-control form-control-sm-sm" name="search-data" id="search-data" placeholder="Pencarian..." />
+                                <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchData" style="display: none;">
+                                    <i class="las la-times fs-3"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!--end::Search-->
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-rounded align-middle table-row-bordered nowrap border" id="dt-penimbangan">
+                        <thead class="bg-light">
+                            <tr class="fw-bolder text-uppercase bg-light">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                <!-- <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Status</th> -->
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Melanggar</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Waktu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Timbangan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Foto Depan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Foto Belakang</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Kend</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Uji</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Masa Berlaku Uji</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Jenis</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Sumbu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">JBI</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Hasil Timbangan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Berat Lebih</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Lebih%</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Toleransi%</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Komoditi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Asal - Tujuan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Pelanggaran</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Regu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Shift</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Operator</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody-of-table"></tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+            </div>
+        </div>
+        <!--end::List Table Data-->
+    </div>
+    <div class="tab-pane fade" id="send-penindakan" role="tabpanel">
+        <!--begin::List Table Data-->
+        <div class="card shadow" id="card-penindakan">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="fw-bolder fs-2 text-gray-900">
+                        <i class="fas fa-th-list fs-2 text-gray-900 me-2"></i>Data Penindakan Belum Dikirim
+                    </h3>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mb-5">
+                    <div class="ms-auto">
+                        <!--begin::Search-->
+                        <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                            <div class="row d-flex me-2">
+                                <select class="show-tick form-select-solid selectpicker" data-live-search="false" data-width="150px" data-style="btn-sm btn-light text-dark" data-container="body" id="filter_tujuan_penindakan" name="filter_tujuan_penindakan" title="Filter Tujuan ...">
+                                    <option value="BPTD">BPTD</option>
+                                    <option value="KEMENHUB">KEMENHUB</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm flex-grow-1 me-2">
+                                <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-light text-dark" name="filter_sanksi_penindakan" id="filter_sanksi_penindakan" data-container="body" title="Filter Sanksi"></select>
+                            </div>
+                            <div class="row d-flex me-2">
+                                <select class="show-tick form-select-solid selectpicker" data-live-search="false" data-width="150px" data-style="btn-sm btn-light text-dark" data-container="body" id="filter_regu_penindakan" name="filter_regu_penindakan" title="Filter Regu ..."></select>
+                            </div>
+                            <div class="input-group input-group-sm input-group-solid border me-2">
+                                <span class="input-group-text"><i class="bi bi-calendar fs-3"></i></span>
+                                <input type="text" class="form-control form-control-sm form-control-solid border-left-0 dt-filter" width="250px" name="filter_date_penindakan" id="filter_date_penindakan" value="" placeholder="Filter Range Tanggal"/>
+                            </div>
+                            <div class="input-group input-group-sm me-n20">
+                                <button type="button" class="btn btn-sm btn-primary" id="filter-penindaakan-reload"><i class="bi bi-funnel-fill fs-3"></i> Filter</button>
+                            </div>
+                            <div class="input-group">
+                                <!--begin::Search-->
+                                <div class="d-flex align-items-center position-relative mb-md-0 mb-3">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text cursor-pointer text-hover-primary" id="click-searchDtPenimbangan"><i class="las la-search fs-3"></i></span>
+                                        <input type="text" class="form-control form-control-sm" name="search-dt" id="search-dtPenimbangan" placeholder="Pencarian..." />
+                                        <span class="input-group-text cursor-pointer text-hover-danger" id="clear-searchDtPenimbangan" style="display: none;">
+                                            <i class="las la-times fs-3"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--end::Search-->
+                            </div>
+                        </div>
+                        <!--end::Search-->
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-rounded align-middle table-row-bordered nowrap border" id="dt-penindakan">
+                        <thead class="bg-light">
+                            <tr class="fw-bolder text-uppercase bg-light">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">No.Kendaraan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Waktu Penindakan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Sanksi</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Regu</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kat.Kendaraan</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Nama PPNS</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200">Pelanggaran</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody-of-table"></tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+            </div>
+        </div>
+        <!--end::List Table Data-->
+    </div>
+</div>
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/reports_send_data.init.js' %}"></script>
+{% endblock %}

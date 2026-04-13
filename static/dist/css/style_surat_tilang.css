@@ -1,0 +1,78 @@
+.k9__pQ7aZx{
+    /* formerly variables from :root */
+    --sx: 0mm;
+    --sy: 0mm;
+
+    --ff: "Lucida Console", monospace;
+    /* --ff: "Courier New", Courier, monospace; */
+    --fs: 3.2mm;
+    --lh: 1.05;
+
+    --yA: 1.2mm;
+    --yB: 1.8mm;
+    --yC: 2.8mm;
+    --yD: 3.0mm;
+    --yE: 2.4mm;
+    --yF: 2.6mm;
+    --yG: 2.0mm;
+
+    position: relative;
+    width: 220mm;
+    height: 220mm;
+    overflow: hidden;
+
+    margin: 0;
+    padding: 0;
+    font-family: var(--ff);
+    font-size: var(--fs);
+    line-height: var(--lh);
+    color: #000;
+    background: #fff;
+  }
+
+  .u1__Tx0pLr{
+    position: absolute;
+    white-space: nowrap;
+    transform: translate(var(--sx), var(--sy));
+  }
+
+  /* debug merah */
+  .zZ__b0ldR{
+    font-weight: 700;
+    color: black; /* hapus kalau sudah final */
+  }
+
+  /* debug grid */
+  .mM__gR9dBg{
+    position: absolute; inset: 0;
+    pointer-events: none;
+    display: none;
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,.06) 1px, transparent 1px);
+    background-size: 5mm 5mm;
+  }
+.aL__split2 {
+  width: 80mm;
+  line-height: 1.50;
+  text-align: left;
+
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+
+  /* paksa maksimal 2 baris */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+  /* tampilkan grid kalau HTML diberi attribute data-debug="1" */
+  html[data-debug="1"] .mM__gR9dBg{ display:block; }
+
+  /* font-size helpers (random) */
+  .pP__fS23x{ font-size: 3mm; letter-spacing: 0.2mm; }
+  .pP__fS33x{ font-size: 3.3mm; letter-spacing: 0.2mm; }
+  .pP__fS37x{ font-size: 3.7mm; letter-spacing: 0.2mm; }
+  .pP__fS41x{ font-size: 4.1mm; letter-spacing: 0.2mm; }
+  .pP__fS21x{ font-size: 2.1mm; letter-spacing: 0.2mm; }

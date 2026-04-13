@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Laporan Penimbangan</title>
+
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 12mm 10mm;
+  }
+
+  body {
+    font-family: "Arial", "DejaVu Sans", sans-serif;
+    font-size: 9px;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* HEADER ----------------------------------------------------------- */
+  .header {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .header-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .header-table td {
+    vertical-align: middle;
+    padding: 5px;
+  }
+
+  .logo {
+    height: 55px;
+    display: block;
+  }
+
+  .judul-utama {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 3px 0;
+    text-transform: uppercase;
+    color: #2c3e50;
+  }
+
+  .judul-sub {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    color: #444;
+  }
+
+  .divider {
+    margin: 8px 0 12px 0;
+    border: 0;
+    border-top: 2px solid #ff8c2f;
+  }
+
+  /* INFO BOX --------------------------------------------------------- */
+.info-box {
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    background: #fefefe;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;   /* ↓ ke bawah */
+    gap: 5px;
+}
+
+
+  .info-label {
+    font-weight: 700;
+    margin-right: 4px;
+    color: #444;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .info-value {
+    font-weight: 600;
+    color: #333;
+  }
+
+  /* TABLE ----------------------------------------------------------- */
+  .table-wrapper {
+    width: 100%;
+  }
+
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5px;
+    background: #ffffff;
+  }
+
+  table.data thead th {
+    background: #ff7b1a;
+    color: #ffffff;
+    padding: 2px 1px;
+    border: 1px solid #e06d12;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  table.data tbody td {
+    padding: 1px 1px;
+    border: 1px solid #d9d9d9;
+    vertical-align: middle;
+  }
+
+  table.data tbody tr:nth-child(even) {
+    background: #fafafa;
+  }
+
+  table.data tbody tr:hover {
+    background: #fff1dc;
+  }
+  table.data td {
+    vertical-align: middle;
+  }
+
+  /* ALIGN CLASS */
+  .c { text-align: center; }
+  .r { text-align: right; }
+  .l { text-align: left; }
+  .nowrap { white-space: nowrap; }
+
+  /* BADGE ----------------------------------------------------------- */
+  .badge {
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 7.3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-danger { background: #d63031; color: #fff; }
+  .badge-success { background: #218c74; color: #fff; }
+
+  /* FOOTER ----------------------------------------------------------- */
+  .footer {
+      margin-top: 20px;
+      width: 100%;
+      page-break-inside: avoid;
+      position: relative;
+  }
+
+  /* kotak tanda tangan */
+  .signature-box {
+      float: right;
+      width: 260px;
+      text-align: center;
+      font-size: 9px;
+  }
+
+  /* gambar tanda tangan */
+  .signature-box img {
+      display: block;
+      margin: 6px auto 4px auto;
+      width: 180px;      /* 🔥 perbesar TTD */
+      height: 80px;
+      object-fit: contain;
+  }
+
+  /* sembunyikan kalau src kosong */
+  .signature-box img[src=""] {
+      display: none;
+  }
+
+  .signature-date {
+      font-weight: 700;
+      margin-bottom: 8px;
+  }
+
+  .signature-name {
+      font-weight: 700;
+      margin-top: 4px;
+  }
+
+  .signature-nip {
+      font-size: 8px;
+      color: #444;
+  }
+  .signature-box {
+    float: right;
+    width: 260px;
+    text-align: center;
+    font-size: 9px;
+}
+
+.signature-box img {
+    display: block;
+    margin: 6px auto 4px auto;
+    width: 100px;   /* perbesar */
+    height: 40px;
+    object-fit: contain;
+}
+</style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <table class="header-table">
+            <tr>
+                <td width="15%" style="text-align: left;">
+                <img class="logo" src="{{ gambar.logo1 }}" />
+                </td>
+
+                <td width="70%" align="center">
+                <div class="judul-utama">LAPORAN PENIMBANGAN</div>
+                <div class="judul-sub" style="padding-top: -10px;">{{ lokasi }}</div>
+                </td>
+
+                <td width="15%" style="text-align: right;">
+                <img class="logo" src="{{ gambar.logo2 }}" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr class="divider">
+    <!-- INFO BOX -->
+    <div class="info-box">
+        <div class="info-item"><span class="info-label">PERIODE:</span> <span class="info-value">{{ periode_name }}</span></div><br>
+        <div class="info-item"><span class="info-label">SHIFT:</span> <span class="info-value">{{ shift|default:'SEMUA' }}</span></div><br>
+        <div class="info-item"><span class="info-label">REGU:</span> <span class="info-value">{{ regu|default:'SEMUA' }}</span></div><br>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-no">JUMLAH PENIMBANGAN : {{ jumlah.penimbangan }}</th>
+                    <th>JUMLAH MELANGGAR : {{ jumlah.melanggar }}</th>
+                    <th>JUMLAH TIDAK MELANGGAR : {{ jumlah.tidak_melanggar }}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <!-- TABLE -->
+    <div class="table-wrapper">
+        <table class="data">
+            <thead>
+                <tr>
+                  <th style="width:3%;">NO</th>
+                  <th style="width:9%;">WAKTU</th>
+                  <th style="width:6%;">NO KEND.</th>
+                  <th style="width:6%;">NO UJI</th>
+                  <th style="width:14%;">JENIS KENDARAAN</th>
+                  <th style="width:4%;">SUMBU</th>
+                  <th style="width:5%;">JBI<br>(KG)</th>
+                  <th style="width:5%;">BERAT<br>(KG)</th>
+                  <th style="width:5%;">LEBIH<br>(KG)</th>
+                  <th style="width:4%;">% LEBIH</th>
+                  <th style="width:3%;">TOL.</th>
+                  <th style="width:10%;">KOMODITI</th>
+                  <th style="width:7%;">ASAL</th>
+                  <th style="width:7%;">TUJUAN</th>
+                  <th style="width:10%;">PELANGGARAN</th>
+                  <th style="width:4%;">SHIFT</th>
+                  <th style="width:4%;">REGU</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                    <td class="c">{{ forloop.counter }}</td>
+                    <td class="c nowrap">{{ row.waktu }}</td>
+                    <td class="c text-bold">{{ row.no_kendaraan }}</td>
+                    <td class="c">{{ row.no_uji }}</td>
+                    <td class="l">{{ row.jenis_kendaraan }}</td>
+                    <td class="c">{{ row.sumbu }}</td>
+                    <td class="r">{{ row.jbi }}</td>
+                    <td class="r">{{ row.berat_timbang }}</td>
+                    <td class="r">{{ row.kelebihan_berat }}</td>
+                    <td class="c">{{ row.prosen_lebih }}</td>
+                    <td class="c">{{ row.toleransi }}</td>
+                    <td class="l">{{ row.komoditi }}</td>
+                    <td class="l">{{ row.asal }}</td>
+                    <td class="l">{{ row.tujuan }}</td>
+                    <td class="l">
+                        {{ row.pelanggaran }}
+                    </td>
+                    <td class="c">{{ row.shift }}</td>
+                    <td class="c">{{ row.regu }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="signature-box">
+          <div>{{ lokasi }}, {{ date_now }}</div>
+          <div style="margin-top:-3px; font-weight:bold;">
+              Wasatpel
+          </div>
+          <!-- Bungkus gambar, atur jarak rapat -->
+          <div style="padding-top:-75px; padding-bottom:-60px; text-align:center;">
+              <img src="{{ korsatpel.ttd }}" width="200">
+          </div>
+          <!-- Nama -->
+          <div style="font-weight:bold; margin-top:-4px;">
+              {{ korsatpel.nama }}
+          </div>
+          <!-- Pangkat -->
+          <div style="font-size:8px; margin-top:-2px;">
+              {{ korsatpel.pangkat }}
+          </div>
+          <!-- NIP -->
+          <div style="font-size:8px; margin-top:-2px;">
+              NIP. {{ korsatpel.nip }}
+          </div>
+      </div>
+    </div>
+</body>
+</html>

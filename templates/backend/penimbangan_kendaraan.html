@@ -1,0 +1,1564 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-ui: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --bg-app: #edf0f7;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --border: #e2e8f0;
+  --border-focus: #3b82f6;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --clr-blue: #1e3a8a;
+  --clr-blue-mid: #2563eb;
+  --clr-teal: #0f766e;
+  --clr-purple: #6d28d9;
+  --clr-slate: #334155;
+  --clr-success: #15803d;
+  --clr-danger: #b91c1c;
+  --clr-warning: #b45309;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+/* ── GLOBAL ── */
+body, .page, [class*="wrapper"] {
+  font-family: var(--font-ui) !important;
+  background-color: var(--bg-app) !important;
+}
+
+/* ── CARD ── */
+.pnb-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.pnb-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, var(--clr-blue) 0%, #1d4ed8 100%);
+}
+.pnb-hd.teal   { background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); }
+.pnb-hd.slate  { background: linear-gradient(135deg, #334155 0%, #475569 100%); }
+.pnb-hd.purple { background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%); }
+.pnb-hd.cyan   { background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%); }
+.pnb-hd.danger { background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%); }
+
+.pnb-hd-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  opacity: .96;
+}
+.pnb-hd-title i { font-size: 15px; opacity: .85; }
+
+.pnb-hd-actions { display: flex; gap: 5px; }
+
+.pnb-hd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: rgba(255,255,255,.88);
+  color: var(--clr-blue);
+  white-space: nowrap;
+  transition: background .15s;
+  font-family: var(--font-ui);
+}
+.pnb-hd-btn:hover { background: #fff; }
+.pnb-hd-btn.red { background: rgba(254,202,202,.25); color: #fca5a5; border: 1px solid rgba(252,165,165,.35); }
+.pnb-hd-btn.red:hover { background: rgba(254,202,202,.4); }
+
+.pnb-body { padding: 13px; }
+
+/* ── INPUTS ── */
+.pnb-field { margin-bottom: 10px; }
+.pnb-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 3px;
+  display: block;
+  letter-spacing: .2px;
+}
+.pnb-label.req::after { content: ' *'; color: #ef4444; }
+
+.pnb-input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: var(--font-ui);
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+.pnb-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+  background: #fff;
+}
+.pnb-input.is-invalid { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.1); }
+.pnb-input[readonly] { background: #f0f4f8; color: var(--text-secondary); cursor: default; }
+.pnb-textarea { resize: vertical; min-height: 58px; }
+
+.pnb-igrp { display: flex; }
+.pnb-igrp .pnb-input { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.pnb-addon {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: #e2e8f0;
+  border: 1.5px solid var(--border);
+  border-left: none;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .15s, color .15s;
+}
+.pnb-addon:hover { background: #cbd5e1; color: var(--clr-blue); }
+
+/* native select override */
+.pnb-select {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: var(--font-ui);
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+.pnb-select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+  background-color: #fff;
+}
+
+/* selectpicker override */
+.bootstrap-select > .dropdown-toggle {
+  background: var(--bg-input) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 13px !important;
+  color: var(--text-primary) !important;
+  padding: 5px 10px !important;
+  height: 34px !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+}
+.bootstrap-select > .dropdown-toggle:focus {
+  border-color: var(--border-focus) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.12) !important;
+}
+
+/* select2 override */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+  background: var(--bg-input) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  min-height: 34px !important;
+}
+.select2-container--default .select2-selection--single { height: 34px !important; }
+.select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 32px !important; font-size: 13px !important; color: var(--text-primary) !important; font-family: var(--font-ui) !important; }
+.select2-container--default .select2-selection--single .select2-selection__arrow { height: 32px !important; }
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.12) !important;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] { background: var(--clr-blue-mid) !important; }
+.select2-container--default .select2-selection--multiple .select2-selection__choice { background: var(--clr-blue) !important; border: none !important; border-radius: 4px !important; color: #fff !important; font-size: 12px !important; padding: 1px 7px !important; }
+
+/* ── STAT PILL ── */
+.pnb-stat {
+  background: #f8fafc;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.pnb-stat::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: #22c55e;
+  border-radius: 0 0 4px 4px;
+  transition: background .3s;
+}
+.pnb-stat-val {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+.pnb-stat-lbl {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ── PLATE DISPLAY ── */
+.plate-box {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  border-radius: 8px;
+  padding: 13px 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px;
+  cursor: default;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.plate-box::before {
+  content: '';
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle, rgba(255,255,255,.12), transparent 70%);
+  border-radius: 50%;
+}
+.plate-num {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 4px;
+  line-height: 1;
+  position: relative;
+}
+.plate-sub {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.65);
+  font-weight: 500;
+  margin-top: 3px;
+  letter-spacing: .5px;
+  position: relative;
+}
+.plate-indicator {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: #22c55e;
+}
+
+/* ── CAMERA ── */
+.cam-wrap {
+  position: relative;
+  background: #0f172a;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.cam-wrap iframe { display: block; width: 100%; height: 185px; border: none; }
+.cam-badge {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 5px 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,.65));
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.88);
+  letter-spacing: .3px;
+  text-align: center;
+}
+
+/* ── PHOTO THUMBS ── */
+.thumb-img {
+  width: 100%;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 2px solid var(--border);
+  transition: border-color .15s, transform .15s;
+  cursor: pointer;
+  display: block;
+}
+.thumb-img:hover { border-color: var(--clr-blue-mid); transform: scale(1.02); }
+.thumb-lbl { font-size: 10px; color: var(--text-muted); font-weight: 500; text-align: center; margin-top: 3px; }
+
+/* ── DIMENSIONS TABLE ── */
+#dimentions-results { font-size: 12px; width: 100% !important; }
+#dimentions-results th {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text-secondary) !important;
+  background: #f8fafc !important;
+  padding: 7px 5px !important;
+  border: 1px solid var(--border) !important;
+  white-space: nowrap;
+  text-align: center;
+}
+#dimentions-results td {
+  padding: 5px !important;
+  border: 1px solid var(--border) !important;
+  vertical-align: middle !important;
+}
+#dimentions-results td:first-child {
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: .5px;
+  color: var(--text-secondary);
+  background: #f8fafc !important;
+  text-align: center;
+  padding: 5px 8px !important;
+  white-space: nowrap;
+}
+#dimentions-results .form-control {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-input);
+  padding: 3px 5px;
+  color: var(--text-primary);
+}
+#dimentions-results .form-control:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(59,130,246,.1);
+}
+#dimentions-results .form-control[readonly] { background: #f0f4f8; color: var(--text-secondary); }
+
+/* ── SWITCH ── */
+.pnb-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: #f8fafc;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  gap: 10px;
+}
+.pnb-switch-lbl { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+/* ── ACTION BUTTONS ── */
+.pnb-btn-save {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: 100%; padding: 11px 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: #fff; border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 4px 12px rgba(37,99,235,.3);
+}
+.pnb-btn-save:hover { box-shadow: 0 6px 16px rgba(37,99,235,.4); transform: translateY(-1px); }
+.pnb-btn-save:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.pnb-btn-reset {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: 100%; padding: 11px 20px;
+  background: #fff; color: #b91c1c;
+  border: 1.5px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.pnb-btn-reset:hover { background: #fef2f2; border-color: #ef4444; }
+
+/* ── VALIDATION HINT ── */
+.field-error {
+  font-size: 11px;
+  color: #ef4444;
+  margin-top: 3px;
+  display: none;
+  font-weight: 500;
+}
+
+/* ── PELANGGARAN ── */
+.pelanggaran-section { padding: 10px 13px 13px; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* ── COMPACT: gauge 70% ── */
+#chart { 
+    width: 100% !important; 
+    height: 220px !important; /* Diperbesar dari sebelumnya agar gauge lebih lega */
+    margin-top: -10px;        /* Mengurangi whitespace atas */
+    margin-bottom: -15px;     /* Mengurangi whitespace bawah agar stats lebih rapat */
+}
+
+/* Mengurangi padding pada body card indikator berat agar chart punya ruang lebih */
+#indicator-berat .pnb-body { 
+    padding: 10px 15px !important; 
+}
+
+/* Memperbesar font angka utama di bawah gauge */
+#indicator-berat .pnb-body .text-center b {
+    font-size: 20px;
+    color: var(--text-primary);
+}
+#indicator-berat .pnb-body {
+    padding: 5px 10px !important;
+}
+#indicator-berat .pnb-stat {
+    padding: 12px 8px; /* Padding lebih nyaman */
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#indicator-berat .pnb-stat-val {
+    font-size: 16px; /* Nilai diperbesar agar terbaca jelas */
+}
+#indicator-berat .row.g-2 { margin-top: 4px !important; }
+#indicator-berat .weight-passed { margin-top: 4px !important; }
+#section-penimbangan { 
+  margin-top: -15px !important; 
+  padding-top: 0 !important;
+}
+
+/* History Card Style */
+.history-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.history-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.history-header { padding: 5px 12px; color: #fff; display: flex; justify-content: space-between; font-size: 11px; }
+.history-body { padding: 10px; background: #fff; }
+.route { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px; }
+
+/* ── CAMERA LOADER ── */
+.cam-loader { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; z-index: 2; gap: 7px; }
+.cam-loader-ring { width: 28px; height: 28px; border: 2px solid rgba(255,255,255,.1); border-top-color: rgba(99,179,237,.7); border-radius: 50%; animation: cam-spin .8s linear infinite; }
+@keyframes cam-spin { to { transform: rotate(360deg); } }
+.cam-loader-bar { width: 50px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.18) 50%, rgba(255,255,255,.04) 75%); background-size: 200% 100%; animation: cam-shimmer 1.4s ease-in-out infinite; }
+@keyframes cam-shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.cam-loader-text { font-size: 9px; color: rgba(255,255,255,.35); letter-spacing: .5px; font-weight: 500; }
+.cam-wrap { cursor: pointer; }
+.cam-fs-btn { position: absolute; top: 6px; right: 6px; z-index: 3; width: 24px; height: 24px; background: rgba(0,0,0,.5); border: none; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity .15s; color: rgba(255,255,255,.85); font-size: 11px; padding: 0; }
+.cam-wrap:hover .cam-fs-btn { opacity: 1; }
+.cam-fs-btn:hover { background: rgba(0,0,0,.8); color: #fff; }
+
+/* ── MODAL IMPROVEMENTS ── */
+.modal-content { border-radius: 12px !important; border: none !important; box-shadow: 0 20px 60px rgba(0,0,0,.18) !important; }
+.modal-header { border-bottom: 1px solid var(--border) !important; padding: 14px 18px !important; border-radius: 12px 12px 0 0 !important; }
+.modal-footer { border-top: 1px solid var(--border) !important; padding: 12px 18px !important; border-radius: 0 0 12px 12px !important; }
+.modal-title { font-family: var(--font-ui) !important; font-weight: 700 !important; font-size: 15px !important; }
+.modal-body { padding: 16px 18px !important; }
+
+/* ── DIMENSION ICON ── */
+#indicator-dimentions .img-information { max-width: 100%; }
+
+/* ── SPACING TWEAKS ── */
+.mt-n10px { margin-top: -5px !important; }
+.mt-n20px { margin-top: -8px !important; }
+.mt-n30px { margin-top: -3px !important; }
+
+/* Styling saat kontainer masuk mode fullscreen */
+.cam-wrap:fullscreen {
+    background: #000 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cam-wrap:fullscreen iframe {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100vw;
+    max-height: 100vh;
+    border: none;
+    opacity: 1 !important; /* Pastikan terlihat */
+}
+
+/* Pastikan tombol tutup muncul di pojok kanan atas saat fullscreen */
+.cam-wrap:fullscreen .cam-fs-btn {
+    opacity: 1 !important;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+}
+#indicator-berat .kelebihan-border-buttom,
+#indicator-berat .persentase-border-buttom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px; /* Tambah ketebalan dari 4px ke 6px */
+    border-radius: 0 0 10px 10px; /* Samakan dengan radius pnb-stat */
+    transition: background 0.3s ease;
+}
+/* --- Global Text Enhancement --- */
+.pnb-label {
+    font-size: 13px !important; /* Diperbesar dari 11.5px */
+    font-weight: 700 !important; /* Lebih tebal agar kontras */
+    color: #334155 !important; /* Warna lebih gelap agar jelas */
+}
+
+.pnb-input, .pnb-select, .select2-selection__rendered, .bootstrap-select .filter-option {
+    font-size: 15px !important; /* Ukuran teks input utama */
+    font-weight: 600 !important;
+    color: #000000 !important; /* Hitam pekat agar terbaca */
+}
+
+/* Memperjelas Teks Placeholder (teks bayangan di dalam form) */
+::placeholder {
+    color: #64748b !important;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* --- Global Text Enhancement --- */
+.pnb-label {
+    font-size: 13px !important; /* Diperbesar dari 11.5px */
+    font-weight: 700 !important; /* Lebih tebal agar kontras */
+    color: #334155 !important; /* Warna lebih gelap agar jelas */
+}
+
+.pnb-input, .pnb-select, .select2-selection__rendered, .bootstrap-select .filter-option {
+    font-size: 15px !important; /* Ukuran teks input utama */
+    font-weight: 600 !important;
+    color: #000000 !important; /* Hitam pekat agar terbaca */
+}
+
+/* Memperjelas Teks Placeholder (teks bayangan di dalam form) */
+::placeholder {
+    color: #64748b !important;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* Memperbesar teks pada tabel dimensi agar tidak kecil-kecil */
+#dimentions-results th {
+    font-size: 12px !important;
+}
+
+#dimentions-results td, #dimentions-results .form-control {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+/* Memperjelas teks pada Statistik (Kelebihan Berat/Dimensi) */
+.pnb-stat-val {
+    font-size: 18px !important; /* Angka indikator diperbesar */
+    color: #1e293b !important;
+}
+
+.pnb-stat-lbl {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+/* Select2 (Komoditi, Asal, Tujuan) */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    font-size: 15px !important;
+}
+
+/* Bootstrap Select (Jenis Kendaraan, Sumbu) */
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+/* Warna teks nilai (Kg & %) saat overload */
+#indicator-berat .text-overload {
+    color: #dc2626 !important;
+}
+
+/* ::after pseudo-element pada .pnb-stat ikut merah saat overload */
+/* (Menutupi kasus default ::after yang masih hijau) */
+#indicator-berat .pnb-stat.stat-overload::after {
+    background: #dc2626 !important;
+}
+</style>
+
+<form id="form-penimbangan" class="form" onsubmit="return false">
+  <div class="row g-2 mt-0" id="section-penimbangan">
+
+    <!-- ══════════════════════════════════════════════
+         LEFT COLUMN — Sensors & LPR
+    ══════════════════════════════════════════════ -->
+    <div class="col-lg-3 col-xxl-3">
+
+      <!-- BERAT TIMBANGAN -->
+      <div class="pnb-card">
+        <div class="pnb-hd">
+          <span class="pnb-hd-title">
+            <i class="bi bi-speedometer2"></i> Indikator Berat
+          </span>
+          <div class="pnb-hd-actions">
+            <button type="button" class="pnb-hd-btn red" onclick="resetWeight()" data-bs-toggle="tooltip" title="Reset ke otomatis">
+              <i class="bi bi-arrow-clockwise"></i> Reset/Reload
+            </button>
+            <button type="button" class="pnb-hd-btn" onclick="inputWeight()">
+              <i class="bi bi-pencil-square"></i> Manual
+            </button>
+          </div>
+        </div>
+        <div class="pnb-body" id="indicator-berat">
+          <!-- Gauge -->
+          <div id="chart" style="width:100%; height:200px;"></div>
+
+          <!-- Stats row -->
+          <div class="row g-2 mt-0">
+            <div class="col-6">
+            <div class="pnb-stat kelebihan-border-buttom-wrap">
+                <div class="pnb-stat-val lebih_berat">0 Kg</div>
+                <div class="pnb-stat-lbl">Kelebihan Berat</div>
+                <div class="kelebihan-border-buttom bg-success" style="position:absolute;bottom:0;left:0;right:0;height:4px;border-radius:0 0 4px 4px;transition: background 0.3s;"></div>
+            </div>
+            </div>
+
+            <div class="col-6">
+            <div class="pnb-stat">
+                <div class="pnb-stat-val persentase_kelebihan">0 %</div>
+                <div class="pnb-stat-lbl">Persentase Lebih</div>
+                <div class="persentase-border-buttom bg-success" style="position:absolute;bottom:0;left:0;right:0;height:4px;border-radius:0 0 4px 4px;transition: background 0.3s;"></div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Passed badge -->
+          <div class="text-center mt-2 weight-passed">
+            <span class="badge badge-success fs-6"><i class="bi bi-check2-circle me-1 text-white fs-5"></i>Passed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LPR -->
+      {% if row.is_lpr == 'Y' %}
+      <div class="pnb-card">
+        <div class="pnb-hd purple">
+          <span class="pnb-hd-title">
+            <i class="ki-solid ki-delivery"></i> Plat Nomor Otomatis
+          </span>
+        </div>
+        <div class="pnb-body">
+          <!-- Plate box -->
+          <div id="results-lpr" class="mb-2">
+            <div class="plate-box">
+              <div class="plate-indicator"></div>
+              <div class="plate-num" id="plat-preview">00000000</div>
+              <div class="plate-sub" id="status-preview">NOMOR KENDARAAN</div>
+            </div>
+          </div>
+          <!-- LPR Camera -->
+          <div class="cam-wrap">
+            <div class="cam-loader">
+              <div class="cam-loader-ring"></div>
+              <div class="cam-loader-bar"></div>
+              <span class="cam-loader-text">Menghubungkan...</span>
+            </div>
+            <button class="cam-fs-btn" title="Fullscreen (double-click)">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+            <iframe id="camlpr" src="" allowfullscreen style="opacity:0;"></iframe>
+            <div class="cam-badge">Kamera LPR</div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- SENSOR DIMENSI -->
+      <div class="pnb-card">
+        <div class="pnb-hd cyan">
+          <span class="pnb-hd-title">
+            <i class="bi bi-aspect-ratio"></i> Sensor Dimensi
+          </span>
+          <div class="pnb-hd-actions">
+            <button type="button" class="pnb-hd-btn red" onclick="resetDimentions()" data-bs-toggle="tooltip" title="Reset ke otomatis">
+              <i class="bi bi-arrow-clockwise"></i> Reset
+            </button>
+            <button type="button" class="pnb-hd-btn" onclick="inputDimentions()">
+              <i class="bi bi-pencil-square"></i> Manual
+            </button>
+          </div>
+        </div>
+        <div class="pnb-body" id="indicator-dimentions">
+          <div class="row align-items-center g-2">
+            <div class="col-7 text-center">
+              <img src="{% static 'dist/img/dimention-icons/passed-icons.png' %}" class="img-information" alt="icon-dimentions" style="max-width:160px; width:100%;">
+            </div>
+            <div class="col-5">
+              <div class="d-flex flex-column gap-2">
+                <div class="pnb-stat" style="position:relative;">
+                  <div class="pnb-stat-val dimensi_panjang" style="font-size:13px;">0 mm</div>
+                  <div class="pnb-stat-lbl">Panjang</div>
+                  <div class="panjang-border-buttom" style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#22c55e;border-radius:0 0 4px 4px;"></div>
+                </div>
+                <div class="pnb-stat" style="position:relative;">
+                  <div class="pnb-stat-val dimensi_lebar" style="font-size:13px;">0 mm</div>
+                  <div class="pnb-stat-lbl">Lebar</div>
+                  <div class="lebar-border-buttom" style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#22c55e;border-radius:0 0 4px 4px;"></div>
+                </div>
+                <div class="pnb-stat" style="position:relative;">
+                  <div class="pnb-stat-val dimensi_tinggi" style="font-size:13px;">0 mm</div>
+                  <div class="pnb-stat-lbl">Tinggi</div>
+                  <div class="tinggi-border-buttom" style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#22c55e;border-radius:0 0 4px 4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-2 dimention-passed">
+            <span class="badge badge-success fs-6"><i class="bi bi-check2-circle me-1 text-white fs-5"></i>Passed</span>
+          </div>
+        </div>
+      </div>
+      <!--begin::Card-->
+      <div class="pnb-card">
+        <div class="pnb-hd cyan">
+          <span class="pnb-hd-title">
+              <i class="ki-solid ki-delivery fs-2 me-2 text-light align-middle"></i>STATUS BARRIER GATE
+          </span>
+          </div>
+          <div class="p-4">
+              <ul class="nav nav-pills d-flex flex-row justify-content-center gap-3" role="tablist">
+                  <li class="nav-item border border-4 border-danger rounded" role="presentation">
+                      <a href="javascript:void(0);" onclick="maintenanceFitur()" class="nav-link d-flex flex-column align-items-center overflow-hidden px-5 py-4">
+                          <div class="nav-icon mb-2">
+                              <img src="{% static 'dist/img/barrier.png' %}" alt="barrier-gate" style="width: 100px;">
+                          </div>
+                          <span class="text-gray-700 fw-bold fs-6">
+                              ANTRIAN
+                          </span>
+                      </a>
+                  </li>
+                  <li class="nav-item border border-4 border-danger rounded" role="presentation">
+                      <a href="javascript:void(0);" onclick="maintenanceFitur()" class="nav-link d-flex flex-column align-items-center overflow-hidden px-5 py-4">
+                          <div class="nav-icon mb-2">
+                              <img src="{% static 'dist/img/barrier.png' %}" alt="barrier-gate" style="width: 100px;">
+                          </div>
+                          <span class="text-gray-700 fw-bold fs-6">
+                              PENIMBANGAN
+                          </span>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+      <!--end::Card-->
+    </div><!-- /LEFT COL -->
+
+    <!-- ══════════════════════════════════════════════
+         MIDDLE COLUMN — Informasi & Dimensi
+    ══════════════════════════════════════════════ -->
+    <div class="col-lg-5 col-xxl-5">
+
+      <!-- INFORMASI KENDARAAN -->
+      <div class="pnb-card">
+        <div class="pnb-hd">
+          <span class="pnb-hd-title">
+            <i class="ki-solid ki-notepad-bookmark"></i> Informasi Kendaraan
+          </span>
+          <div class="pnb-hd-actions">
+            <button type="button" class="pnb-hd-btn" onclick="loadKendaraanBodong()">
+              <i class="bi bi-pencil"></i> Kendaraan Bodong
+            </button>
+          </div>
+        </div>
+        <div class="pnb-body">
+          <!-- Hidden inputs -->
+          <input type="hidden" id="foto_depan_url" name="foto_depan_url">
+          <input type="hidden" id="foto_belakang_url" name="foto_belakang_url">
+          <input type="hidden" id="foto_kanan_url" name="foto_kanan_url">
+          <input type="hidden" id="foto_kiri_url" name="foto_kiri_url">
+          <input type="hidden" id="jbb_uji" name="jbb_uji">
+          <input type="hidden" id="jbkb_uji" name="jbkb_uji">
+          <input type="hidden" id="mst_uji" name="mst_uji">
+          <input type="hidden" id="jenis_kendaraan_nama" name="jenis_kendaraan_nama">
+          <input type="hidden" id="sumbu_nama" name="sumbu_nama">
+          <input type="hidden" id="tanggal_uji" name="tanggal_uji">
+          <input type="hidden" name="berat_kendaraan">
+          <input type="hidden" name="kelebihan_berat" value="0">
+          <input type="hidden" name="persentase_kelebihan" value="0">
+
+          <!-- QR Code + LPR row -->
+          <div class="row g-2 mb-2">
+            <div class="col-8">
+              <div class="pnb-field mb-0">
+                <div class="pnb-igrp">
+                  <input type="text" class="pnb-input no-space" name="Qr Code" id="Qr Code" maxlength="100" placeholder="Scan QR Code...">
+                  <span class="pnb-addon hide-btnchecksrut" id="btn-qrCode" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" title="Cek QR Code">
+                    <i class="bi bi-qr-code fs-5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-4 d-flex gap-1">
+              {% if row.is_lpr == 'Y' %}
+                <button type="button" class="btn btn-sm btn-info w-50 px-1" id="btn-search-lpr" style="font-size:12px;border-radius:6px;">
+                  <i class="bi bi-search me-1"></i>LPR
+                </button>
+              {% endif %}
+              {% if row.is_rfid == 'Y' %}
+                <button type="button" class="btn btn-sm btn-info w-50 px-1" id="btn-search-rfid" style="font-size:12px;border-radius:6px;">
+                  <i class="bi bi-search me-1"></i>RFID
+                </button>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="row g-2">
+            <!-- Nomor Kendaraan -->
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Nomor Kendaraan</label>
+                <div class="pnb-igrp">
+                  <input type="text" class="pnb-input no-space" name="no_kendaraan" id="no_kendaraan" maxlength="100" placeholder="B11111TYS" style="text-transform:uppercase;">
+                  <span class="pnb-addon hide-btnchecksrut" id="btn-searchNoken" title="Cek kendaraan di database">
+                    <i class="ki-solid ki-magnifier fs-5"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- Nomor Uji -->
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Nomor Uji</label>
+                <input type="text" class="pnb-input no-space text-uppercase" name="no_uji" id="no_uji" maxlength="100" placeholder="Isi Nomor Uji...">
+              </div>
+            </div>
+            <!-- Masa Berlaku Uji -->
+            <div class="col-6" id="iGroup-masaBerlakuUji">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Masa Berlaku Uji</label>
+                <div class="pnb-igrp">
+                  <input type="text" class="pnb-input no-space masa_berlaku_uji" name="masa_berlaku_uji" id="masa_berlaku_uji" maxlength="100" placeholder="dd/mm/yyyy">
+                  <span class="pnb-addon"><i class="ki-solid ki-calendar-2 fs-5"></i></span>
+                </div>
+                <span class="field-error" style="display:none;" id="info-masa-uji">Masa berlaku uji sudah habis!</span>
+              </div>
+            </div>
+            <!-- JBI -->
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">JBI (Kg)</label>
+                <input type="text" class="pnb-input number-only" name="jbi" id="jbi" maxlength="100" placeholder="Isi JBI...">
+              </div>
+            </div>
+            <!-- Jenis Kendaraan -->
+            <div class="col-6" id="iGroup-jenisKendaraan">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Jenis Kendaraan</label>
+                <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="jenis_kendaraan_id" id="jenis_kendaraan_id" data-container="body" title="Pilih Jenis Kendaraan ..."></select>
+              </div>
+            </div>
+            <!-- Jumlah Sumbu -->
+            <div class="col-6" id="iGroup-sumbu">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Jumlah Sumbu</label>
+                <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-light text-dark" name="sumbu_id" id="sumbu_id" data-container="body" title="Pilih Jumlah sumbu ..."></select>
+              </div>
+            </div>
+            <!-- Kepemilikan -->
+            <div class="col-6" id="iGroup-kepemilikan">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Kepemilikan</label>
+                <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="kepemilikan_id" id="kepemilikan_id" data-container="body" title="Pilih Kepemilikan ..."></select>
+              </div>
+            </div>
+            <!-- Nama Pemilik -->
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Nama Pemilik</label>
+                <input type="text" class="pnb-input text-uppercase" name="nama_pemilik" id="nama_pemilik" maxlength="100" placeholder="Isi nama pemilik...">
+              </div>
+            </div>
+            <!-- Alamat Pemilik -->
+            <div class="col-9">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Alamat Pemilik</label>
+                <textarea name="alamat_pemilik" id="alamat_pemilik" rows="2" class="pnb-input pnb-textarea text-uppercase" placeholder="Isi alamat pemilik..."></textarea>
+              </div>
+            </div>
+            <!-- Gandengan -->
+            <div class="col-3" id="iGroup-isGandengan">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Gandengan?</label>
+                <div class="form-check form-switch form-check-custom form-check-solid mt-2">
+                  <input class="form-check-input cursor-pointer" type="checkbox" id="gandengan" name="gandengan" style="width:36px; height:20px;" />
+                  <label class="form-check-label ms-2" for="gandengan" style="font-size:12px; font-weight:600;">Tidak</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIMENSI TABLE -->
+      <div class="pnb-card">
+        <div class="pnb-hd cyan">
+          <span class="pnb-hd-title">
+            <i class="bi bi-aspect-ratio"></i> Dimensi Kendaraan
+          </span>
+        </div>
+        <div class="pnb-body p-2">
+          <div class="table-responsive">
+            <table class="table table-rounded align-middle nowrap mb-0" id="dimentions-results">
+              <thead>
+                <tr>
+                  <th class="text-center"></th>
+                  <th class="text-center">DIIZINKAN (mm)</th>
+                  <th class="text-center">PENGUKURAN (mm)</th>
+                  <th class="text-center">TOLERANSI (mm)</th>
+                  <th class="text-center" style="color:#dc2626 !important;">KELEBIHAN (mm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row_dim in 'PLT'|make_list %}{% endfor %}
+                <!-- PANJANG -->
+                <tr>
+                  <td class="fw-bold text-uppercase">PANJANG</td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control text-center panjang-kendaraan" id="panjang_utama" name="panjang_utama" value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center panjang-kendaraan" id="panjang_p" name="panjang_p" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center panjang-kendaraan" id="panjang_toleransi" name="panjang_toleransi" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center panjang-kendaraan" id="kelebihan_panjang" name="kelebihan_panjang" readonly value="0" placeholder="0"></div></td>
+                </tr>
+                <!-- LEBAR -->
+                <tr>
+                  <td class="fw-bold text-uppercase">LEBAR</td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center lebar-kendaraan" id="lebar_utama" name="lebar_utama" value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center lebar-kendaraan" id="lebar_p" name="lebar_p" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center lebar-kendaraan" id="lebar_toleransi" name="lebar_toleransi" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center lebar-kendaraan" id="kelebihan_lebar" name="kelebihan_lebar" readonly value="0" placeholder="0"></div></td>
+                </tr>
+                <!-- TINGGI -->
+                <tr>
+                  <td class="fw-bold text-uppercase">TINGGI</td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center tinggi-kendaraan" id="tinggi_utama" name="tinggi_utama" value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center tinggi-kendaraan" id="tinggi_p" name="tinggi_p" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center tinggi-kendaraan" id="tinggi_toleransi" name="tinggi_toleransi" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center tinggi-kendaraan" id="kelebihan_tinggi" name="kelebihan_tinggi" readonly value="0" placeholder="0"></div></td>
+                </tr>
+                <!-- FOH -->
+                <tr>
+                  <td class="fw-bold text-uppercase">FOH</td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center foh-kendaraan" id="julur_depan" name="julur_depan" value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center foh-kendaraan" id="julur_depan_p" name="julur_depan_p" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center foh-kendaraan" id="julur_depan_toleransi" name="julur_depan_toleransi" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center foh-kendaraan" id="kelebihan_julur_depan" name="kelebihan_julur_depan" readonly value="0" placeholder="0"></div></td>
+                </tr>
+                <!-- ROH -->
+                <tr>
+                  <td class="fw-bold text-uppercase">ROH</td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center roh-kendaraan" id="julur_belakang" name="julur_belakang" value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center roh-kendaraan" id="julur_belakang_p" name="julur_belakang_p" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center roh-kendaraan" id="julur_belakang_toleransi" name="julur_belakang_toleransi" readonly value="0" placeholder="0"></div></td>
+                  <td><div class="input-group input-group-sm" style="min-width:90px;max-width:130px;margin:auto;"><input type="text" inputmode="numeric" class="form-control text-center roh-kendaraan" id="kelebihan_julur_belakang" name="kelebihan_julur_belakang" readonly value="0" placeholder="0"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENGEMUDI -->
+      <div class="pnb-card" id="form-pengemudi">
+        <div class="pnb-hd slate">
+          <span class="pnb-hd-title">
+            <i class="ki-solid ki-notepad-bookmark"></i> Informasi Pengemudi
+          </span>
+        </div>
+        <div class="pnb-body">
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Nama Pengemudi</label>
+                <input type="text" class="pnb-input text-uppercase" name="nama_pengemudi" id="nama_pengemudi" maxlength="100" placeholder="-" value="-">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Alamat Pengemudi</label>
+                <input type="text" class="pnb-input text-uppercase" name="alamat_pengemudi" id="alamat_pengemudi" maxlength="150" placeholder="-" value="-">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Jenis Kelamin</label>
+                <select class="show-tick form-select-solid dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="jenis_kelamin_pengemudi" id="jenis_kelamin_pengemudi" data-container="body" title="-">
+                  <option value="LAKI-LAKI" selected>LAKI-LAKI</option>
+                  <option value="PEREMPUAN">PEREMPUAN</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Umur</label>
+                <input type="text" class="pnb-input number-only" name="umur_pengemudi" id="umur_pengemudi" maxlength="3" placeholder="0" value="0">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">No. Telepon</label>
+                <input type="text" class="pnb-input number-only" name="no_telepon" id="no_telepon" maxlength="100" placeholder="0" value="0">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Warna Kendaraan</label>
+                <input type="text" class="pnb-input text-uppercase" name="warna_kendaraan" id="warna_kendaraan" maxlength="100" placeholder="-" value="-">
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">Gol. SIM / Identitas</label>
+                <select class="show-tick form-select-solid dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="gol_sim_id" id="gol_sim_id" data-container="body" title="-"></select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label">No. SIM / Identitas</label>
+                <input type="text" class="pnb-input number-only" name="no_identitas" id="no_identitas" maxlength="100" placeholder="0" value="0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /MIDDLE COL -->
+
+    <!-- ══════════════════════════════════════════════
+         RIGHT COLUMN — Komoditi, Pelanggaran, CCTV
+    ══════════════════════════════════════════════ -->
+    <div class="col-lg-4 col-xxl-4">
+
+      <!-- KOMODITI & ASAL TUJUAN -->
+      <div class="pnb-card">
+        <div class="pnb-hd teal">
+          <span class="pnb-hd-title">
+            <i class="ki-solid ki-notepad-bookmark"></i> Komoditi & Asal Tujuan
+          </span>
+          <div class="pnb-hd-actions">
+            <button type="button" class="pnb-hd-btn" onclick="loadHistory()">
+              <i class="bi bi-eye"></i> Histori
+            </button>
+          </div>
+        </div>
+        <div class="pnb-body">
+          <div class="row g-2">
+            <div class="col-12" id="iGroup-komoditi">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Komoditi</label>
+                <select class="form-select form-select-sm" name="komoditi_id" id="komoditi_id"></select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Asal Kendaraan</label>
+                <select class="form-select form-select-sm" name="asal_kota_id" id="asal_kota_id"></select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Tujuan Kendaraan</label>
+                <select class="form-select form-select-sm" name="tujuan_kota_id" id="tujuan_kota_id"></select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Nomor Surat Jalan</label>
+                <input type="text" class="pnb-input text-uppercase" name="nomor_surat_jalan" id="nomor_surat_jalan" maxlength="100" placeholder="No. surat jalan...">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Pemilik Komoditi</label>
+                <input type="text" class="pnb-input text-uppercase" name="pemilik_komoditi" id="pemilik_komoditi" maxlength="100" placeholder="Nama pemilik...">
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="pnb-field mb-0">
+                <label class="pnb-label req">Alamat Pemilik Komoditi</label>
+                <textarea name="alamat_pemilik_komoditi" id="alamat_pemilik_komoditi" rows="2" class="pnb-input pnb-textarea text-uppercase" placeholder="Isi alamat..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TILANG STATUS -->
+      <div class="pnb-card">
+        <div class="pnb-body py-2 px-3">
+          <div class="d-flex align-items-center justify-content-between py-1" id="iGroup-isAlreadyTilang">
+            <div>
+              <div class="fw-semibold" style="font-size:13px; color:var(--text-primary);">Kendaraan sudah di tilang?</div>
+            </div>
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input cursor-pointer" type="checkbox" id="is_already_tilang" name="is_already_tilang" style="width:38px;height:21px;" />
+              <label class="form-check-label ms-2 fw-semibold" for="is_already_tilang" style="font-size:12px;">Tidak</label>
+            </div>
+          </div>
+          <div class="mt-2" id="iGroup-isFormSuratTilang" style="display:none;">
+            <input type="text" class="pnb-input text-uppercase" name="nomor_surat_tilang" id="nomor_surat_tilang" maxlength="100" placeholder="Nomor surat tilang...">
+          </div>
+        </div>
+      </div>
+
+      <!-- PELANGGARAN -->
+      <div class="pnb-card">
+        <div class="pnb-hd danger">
+          <span class="pnb-hd-title">
+            <i class="bi bi-exclamation-circle-fill"></i> Pelanggaran Terdeteksi
+          </span>
+        </div>
+        <div class="pelanggaran-section">
+          <select class="form-select form-select-sm" data-control="select2" data-close-on-select="false" data-allow-clear="true" multiple="multiple" name="pelanggaran_id" id="pelanggaran_id" readonly></select>
+        </div>
+      </div>
+
+      <!-- CCTV -->
+      <div class="pnb-card">
+        <div class="pnb-hd slate">
+          <span class="pnb-hd-title">
+            <i class="bi bi-webcam"></i> Monitor CCTV
+          </span>
+          <div class="pnb-hd-actions">
+            <button type="button" class="pnb-hd-btn" id="btn-reload-all">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+          </div>
+        </div>
+        <div class="pnb-body">
+          <!-- Camera iframes -->
+          <div class="row g-2" id="previewCamera">
+            <div class="col-6">
+              <div class="cam-wrap">
+              <div class="cam-loader"><div class="cam-loader-ring"></div><div class="cam-loader-bar"></div><span class="cam-loader-text">Menghubungkan...</span></div>
+              <button class="cam-fs-btn" title="Fullscreen"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+              <iframe id="camdepan" src="" allowfullscreen style="opacity:0;"></iframe>
+              <div class="cam-badge">Kamera Depan</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="cam-wrap">
+              <div class="cam-loader"><div class="cam-loader-ring"></div><div class="cam-loader-bar"></div><span class="cam-loader-text">Menghubungkan...</span></div>
+              <button class="cam-fs-btn" title="Fullscreen"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+              <iframe id="cambelakang" src="" allowfullscreen style="opacity:0;"></iframe>
+              <div class="cam-badge">Kamera Belakang</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photo thumbnails -->
+          <div class="row g-2 mt-1" id="gambar-kendaraan">
+            <div class="col-3 depan">
+              <a href="javascript:void(0);">
+                <img src="{% static 'dist/img/default-img.png' %}" class="thumb-img" alt="Foto Depan" title="Foto Depan">
+              </a>
+              <div class="thumb-lbl">Depan</div>
+            </div>
+            <div class="col-3 belakang">
+              <a href="javascript:void(0);">
+                <img src="{% static 'dist/img/default-img.png' %}" class="thumb-img" alt="Foto Belakang" title="Foto Belakang">
+              </a>
+              <div class="thumb-lbl">Belakang</div>
+            </div>
+            <div class="col-3 kiri">
+              <a href="javascript:void(0);">
+                <img src="{% static 'dist/img/default-img.png' %}" class="thumb-img" alt="Foto Kiri" title="Foto Kiri">
+              </a>
+              <div class="thumb-lbl">Kiri</div>
+            </div>
+            <div class="col-3 kanan">
+              <a href="javascript:void(0);">
+                <img src="{% static 'dist/img/default-img.png' %}" class="thumb-img" alt="Foto Kanan" title="Foto Kanan">
+              </a>
+              <div class="thumb-lbl">Kanan</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="d-flex gap-2 mb-3">
+        <button type="button" class="pnb-btn-save" id="btn-save" disabled>
+          <span class="indicator-label d-flex align-items-center gap-2">
+            <i class="las la-save fs-4"></i> Simpan Data
+          </span>
+          <span class="indicator-progress">
+            Menyimpan... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+          </span>
+        </button>
+        <button type="button" class="pnb-btn-reset" id="btn-reset" onclick="_clearFormPenimbangan();">
+          <i class="las la-redo-alt fs-4"></i> Reset
+        </button>
+      </div>
+
+    </div><!-- /RIGHT COL -->
+
+  </div>
+</form>
+
+<!-- ══════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════ -->
+
+<!-- Struk Penimbangan -->
+<div class="modal fade" tabindex="-1" id="mdl-printStruk" aria-hidden="true" style="z-index:9999;">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Pratinjau Struk Penimbangan</h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body body-content"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg fs-3 me-2"></i>Tutup</button>
+        <button type="button" class="btn btn-sm btn-primary" id="btn-printStruk" onclick="_printStruk('N', 0)">
+          <span class="indicator-label"><i class="ki-solid ki-printer fs-3"></i> Print</span>
+          <span class="indicator-progress">Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Input Weight Manual -->
+<div class="modal fade" tabindex="-1" id="mdl-inputWight" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Input Manual Berat</h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body">
+        <form id="form-weights" class="form" onsubmit="return false">
+          <input type="hidden" name="is_input_dimention" value="1">
+          <div class="pnb-field">
+            <label class="pnb-label req">Berat Timbangan (Kg)</label>
+            <input type="text" class="pnb-input number-only" name="berat_custom" id="berat_custom" maxlength="100" placeholder="Isi berat (Kg)...">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+        <button type="button" class="btn btn-sm btn-primary" id="btn-saveWight">
+          <span class="indicator-label"><i class="las la-save me-1"></i>Simpan</span>
+          <span class="indicator-progress">Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Input Dimensi Manual -->
+<div class="modal fade" tabindex="-1" id="mdl-inputDimensi" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Input Manual Dimensi</h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body">
+        <form id="form-dimentions" class="form" onsubmit="return false">
+          <input type="hidden" name="is_input_dimention" value="1">
+          <div class="pnb-field">
+            <label class="pnb-label req">Panjang <code>mm</code></label>
+            <input type="text" class="pnb-input number-only" name="panjang_custom" id="panjang_custom" maxlength="100" placeholder="Isi Panjang (mm)...">
+          </div>
+          <div class="pnb-field">
+            <label class="pnb-label req">Lebar <code>mm</code></label>
+            <input type="text" class="pnb-input number-only" name="lebar_custom" id="lebar_custom" maxlength="100" placeholder="Isi Lebar (mm)...">
+          </div>
+          <div class="pnb-field">
+            <label class="pnb-label req">Tinggi <code>mm</code></label>
+            <input type="text" class="pnb-input number-only" name="tinggi_custom" id="tinggi_custom" maxlength="100" placeholder="Isi Tinggi (mm)...">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+        <button type="button" class="btn btn-sm btn-primary" id="btn-saveDimention">
+          <span class="indicator-label"><i class="las la-save me-1"></i>Simpan</span>
+          <span class="indicator-progress">Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Antrian -->
+<div class="modal fade" tabindex="-1" id="mdl-antrian" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="ki-duotone ki-notification-bing fs-1 me-1 align-middle"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+          List Antrian Kendaraan Belum Ditimbang
+        </h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-end mb-3">
+          <div class="input-group input-group-sm" style="max-width:240px;">
+            <span class="input-group-text cursor-pointer" id="click-searchDtAntrian"><i class="las la-search"></i></span>
+            <input type="text" class="form-control" name="search-DtAntrian" id="search-DtAntrian" placeholder="Pencarian..." />
+            <span class="input-group-text cursor-pointer text-danger" id="clear-searchDtAntrian" style="display:none;"><i class="las la-times"></i></span>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-rounded align-middle table-row-bordered nowrap border" id="dt-antrianKendaraan">
+            <thead class="bg-light">
+              <tr class="fw-bolder text-uppercase bg-light">
+                <th class="text-center">No</th>
+                <th class="text-center">Aksi</th>
+                <th class="text-center">No.Kendaraan</th>
+                <th class="text-center">Dokumen</th>
+                <th class="text-center">No.Uji</th>
+                <th class="text-center">Pemilik</th>
+              </tr>
+            </thead>
+            <tbody class="tbody-of-table"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Penimbangan List -->
+<div class="modal fade" tabindex="-1" id="mdl-penimbangan" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="ki-duotone ki-tablet-text-down fs-1 me-1 align-middle"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+          List Kendaraan Sudah Ditimbang Hari Ini
+        </h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-end mb-3">
+          <div class="input-group input-group-sm" style="max-width:240px;">
+            <span class="input-group-text cursor-pointer" id="click-searchDtPenimbangan"><i class="las la-search"></i></span>
+            <input type="text" class="form-control" name="search-DtPenimbangan" id="search-DtPenimbangan" placeholder="Pencarian..." />
+            <span class="input-group-text cursor-pointer text-danger" id="clear-searchDtPenimbangan" style="display:none;"><i class="las la-times"></i></span>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-rounded align-middle table-row-bordered nowrap border" id="dt-penimbanganKendaraan">
+            <thead class="bg-light">
+              <tr class="fw-bolder text-uppercase bg-light">
+                <th class="text-center">No</th><th class="text-center">Aksi</th><th class="text-center">Status</th>
+                <th class="text-center">No.Kendaraan</th><th class="text-center">Waktu</th><th class="text-center">No.Uji</th>
+                <th class="text-center">Pemilik</th><th class="text-center">JBI(Kg)</th><th class="text-center">Berat(Kg)</th>
+                <th class="text-center">Lebih(Kg)</th><th class="text-center">Persen(%)</th>
+              </tr>
+            </thead>
+            <tbody class="tbody-of-table"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LPR Modal -->
+<div class="modal fade" tabindex="-1" id="mdl-lpr" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="ki-duotone ki-notification-bing fs-1 me-1 align-middle"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+          Kendaraan Terdeteksi & Terdaftar
+        </h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body"><div class="row justify-content-between body-content"></div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal fade" tabindex="-1" id="mdl-history" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="ki-duotone ki-notification-bing fs-1 me-1 align-middle"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+          <span class='heade-content'>Riwayat Komoditi & Asal Tujuan</span>
+        </h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body"><div class="row justify-content-between body-content"></div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Kendaraan Bodong Modal -->
+<div class="modal fade" tabindex="-1" id="mdl-kendaraanBodong" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="bi bi-pencil-square me-1"></i>Input Kendaraan Bodong</h3>
+        <div class="btn btn-icon btn-sm btn-active-light-danger" data-bs-dismiss="modal"><i class="bi bi-x-md fs-2x"></i></div>
+      </div>
+      <div class="modal-body">
+        <form id="form-kendaraan-bodong" class="form" onsubmit="return false">
+          <div class="row g-3 body-content">
+            <div class="col-md-4">
+              <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-4">
+                  <div class="mb-2">
+                    <span class="text-muted fw-semibold d-block fs-8 mb-1">Berat :</span>
+                    <span class="text-dark fw-bold fs-7 weight-indicator">0 Kg</span>
+                  </div>
+                  <div>
+                    <span class="text-muted fw-semibold d-block fs-8 mb-1">Panjang | Lebar | Tinggi :</span>
+                    <span class="text-dark fw-bold fs-7 dimention-indicator">0 mm | 0 mm | 0 mm</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-4">
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <div class="pnb-field mb-0">
+                        <label class="pnb-label req">Nomor Kendaraan</label>
+                        <div class="pnb-igrp">
+                          <input type="text" class="pnb-input no-space" name="no_kendaraan_bd" id="no_kendaraan_bd" maxlength="100" placeholder="No. Kendaraan..." style="text-transform:uppercase;">
+                          <span class="pnb-addon hide-btnchecksrut" id="btn-searchBodong">Histori</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6" id="iGroup-komoditi-bd">
+                      <div class="pnb-field mb-0">
+                        <label class="pnb-label req">Komoditi</label>
+                        <select class="form-select form-select-sm" name="komoditi_id_bd" id="komoditi_id_bd"></select>
+                      </div>
+                    </div>
+                    <div class="col-6" id="iGroup-asal-bd">
+                      <div class="pnb-field mb-0">
+                        <label class="pnb-label req">Asal Kendaraan</label>
+                        <select class="form-select form-select-sm" name="asal_kota_id_bd" id="asal_kota_id_bd"></select>
+                      </div>
+                    </div>
+                    <div class="col-6" id="iGroup-tujuan-bd">
+                      <div class="pnb-field mb-0">
+                        <label class="pnb-label req">Tujuan Kendaraan</label>
+                        <select class="form-select form-select-sm" name="tujuan_kota_id_bd" id="tujuan_kota_id_bd"></select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row mt-3">
+          <div class="table-responsive" id="table-kendaraanBodong" style="display:none;">
+            <div class="pnb-card">
+              <div class="pnb-hd">
+                <span class="pnb-hd-title"><i class="bi bi-history"></i> Histori Kendaraan</span>
+                <span class="badge badge-light text-dark total-history">0</span>
+              </div>
+              <div class="pnb-body p-2">
+                <table class="table table-rounded align-middle table-row-bordered nowrap border mb-0">
+                  <thead class="bg-light">
+                    <tr class="fw-bolder text-uppercase bg-light">
+                      <th class="text-center">Waktu</th><th class="text-center">No.Kendaraan</th>
+                      <th class="text-center">Komoditi</th><th class="text-center">Asal</th>
+                      <th class="text-center">Tujuan</th><th class="text-center">Berat</th>
+                    </tr>
+                  </thead>
+                  <tbody class="tbody-of-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg me-2"></i>Tutup</button>
+        <button type="button" class="btn btn-sm btn-primary" id="btn-saveBodong">
+          <span class="indicator-label"><i class="las la-save me-1"></i>Simpan</span>
+          <span class="indicator-progress">Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'backend/partials/vms.html' %}
+{% endblock mainContent %}
+
+{% block script %}
+<script>
+    const ws_alat = "{{ row.ws_alat|escapejs }}";
+    const is_lpr = "{{ row.is_lpr|escapejs }}";
+    const is_auto_lpr = "{{ row.is_auto_lpr|escapejs }}";
+    const cam_depan_ws = "{{ row.cam_depan_ws|escapejs }}";
+    const cam_belakang_ws = "{{ row.cam_belakang_ws|escapejs }}";
+    const cam_lpr_ws = "{{ row.cam_lpr_ws|escapejs }}";
+</script>
+<script src="{% static 'dist/plugins/echarts/echarts.min.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/plugins/qrcode-generator/qrcode.min.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/penimbangan_kendaraan.init.js' %}"></script>
+{% endblock %}

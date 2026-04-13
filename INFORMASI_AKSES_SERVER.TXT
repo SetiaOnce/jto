@@ -1,0 +1,31 @@
+++++++++++++++++++++++++++++++++++++++++++++
+AKSES SERVER UPPKB PUT (Padang Ulak Tanding)
+++++++++++++++++++++++++++++++++++++++++++++
+
+ip : 10.12.30.2
+
+Login
++++++++++++
+user: root
+password: Tc1@As3lih ** 
+
+user: uppkb
+password: Tc1@As3lih
+
+
+PostgreSQL
++++++++++++
+user: postgre
+password: #Tc1@As3lih@@>>
+
+user: tci
+password: Tc1@As3lih#<
+
+
+MySQL
++++++++++++
+user: postgre
+password: #Tc1@As3lih@@>>
+
+user: tci
+password: Tc1@As3lih#<

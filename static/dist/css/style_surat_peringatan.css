@@ -1,0 +1,242 @@
+/* ===== PRINT: 1 HALAMAN A4 ===== */
+@page { size: A4; margin: 10mm; }
+* { box-sizing: border-box; }
+/* html, body { height: 100%; }
+body{
+    margin:0;
+    background:#f2f2f2;
+    font-family:"Times New Roman", Times, serif;
+    color:#000;
+} */
+
+/* ===== A4 SHEET ===== */
+.kX_9pQ{
+    margin:0;
+    background:#f2f2f2;
+    font-family:"Times New Roman", Times, serif;
+    color:#000;
+
+    width:210mm;
+    height:297mm;
+    margin:0 auto;
+    background:#fff;
+    border:1.2px solid #000;     /* BORDER HANYA SATU */
+    padding:5mm 6mm 5mm 6mm;     /* lebih hemat */
+    overflow:hidden;             /* cegah jadi 2 halaman */
+    position:relative;
+}
+.kX_9pQ *{ page-break-inside: avoid; }
+
+/* ===== HEADER (LEBIH KECIL) ===== */
+.hQ_0v7{
+    width: calc(100% + 12mm);
+    margin-left: -6mm;
+    margin-right: -6mm;
+
+    margin-top: -5mm;              /* nempel ke atas */
+    /* border: 1px solid #000; */
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.hQ_0v7 td{
+    /* border:1px solid #000; */
+    vertical-align:middle;
+    padding:2.4mm 2.8mm; /* lebih kecil */
+}
+.hQ_0v7 .cA_8m1{ width:auto; padding:2.4mm 3.2mm; }
+.hQ_0v7 .cB_8m2{ width:86mm; padding:0; } /* sedikit lebih kecil */
+
+.pL_4s2{
+    display:flex;
+    align-items:center;
+    gap:3.6mm;
+    min-height:20mm; /* dipendekkan */
+    position:relative;
+}
+.lG_77p{
+    width:19mm; height:19mm; /* logo sedikit kecil */
+    display:grid; place-items:center;
+    overflow:hidden;
+    flex:0 0 auto;
+}
+.lG_77p img{ width:100%; height:100%; object-fit:contain; }
+
+/* teks tengah benar-benar center, font lebih kecil */
+.hD_2k8{
+    position:absolute;
+    left:0; right:0;
+    text-align:center;
+    line-height:1.08;
+    padding:0 20mm; /* aman dari logo */
+}
+.hD_2k8 .uU_1{
+    font-weight:700;
+    letter-spacing:0.15px;
+    font-size:8.3pt;  /* LEBIH KECIL */
+}
+.hD_2k8 .uU_2{
+    font-weight:700;
+    font-size:7.8pt;  /* LEBIH KECIL */
+    margin-top:0.8mm;
+}
+
+/* tabel kanan lebih kecil */
+.bX_4q1 table{ width:100%; border-collapse:collapse; font-size:7.6pt; }
+.bX_4q1 td{ border:1px solid #000; padding:1.6mm 1.8mm; vertical-align:top; }
+.bX_4q1 .cL_1{ width:27mm; }
+.bX_4q1 .cL_2{ width:3mm; text-align:center; }
+.bX_4q1 .cL_3{ width:auto; }
+
+/* ===== BAR JUDUL ===== */
+.zZ_88h{
+    /* bleed kiri–kanan sesuai padding sheet */
+    width: calc(100% + 12mm);
+    margin-left: -6mm;
+    margin-right: -6mm;
+
+    /* jarak atas kecil dari header */
+    /* margin-top: 2mm; */
+
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    border-left: none;
+    border-right: none;
+    background: #e7e2d8;
+    text-align: center;
+
+    padding: 1.4mm 2mm;   /* lebih tipis & rapat */
+    font-weight: 700;
+    font-size: 7.0pt;     /* kecil, aman A4 */
+    letter-spacing: 0.1px;
+}
+
+/* ===== META + ADDRESS ===== */
+.mN_5s0{
+    margin-top:3.2mm;
+    display:flex;
+    gap:6mm;
+    align-items:flex-start;
+}
+.mN_5s0 .pL_0a0{ flex:1; }
+.mN_5s0 .pR_0b0{ width:65mm; }
+
+.qQ_2d2{ font-size:8.4pt; line-height:1.18; } /* lebih kecil */
+.qQ_2d2 .rW_0{ display:flex; gap:2mm; }
+.qQ_2d2 .rW_0 .k1{ width:22mm; }
+.qQ_2d2 .rW_0 .k2{ width:3mm; text-align:center; }
+.qQ_2d2 .rW_0 .k3{ flex:1; }
+.qQ_2d2 .sB_9{ margin-top:1.4mm; font-weight:700; }
+
+.aD_7y7{ font-size:8.4pt; line-height:1.22; }
+.aD_7y7 .b{ font-weight:700; }
+.aD_7y7 .tC{ margin-top:1.4mm; }
+.aD_7y7 .tP{ margin-top:1.4mm; text-align:center; letter-spacing:0.15px; }
+
+/* ===== CONTENT ===== */
+.cN_6f6{ margin-top:3.2mm; font-size:8.2pt; line-height:1.25; } /* lebih kecil */
+.cN_6f6 .sE_1{ margin-top:2.2mm; }
+.cN_6f6 .nU_1{ font-weight:700; }
+.cN_6f6 ol{ margin:1.1mm 0 0 5.5mm; padding:0; }
+.cN_6f6 ol li{ margin:0.9mm 0; }
+.cN_6f6 .iN_33{ margin-left:5.5mm; }
+.cN_6f6 .iN_33 .sU{ margin-top:0.7mm; }
+
+.dT_3p3{ margin-top:1.5mm; }
+.dT_3p3 .r0{ display:flex; gap:2mm; }
+.dT_3p3 .r0 .a{ width:39mm; }
+.dT_3p3 .r0 .b{ width:3mm; text-align:center; }
+.dT_3p3 .r0 .c{ flex:1; font-weight:700; letter-spacing:0.15px; }
+
+.cB_9k9{ margin-top:1.4mm; display:flex; gap:8mm; }
+.cB_9k9 .lF{ flex:1; }
+.cB_9k9 .rF{ width:120mm; padding-top:1mm; }
+.xC_0x{ display:flex; justify-content:space-between; align-items:center; }
+.xC_0x .bx{ width:6mm; height:6mm; border:1px solid #000; display:inline-block; }
+
+.pW_2m2{ margin-top:2mm; text-align:justify; }
+
+/* ===== SIGNATURES ===== */
+.sG_8r8{
+    margin-top:6.5mm;
+    display:flex;
+    justify-content:space-between;
+    gap:10mm;
+    font-size:8.2pt;
+}
+/* ===== SIGNATURE AREA ===== */
+.sG_8r8 {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sG_8r8 .kS {
+    width: 45%;
+    text-align: center;
+    font-size: 12px;
+}
+
+.sG_8r8 .kS img {
+    display: block;
+    margin: -30px auto -30px auto;
+    width: 240px;       /* ukuran ttd */
+    height: 120px;
+    object-fit: contain;
+}
+
+/* kalau src kosong → sembunyikan img */
+.sG_8r8 .kS img[src=""],
+.sG_8r8 .kS img:not([src]) {
+    display: none;
+}
+
+/* Nama & NIP */
+.sG_8r8 .nm {
+    margin-top: 50px; /* ruang untuk tanda tangan */
+    font-weight: bold;
+}
+
+.sG_8r8 .id {
+    font-size: 11px;
+}
+
+/* ===== TEMBUSAN ===== */
+.tM_1y1{ margin-top:4.2mm; font-size:8.0pt; }
+.tM_1y1 .b{ font-weight:700; }
+.tM_1y1 ol{ margin:1mm 0 0 5.5mm; }
+
+/* kotak checkbox */
+.bx{
+    width:6mm;
+    height:6mm;
+    border:1px solid #000;
+    display:inline-block;
+    position:relative;
+}
+
+/* JIKA ADA CLASS INI → CHECKLIST */
+.bx.ck_1::after{
+    content:"✓";
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -58%);
+    font-size:9pt;
+    font-weight:700;
+}
+
+/* ===== FOOTER ===== */
+.fT_9x9{
+    position: absolute;
+    bottom: 4mm;          /* jarak dari bawah kertas */
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7.4pt;     /* kecil, aman print */
+    line-height: 1.2;
+    color: #f80d0d;
+}
+@media print{
+    body{ background:#fff; }
+    .kX_9pQ{ margin:0; box-shadow:none; }
+}

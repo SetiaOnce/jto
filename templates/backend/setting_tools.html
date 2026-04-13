@@ -1,0 +1,305 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="d-flex flex-column flex-lg-row">
+    <div class="d-none d-lg-flex flex-column flex-lg-row-auto w-100 w-lg-275px" data-kt-drawer="true" data-kt-drawer-name="inbox-aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_inbox_aside_toggle"> 
+        <!--begin::Sticky aside-->
+        <div class="card card-flush mb-0 shadow" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '100px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="100px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+            <!--begin::Aside content-->
+            <div class="card-body">
+                {% include 'backend/partials/site_menus.html' %}
+            </div>
+            <!--end::Aside content-->
+        </div>
+        <!--end::Sticky aside-->
+    </div>
+    <!--begin::Content-->
+    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+        <!--begin::List Table Data-->
+        <div class="card shadow" id="card-settingTools">
+            <div class="card-body">
+                 <div class="row d-flex justify-content-between">
+                    <div class="col-md-9 d-flex justify-content-start">
+                        <div class="mb-5 hover-scroll-x">
+                            <div class="d-grid">
+                                <ul class="nav nav-tabs flex-nowrap text-nowrap">
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0 active" data-bs-toggle="tab" href="#kt_tab_indicator">INDIKATOR TIMBANGAN</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_camera">CAMERA</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_printer">PRINTER PENIMBANGAN</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_access">AKSES PENIMBANGAN</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-end">               
+                        <div class="row d-flex">
+                            <select class="show-tick form-select-solid me-2 selectpicker" data-live-search="false" data-width="300px" data-style="btn-sm btn-light text-dark" data-container="body" id="timbangan_id" name="timbangan_id" title="Pilih Platform ..."></select>
+                        </div>
+                    </div>
+                </div>
+                <form id="form-editTools" class="form" onsubmit="return false">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="kt_tab_indicator" role="tabpanel">
+                            <h5 class="fw-bolder fs-7 m-0 mb-1">*) INDIKATOR TIMBANGAN</h5>
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="jenis_rs232">Jenis RS232</label>
+                                <div class="col-lg-8">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="rs" id="rs" data-container="body" title="Pilih Jenis RS232 ...">
+                                        <option value="BAFO">BAFO</option>
+                                        <option value="ATENT">ATENT</option>
+                                        <option value="PROLIFIC">PROLIFIC</option>
+                                        <option value="FTDI">FTDI</option>
+                                        <option value="UGREEN">UGREEN</option>
+                                        <option value="UNITEK">UNITEK</option>
+                                        <option value="SABRENT">SABRENT</option>
+                                        <option value="TRENDNET">TRENDNET</option>
+                                        <option value="DIGITUS">DIGITUS</option>
+                                        <option value="STARTECH">STARTECH</option>
+                                        <option value="ELSE">LAINNYA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="port">Port (COM)</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control no-space" name="port" id="port" maxlength="50" placeholder="COM Serial..." />
+
+                                    <!-- <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="port" id="port" data-container="body" title="Pilih Port ...">
+                                        {% for com in available_ports %}
+                                        <option value="{{ com.device }}">{{ com.description }}</option>
+                                        {% endfor %}
+                                    </select> -->
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="baudrate">Baudrate</label>
+                                <div class="col-lg-8">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="baudrate" id="baudrate" data-container="body" title="Pilih Baudrate ...">
+                                        <option value="1200">1200</option>
+                                        <option value="2400">2400</option>
+                                        <option value="4800">4800</option>
+                                        <option value="9600">9600</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="parity">Parity</label>
+                                <div class="col-lg-8">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="parity" id="parity" data-container="body" title="Pilih Parity ...">
+                                        <option value="PARITY_EVEN">Even</option>
+                                        <option value="PARITY_ODD">Odd</option>
+                                        <option value="PARITY_NONE">None</option>
+                                        <option value="PARITY_MARK">Mark</option>
+                                        <option value="PARITY_SPACE">Space</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="stopbits">Stopbits</label>
+                                <div class="col-lg-8">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="stopbits" id="stopbits" data-container="body" title="Pilih Stopbits ...">
+                                        <option value="STOPBITS_ONE">1</option>
+                                        <option value="STOPBITS_ONE_POINT_FIVE">1.5</option>
+                                        <option value="STOPBITS_TWO">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="bytesize">Bytesize</label>
+                                <div class="col-lg-8">
+                                    <select class="show-tick form-select-solid me-2 dt-filter selectpicker" data-live-search="false" data-width="100%" data-style="btn-sm btn-secondary text-dark" name="bytesize" id="bytesize" data-container="body" title="Pilih Bytesize ...">
+                                        <option value="FIVEBITS">5</option>
+                                        <option value="SIXBITS">6</option>
+                                        <option value="SEVENBITS">7</option>
+                                        <option value="EIGHTBITS">8</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row d-flex justify-content-between mt-5">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-test" data-test="INDICATOR">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Test Koneksi
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2 btn-reset" data-reset="INDICATOR"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-save" data-save="INDICATOR">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Simpan
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_camera" role="tabpanel">
+                            <h5 class="fw-bolder fs-7 m-0 mb-1">*) CAMERA</h5>
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="rtsp_camera_1">Camera 1</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="rtsp_camera_1" id="rtsp_camera_1" class="form-control mb-3 mb-lg-0"  placeholder="Isikan rtsp camera 1 ..." />
+                                    <small>Contoh input : rtsp://username:password@ip:port/Streaming/Channels/101</small>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="rtsp_camera_2">Camera 2</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="rtsp_camera_2" id="rtsp_camera_2" class="form-control mb-3 mb-lg-0" placeholder="Isikan rtsp camera 2 ..." />
+                                    <small>Contoh input : rtsp://username:password@ip:port/Streaming/Channels/101</small>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row d-flex justify-content-between mt-5">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-test" data-test="CAMERA">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Test Koneksi
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2 btn-reset" data-reset="CAMERA"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-save" data-save="CAMERA">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Simpan
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_printer" role="tabpanel">
+                            <h5 class="fw-bolder fs-7 m-0 mb-1">*) PRINTER PENIMBANGAN</h5>
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="ip_printer_penimbangan">IP Printer</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="ip_printer_penimbangan" id="ip_printer_penimbangan" class="form-control mb-3 mb-lg-0" maxlength="30" placeholder="Isikan ip printer ..." />
+                                    <small>Contoh input : 192.168.113.44</small>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="port_printer_penimbangan">Port Printer</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="port_printer_penimbangan" id="port_printer_penimbangan" class="form-control mb-3 mb-lg-0" maxlength="10" placeholder="Isikan port printer ..." />
+                                    <small>Contoh input : 3306</small>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row d-flex justify-content-between mt-5">
+                                <div class="col-md-6 d-flex justify-content-start">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-test" data-test="PRINTER_STRUK">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Test Koneksi
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2 btn-reset" data-reset="PRINTER_STRUK"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-save" data-save="PRINTER_STRUK">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Simpan
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_access" role="tabpanel">
+                            <h5 class="fw-bolder fs-7 m-0 mb-1">*) AKSES PENIMBANGAN</h5>
+                            <!--begin::Input group-->
+                            <div class="row mb-6 checkIs" id="iGroup-isIp">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="is_ip_access_timbang">Hak Fitur</label>
+                                <div class="col-lg-8">
+                                    <div class="form-check form-switch form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" id="is_ip_access_timbang" name="is_ip_access_timbang" />
+                                        <label class="form-check-label" for="is_ip_access_timbang">SEMUA</label>
+                                    </div>
+                                    <div class="form-text">*) Jika <code>SEMUA</code>Maka, Semua akun level penimbangan dan administrator akan mendapatkan akses.</div>
+                                    <div class="form-text">*) Jika <code>IP</code>Maka, yang mendapatkan akses hanya IP yang terdaftar.</div>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-6 isIpAddress-hide" style="display: none;">
+                                <label class="col-lg-4 col-form-label required fw-bold fs-6" for="ip_timbang_allowed">Alamat IP</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="ip_timbang_allowed" id="ip_timbang_allowed" class="form-control mb-3 mb-lg-0"  placeholder="Isikan alamat IP ..." />
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row d-flex justify-content-between mt-5">
+                                <div class="col-md-6 d-flex justify-content-start"></div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-light-danger me-2 btn-reset" data-reset="AKSES_PENIMBANGAN"><i class="las la-redo-alt fs-3 me-1"></i>Batal</button>
+                                    <button type="button" class="btn btn-sm btn-primary btn-save" data-save="AKSES_PENIMBANGAN">
+                                        <span class="indicator-label">
+                                            <i class="las la-save fs-3 me-1"></i>Simpan
+                                        </span>
+                                        <span class="indicator-progress">
+                                            Mohon tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- <div class="d-flex justify-content-between align-items-start flex-wrap mb-10">
+                    <h3 class="fw-bolder m-0 mb-3"><i class="las la-pen text-dark fs-2 me-3"></i>Edit Alat Timbangan</h3>
+                </div> -->
+                <!--begin::Form-->
+            </div>
+        </div>
+        <!--end::List Table Data-->
+    </div>
+    <!--end::Content-->
+</div>
+
+{% endblock mainContent %}
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/setting_tools.init.js' %}"></script>
+{% endblock %}
