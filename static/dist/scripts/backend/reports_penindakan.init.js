@@ -364,9 +364,9 @@ const _printSuratPeringatan = (is_preview, idp_penimbangan) =>  {
                                 </div>
                                 <div class="sE_1">
                                     <span class="nU_1">2.</span>
-                                    Bahwa Saudara telah melakukan <b>PELANGGARAN TERTENTU</b> sebagaimana Pasal 286 (3) jo. Ps. 106
+                                    Bahwa Saudara telah melakukan <b>PELANGGARAN TERTENTU</b> sebagaimana Pasal : `+row.pasal+`
                                     <div style="margin-left:10px; margin-top:-10px;">
-                                        <br/>Pada tanggal, <b>`+row.tanggal_timbang+`</b> di Satpel UPPKB Cekik, dengan data sebagai berikut :
+                                        <br/>Pada tanggal, <b>`+row.tanggal_timbang+`</b> di Satpel `+data.row.nama_jt+`, dengan data sebagai berikut :
                                     </div>
                                     <div style="margin-left:15px;">
                                         <div class="dT_3p3">
@@ -417,6 +417,15 @@ const _printSuratPeringatan = (is_preview, idp_penimbangan) =>  {
                                                 ${outputPelanggaran}
                                             </div>
                                             <div class="rF"></div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-left:15px;">
+                                        <div class="dT_3p3">
+                                            <div class="r0">
+                                                <div class="a">Keterangan Tindakan</div>
+                                                <div class="b">:</div>
+                                                <div class="c">`+row.keterangan_tindakan+`</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

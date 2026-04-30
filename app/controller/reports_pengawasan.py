@@ -3,18 +3,16 @@ from django.http import HttpResponse, JsonResponse
 from app.models import LokasiUppkb, DataPenimbangan, DataSdm, DataPelanggaran, DataPenindakan
 from django.templatetags.static import static
 from django.db.models import Q
-from datetime import date, time
+from datetime import date, time, datetime, timedelta
 from .utils import json_response
 from .common import jenisPelanggaran, sanksi, subSanksi
 import locale, os
-from datetime import datetime, timedelta
-from django.utils.timezone import now, make_aware
+from django.utils.timezone import now
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 import calendar
-from django.utils import timezone
 from django.conf import settings
 
 def index(request):
@@ -36,7 +34,6 @@ def show(request):
         filter_interval = request.GET.get('filter_interval', 'MONTH').upper()
         today = date.today()
         current_month, current_year = today.month, today.year
-        tz = timezone.get_current_timezone()
 
         # Validasi bulan & tahun
         try:
@@ -66,19 +63,19 @@ def show(request):
         else:
             return json_response(False, "filter_interval tidak valid", 400)
 
-        # Helper: dapatkan range waktu dari d
+        # Helper: dapatkan range waktu dari d (naive datetime untuk USE_TZ = False)
         def get_range(d):
             if filter_interval == 'MONTH':
                 return (
-                    timezone.make_aware(datetime.combine(d, time.min), tz),
-                    timezone.make_aware(datetime.combine(d, time.max), tz)
+                    datetime.combine(d, time.min),
+                    datetime.combine(d, time.max)
                 )
             else:  # YEAR
-                start = timezone.make_aware(datetime(filter_year, d['bulan_id'], 1), tz)
+                start = datetime(filter_year, d['bulan_id'], 1, 0, 0, 0)
                 if d['bulan_id'] == 12:
-                    end = timezone.make_aware(datetime(filter_year + 1, 1, 1), tz)
+                    end = datetime(filter_year + 1, 1, 1, 0, 0, 0)
                 else:
-                    end = timezone.make_aware(datetime(filter_year, d['bulan_id'] + 1, 1), tz)
+                    end = datetime(filter_year, d['bulan_id'] + 1, 1, 0, 0, 0)
                 return start, end
 
         data = []
@@ -176,7 +173,6 @@ def export(request):
     filter_interval = request.GET.get('filter_interval', 'MONTH').upper()
     today = date.today()
     current_month, current_year = today.month, today.year
-    tz = timezone.get_current_timezone()
     export_type = request.GET.get('export_type')
 
     # Validasi bulan & tahun
@@ -207,19 +203,19 @@ def export(request):
     else:
         return json_response(False, "filter_interval tidak valid", 400)
 
-    # Helper: dapatkan range waktu dari d
+    # Helper: dapatkan range waktu dari d (naive datetime untuk USE_TZ = False)
     def get_range(d):
         if filter_interval == 'MONTH':
             return (
-                timezone.make_aware(datetime.combine(d, time.min), tz),
-                timezone.make_aware(datetime.combine(d, time.max), tz)
+                datetime.combine(d, time.min),
+                datetime.combine(d, time.max)
             )
         else:  # YEAR
-            start = timezone.make_aware(datetime(filter_year, d['bulan_id'], 1), tz)
+            start = datetime(filter_year, d['bulan_id'], 1, 0, 0, 0)
             if d['bulan_id'] == 12:
-                end = timezone.make_aware(datetime(filter_year + 1, 1, 1), tz)
+                end = datetime(filter_year + 1, 1, 1, 0, 0, 0)
             else:
-                end = timezone.make_aware(datetime(filter_year, d['bulan_id'] + 1, 1), tz)
+                end = datetime(filter_year, d['bulan_id'] + 1, 1, 0, 0, 0)
             return start, end
 
     data = []

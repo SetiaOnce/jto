@@ -41,3 +41,5 @@ from .lpr_blue import LprBlue
 from .kendaraan_bodong import KendaraanBodong
 from .data_peringatan import DataPeringatan
 from .master_jenis_kendaraan_tilang import MasterJenisKendaraanTilang
+from .master_toleransi_komoditi import MasterToleransiKomoditi
+from .master_toleransi_dimensi import MasterToleransiDimensi

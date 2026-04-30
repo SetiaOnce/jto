@@ -3,18 +3,16 @@ from django.http import HttpResponse, JsonResponse
 from app.models import LokasiUppkb, DataPenimbangan, DataSdm
 from django.templatetags.static import static
 from django.db.models import Q
-from datetime import date, time
+from datetime import date, time, datetime, timedelta
 from .utils import json_response
 from .common import tablePersentaseKelebihan
 import locale, os
-from datetime import datetime, timedelta
-from django.utils.timezone import now, make_aware
+from django.utils.timezone import now
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 import calendar
-from django.utils import timezone
 from django.conf import settings
 
 def index(request):
@@ -34,7 +32,6 @@ def show(request):
         filter_interval = request.GET.get('filter_interval', 'MONTH').upper()
         today = date.today()
         current_month, current_year = today.month, today.year
-        tz = timezone.get_current_timezone()
 
         # Validasi bulan & tahun
         try:
@@ -64,19 +61,19 @@ def show(request):
         else:
             return json_response(False, "filter_interval tidak valid", 400)
 
-        # Helper: dapatkan range waktu dari d
+        # Helper: dapatkan range waktu dari d (naive datetime untuk USE_TZ = False)
         def get_range(d):
             if filter_interval == 'MONTH':
                 return (
-                    timezone.make_aware(datetime.combine(d, time.min), tz),
-                    timezone.make_aware(datetime.combine(d, time.max), tz)
+                    datetime.combine(d, time.min),
+                    datetime.combine(d, time.max)
                 )
             else:  # YEAR
-                start = timezone.make_aware(datetime(filter_year, d['bulan_id'], 1), tz)
+                start = datetime(filter_year, d['bulan_id'], 1, 0, 0, 0)
                 if d['bulan_id'] == 12:
-                    end = timezone.make_aware(datetime(filter_year + 1, 1, 1), tz)
+                    end = datetime(filter_year + 1, 1, 1, 0, 0, 0)
                 else:
-                    end = timezone.make_aware(datetime(filter_year, d['bulan_id'] + 1, 1), tz)
+                    end = datetime(filter_year, d['bulan_id'] + 1, 1, 0, 0, 0)
                 return start, end
 
         data = []
@@ -88,7 +85,7 @@ def show(request):
 
             if filter_interval == 'MONTH':
                 is_selected = (d == today)
-                time_name = d
+                time_name = d.strftime('%d-%b-%y')
             else:  # YEAR
                 is_selected = (filter_year == current_year and d['bulan_id'] == current_month)
                 time_name = d['bulan_nama']
@@ -105,13 +102,10 @@ def show(request):
             kendaraan_under = query.filter(is_melanggar='Y', prosen_lebih__lte=5).count()
             total_under += kendaraan_under
 
-            # Pelanggaran
+            # Pelanggaran (dengan base query yang sudah di-filter)
             dt_kelebihan = []
             for idx, pl in enumerate(tablePersentaseKelebihan()):
-                qs = DataPenimbangan.objects.all()
-
-                qs = qs.filter(tgl_penimbangan__gte=start_dt, tgl_penimbangan__lt=end_dt) if filter_interval == 'YEAR' \
-                    else qs.filter(tgl_penimbangan__range=(start_dt, end_dt))
+                qs = query.all()  # ✅ Start dari query yang sudah di-filter, bukan .all()
 
                 if pl['id'] == 2:
                     qs = qs.filter(prosen_lebih__gte=6, prosen_lebih__lte=20)
@@ -135,24 +129,23 @@ def show(request):
                 'time': time_name,
                 'dt_kelebihan': dt_kelebihan,
                 'kendaraan_melanggar': kendaraan_melanggar,
-                'kendaraan_under': total_under,
+                'kendaraan_under': kendaraan_under,
             })
         data.append({
             'is_selected_column': True,
             "time": "TOTAL",
             'dt_kelebihan': [{'total': t} for t in total_kelebihan_per_jenis],
             'kendaraan_melanggar': total_melanggar,
-            'kendaraan_under': total_melanggar,
+            'kendaraan_under': total_under,
         })
     return json_response(status=True, message='Success', data=data)
     
 def export(request):
     lokasi                      = LokasiUppkb.objects.first()
-    filter_interval = request.GET.get('filter_interval', 'MONTH').upper()
-    today = date.today()
+    filter_interval             = request.GET.get('filter_interval', 'MONTH').upper()
+    today                       = date.today()
     current_month, current_year = today.month, today.year
-    tz = timezone.get_current_timezone()
-    export_type = request.GET.get('export_type')
+    export_type                 = request.GET.get('export_type')
 
     # Validasi bulan & tahun
     try:
@@ -182,19 +175,19 @@ def export(request):
     else:
         return json_response(False, "filter_interval tidak valid", 400)
 
-    # Helper: dapatkan range waktu dari d
+    # Helper: dapatkan range waktu dari d (naive datetime untuk USE_TZ = False)
     def get_range(d):
         if filter_interval == 'MONTH':
             return (
-                timezone.make_aware(datetime.combine(d, time.min), tz),
-                timezone.make_aware(datetime.combine(d, time.max), tz)
+                datetime.combine(d, time.min),
+                datetime.combine(d, time.max)
             )
         else:  # YEAR
-            start = timezone.make_aware(datetime(filter_year, d['bulan_id'], 1), tz)
+            start = datetime(filter_year, d['bulan_id'], 1, 0, 0, 0)
             if d['bulan_id'] == 12:
-                end = timezone.make_aware(datetime(filter_year + 1, 1, 1), tz)
+                end = datetime(filter_year + 1, 1, 1, 0, 0, 0)
             else:
-                end = timezone.make_aware(datetime(filter_year, d['bulan_id'] + 1, 1), tz)
+                end = datetime(filter_year, d['bulan_id'] + 1, 1, 0, 0, 0)
             return start, end
 
     data = []
@@ -223,13 +216,10 @@ def export(request):
         kendaraan_under = query.filter(is_melanggar='Y', prosen_lebih__lte=5).count()
         total_under += kendaraan_under
 
-        # Pelanggaran
+        # Pelanggaran (dengan base query yang sudah di-filter)
         dt_kelebihan = []
         for idx, pl in enumerate(tablePersentaseKelebihan()):
-            qs = DataPenimbangan.objects.all()
-
-            qs = qs.filter(tgl_penimbangan__gte=start_dt, tgl_penimbangan__lt=end_dt) if filter_interval == 'YEAR' \
-                else qs.filter(tgl_penimbangan__range=(start_dt, end_dt))
+            qs = query.all()  # ✅ Start dari query yang sudah di-filter, bukan .all()
 
             if pl['id'] == 2:
                 qs = qs.filter(prosen_lebih__gte=6, prosen_lebih__lte=20)
@@ -253,14 +243,14 @@ def export(request):
             'time': time_name,
             'dt_kelebihan': dt_kelebihan,
             'kendaraan_melanggar': kendaraan_melanggar,
-            'kendaraan_under': total_under,
+            'kendaraan_under': kendaraan_under,
         })
     data.append({
         'is_selected_column': True,
         "time": "TOTAL",
         'dt_kelebihan': [{'total': t} for t in total_kelebihan_per_jenis],
         'kendaraan_melanggar': total_melanggar,
-        'kendaraan_under': total_melanggar,
+        'kendaraan_under': total_under,
     })
     if export_type == 'excel':
         wb = Workbook()
@@ -379,7 +369,6 @@ def export(request):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = (
             'atachment; filename="Rekap_Kelebihan_Muatan_'
-            # 'inline; filename="Rekap_Kelebihan_Muatan_'
             + lokasi.nama.lower()
             + '_'
             + now().strftime("%Y%m%d%H%M%S")

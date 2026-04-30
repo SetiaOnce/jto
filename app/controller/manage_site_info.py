@@ -498,6 +498,7 @@ def update(request):
                 return json_response(status=False, message="Data pusat tidak ditemukan")
 
             LokasiUppkb.objects.filter(id_update=1).update(
+                id=new_uppkb.id,
                 kota_kab_id=new_uppkb.kab_kota.id if new_uppkb.kab_kota else None,
                 kode=new_uppkb.kode,
                 nama=new_uppkb.nama,

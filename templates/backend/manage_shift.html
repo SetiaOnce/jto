@@ -1,0 +1,116 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="d-flex flex-column flex-lg-row">
+    <div class="d-none d-lg-flex flex-column flex-lg-row-auto w-100 w-lg-275px" data-kt-drawer="true" data-kt-drawer-name="inbox-aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_inbox_aside_toggle"> 
+        <!--begin::Sticky aside-->
+        <div class="card card-flush mb-0 shadow" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '100px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="100px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+            <!--begin::Aside content-->
+            <div class="card-body">
+                {% include 'backend/partials/site_menus.html' %}
+            </div>
+            <!--end::Aside content-->
+        </div>
+        <!--end::Sticky aside-->
+    </div>
+    <!--begin::Content-->
+    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+        <div class="card shadow">
+            <div class="card-header border-0 pt-6">
+                <div class="card-title">
+                    <h3 class="fw-bolder"><i class="las la-clock fs-2 me-2"></i>Manajemen Shift</h3>
+                </div>
+                <div class="card-toolbar">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_add()">
+                        <i class="las la-plus fs-3"></i> Tambah Shift
+                    </button>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive">
+                    <table class="table table-rounded align-middle table-row-bordered border nowrap" id="table-shift">
+                        <thead>
+                            <tr class="fw-bolder text-uppercase bg-light">
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Kode</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Nama Shift</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Jam Mulai</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Jam Selesai</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Status</th>
+                                <th class="align-middle px-2 border-bottom-2 border-gray-200 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal-shift" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered mw-650px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="fw-bolder" id="modal-title">Tambah Shift</h2>
+                        <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                            <i class="las la-times fs-1"></i>
+                        </div>
+                    </div>
+                    <form id="form-shift" onsubmit="return false">
+                        <input type="hidden" name="id" id="shift_id">
+                        <div class="modal-body py-10 px-lg-17">
+                            <!-- Kode Shift -->
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-bold mb-2">Kode Shift</label>
+                                <input type="text" class="form-control form-control-solid" name="kode" id="kode" placeholder="Contoh: S01, S02" required />
+                                <small class="text-danger" id="error-kode"></small>
+                            </div>
+
+                            <!-- Nama Shift -->
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-bold mb-2">Nama Shift</label>
+                                <input type="text" class="form-control form-control-solid" name="nama" id="nama" placeholder="Contoh: Shift Pagi, Shift Malam" required />
+                                <small class="text-danger" id="error-nama"></small>
+                            </div>
+
+                            <!-- Jam Mulai dan Jam Selesai -->
+                            <div class="row g-9 mb-7">
+                                <div class="col-md-6 fv-row">
+                                    <label class="required fs-6 fw-bold mb-2">Jam Mulai</label>
+                                    <input type="time" class="form-control form-control-solid" name="jam_mulai" id="jam_mulai" required />
+                                    <small class="text-danger" id="error-jam_mulai"></small>
+                                </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="required fs-6 fw-bold mb-2">Jam Selesai</label>
+                                    <input type="time" class="form-control form-control-solid" name="jam_selesai" id="jam_selesai" required />
+                                    <small class="text-danger" id="error-jam_selesai"></small>
+                                </div>
+                            </div>
+
+                            <!-- Status Active -->
+                            <div class="fv-row mb-7">
+                                <div class="form-check form-switch form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active" checked />
+                                    <label class="form-check-label fw-bold" for="is_active">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer flex-center">
+                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-primary" id="btn-save" onclick="_save()">
+                                <span class="indicator-label">Simpan</span>
+                                <span class="indicator-progress">Menyimpan...
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/manage_shift.init.js' %}"></script>
+{% endblock %}

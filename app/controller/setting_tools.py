@@ -29,23 +29,71 @@ def index(request):
     return render(request, 'backend/setting_tools.html', context)
 
 def show(request):
-   timbangan_id = request.GET.get('timbangan_id')
-   getRow = MasterTimbangan.objects.filter(id=timbangan_id).first()
-   results = {
-      'rs' : getRow.rs,
-      'port' : getRow.port,
-      'baudrate' : getRow.baudrate,
-      'parity' : getRow.parity,
-      'stopbits' : getRow.stopbits,
-      'bytesize' : getRow.bytesize,
-      'rtsp_camera_1' : getRow.rtsp_camera_1,
-      'rtsp_camera_2' : getRow.rtsp_camera_2,
-      'ip_printer_penimbangan' : getRow.ip_printer_penimbangan,
-      'port_printer_penimbangan' : getRow.port_printer_penimbangan,
-      'is_ip_access_timbang' : getRow.is_ip_access_timbang,
-      'ip_timbang_allowed' : getRow.ip_timbang_allowed,
-   }
-   return json_response(status=True, message='Success', data=results)
+    timbangan_id = request.GET.get('timbangan_id')
+    getRow = MasterTimbangan.objects.filter(id=timbangan_id).first()
+    
+    if not getRow:
+        return json_response(status=False, message='Data tidak ditemukan')
+
+    results = {
+        # Tab UMUM
+        'nama': getRow.nama,
+        'is_active': getRow.is_active,
+        'is_voice': getRow.is_voice,
+        'ws_alat': getRow.ws_alat,
+        
+        # Tab INDICATOR
+        'rs' : getRow.rs,
+        'port' : getRow.port,
+        'baudrate' : getRow.baudrate,
+        'parity' : getRow.parity,
+        'stopbits' : getRow.stopbits,
+        'bytesize' : getRow.bytesize,
+        
+        # Tab CAMERA
+        'rtsp_camera_1' : getRow.rtsp_camera_1,
+        'rtsp_camera_2' : getRow.rtsp_camera_2,
+        'cam_depan_url' : getRow.cam_depan_url,
+        'cam_depan_username' : getRow.cam_depan_username,
+        'cam_depan_password' : getRow.cam_depan_password,
+        'cam_depan_ws' : getRow.cam_depan_ws,
+        'cam_belakang_url' : getRow.cam_belakang_url,
+        'cam_belakang_username' : getRow.cam_belakang_username,
+        'cam_belakang_password' : getRow.cam_belakang_password,
+        'cam_belakang_ws' : getRow.cam_belakang_ws,
+        
+        # Tab PRINTER
+        'is_print_struk' : getRow.is_print_struk,
+        'ip_printer_penimbangan' : getRow.ip_printer_penimbangan,
+        'port_printer_penimbangan' : getRow.port_printer_penimbangan,
+        
+        # Tab LPR & RFID
+        'is_lpr' : getRow.is_lpr,
+        'username_camera_lpr' : getRow.username_camera_lpr,
+        'password_camera_lpr' : getRow.password_camera_lpr,
+        'ip_camera_lpr' : getRow.ip_camera_lpr,
+        'cam_lpr_ws' : getRow.cam_lpr_ws,
+        'is_auto_lpr' : getRow.is_auto_lpr,
+        'is_rfid' : getRow.is_rfid,
+        'ip_rfid' : getRow.ip_rfid,
+
+        # Tambahan Tab GATE
+        'is_gate' : getRow.is_gate,
+        'ip_pintu_antrian' : getRow.ip_pintu_antrian,
+        'port_pintu_antrian' : getRow.port_pintu_antrian,
+        'addr_ibg_antrian' : getRow.addr_ibg_antrian,
+        'ip_pintu_penimbangan' : getRow.ip_pintu_penimbangan,
+        'port_pintu_penimbangan' : getRow.port_pintu_penimbangan,
+        'addr_ibg_penimbangan' : getRow.addr_ibg_penimbangan,
+        # Tambahan Tab DIMENSI
+        'is_lidar' : getRow.is_lidar,
+        'api_url_sensor_dim' : getRow.api_url_sensor_dim,
+
+        # Tab AKSES
+        'is_ip_access_timbang' : getRow.is_ip_access_timbang,
+        'ip_timbang_allowed' : getRow.ip_timbang_allowed,
+    }
+    return json_response(status=True, message='Success', data=results)
 
 def update(request):
     try:
@@ -54,34 +102,67 @@ def update(request):
 
         if alat:
             category = request.POST.get('category')
-            print(category)
-            # Update
-            if category == 'INDICATOR':
+            
+            if category == 'UMUM':
+                alat.nama = request.POST.get('nama')
+                alat.ws_alat = request.POST.get('ws_alat')
+                alat.is_active = 'Y' if request.POST.get('is_active') else 'N'
+                alat.is_voice = 'Y' if request.POST.get('is_voice') else 'N'
+                
+            elif category == 'INDICATOR':
                 alat.rs = request.POST.get('rs').upper()
                 alat.port = request.POST.get('port').upper()
                 alat.baudrate = request.POST.get('baudrate')
                 alat.parity = request.POST.get('parity')
                 alat.stopbits = request.POST.get('stopbits')
                 alat.bytesize = request.POST.get('bytesize')
+                
             elif category == 'CAMERA':
                 alat.rtsp_camera_1 = request.POST.get('rtsp_camera_1')
                 alat.rtsp_camera_2 = request.POST.get('rtsp_camera_2')
+                alat.cam_depan_url = request.POST.get('cam_depan_url')
+                alat.cam_depan_username = request.POST.get('cam_depan_username')
+                alat.cam_depan_password = request.POST.get('cam_depan_password')
+                alat.cam_depan_ws = request.POST.get('cam_depan_ws')
+                alat.cam_belakang_url = request.POST.get('cam_belakang_url')
+                alat.cam_belakang_username = request.POST.get('cam_belakang_username')
+                alat.cam_belakang_password = request.POST.get('cam_belakang_password')
+                alat.cam_belakang_ws = request.POST.get('cam_belakang_ws')
+                
             elif category == 'PRINTER_STRUK':
+                alat.is_print_struk = 'Y' if request.POST.get('is_print_struk') else 'N'
                 alat.ip_printer_penimbangan = request.POST.get('ip_printer_penimbangan')
                 alat.port_printer_penimbangan = request.POST.get('port_printer_penimbangan')
+
+            elif category == 'LPR_RFID':
+                alat.is_lpr = 'Y' if request.POST.get('is_lpr') else 'N'
+                alat.is_auto_lpr = 'Y' if request.POST.get('is_auto_lpr') else 'N'
+                alat.is_rfid = 'Y' if request.POST.get('is_rfid') else 'N'
+                alat.ip_rfid = request.POST.get('ip_rfid')
+                alat.ip_camera_lpr = request.POST.get('ip_camera_lpr')
+                alat.username_camera_lpr = request.POST.get('username_camera_lpr')
+                alat.password_camera_lpr = request.POST.get('password_camera_lpr')
+                alat.cam_lpr_ws = request.POST.get('cam_lpr_ws')
+            elif category == 'GATE':
+                alat.is_gate = 'Y' if request.POST.get('is_gate') else 'N'
+                alat.ip_pintu_antrian = request.POST.get('ip_pintu_antrian')
+                alat.port_pintu_antrian = request.POST.get('port_pintu_antrian')
+                alat.addr_ibg_antrian = request.POST.get('addr_ibg_antrian')
+                alat.ip_pintu_penimbangan = request.POST.get('ip_pintu_penimbangan')
+                alat.port_pintu_penimbangan = request.POST.get('port_pintu_penimbangan')
+                alat.addr_ibg_penimbangan = request.POST.get('addr_ibg_penimbangan')
+            elif category == 'DIMENSI': # <-- Kategori Simpan Baru
+                alat.is_lidar = 'Y' if request.POST.get('is_lidar') else 'N'
+                alat.api_url_sensor_dim = request.POST.get('api_url_sensor_dim')
             elif category == 'AKSES_PENIMBANGAN':
                 alat.is_ip_access_timbang = 'Y' if request.POST.get('is_ip_access_timbang') else 'N'
                 alat.ip_timbang_allowed = request.POST.get('ip_timbang_allowed')
 
-            # save
             alat.save()
-            results = {
-                'category' : category,
-                'timbangan_id' : timbangan_id
-            }
-            return json_response(status=True, message="Konfigurasi alat berhasil diperbarui", data=results)
+            results = {'category' : category, 'timbangan_id' : timbangan_id}
+            return json_response(status=True, message="Konfigurasi berhasil diperbarui", data=results)
         else:
-            return json_response(status=False, message="Credentials error")
+            return json_response(status=False, message="Platform timbangan tidak ditemukan")
     except Exception as e:
         return json_response(status=False, message=str(e), code=401)
     

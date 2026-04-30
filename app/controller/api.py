@@ -5,6 +5,8 @@ from app.models import LokasiUppkb
 from django.conf import settings
 from datetime import date, datetime
 import re
+import os
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 def login_pusat():
     lokasi  = LokasiUppkb.objects.first()
@@ -153,6 +155,26 @@ def send_penimbangan_to_pusat(row):
         "plate_no_img_url": "",
     }
 
+    multipart_fields = {}
+    for key, value in payload.items():
+        if value is not None:
+            multipart_fields[key] = str(value)
+    
+    if getattr(item, 'foto_depan', None):
+        path_depan = os.path.join(settings.BASE_DIR, 'static', 'dist', 'img', 'penimbangan', item.foto_depan)
+        if os.path.exists(path_depan):
+            multipart_fields['fotoDepan'] = ('foto_depan.jpg', open(path_depan, 'rb'), 'image/jpeg')
+            print(f"✅ STREAMING: Gambar Foto Depan disiapkan -> {path_depan}")
+
+    if getattr(item, 'foto_belakang', None):
+        path_belakang = os.path.join(settings.BASE_DIR, 'static', 'dist', 'img', 'penimbangan', item.foto_belakang)
+        if os.path.exists(path_belakang):
+            multipart_fields['fotoBelakang'] = ('foto_belakang.jpg', open(path_belakang, 'rb'), 'image/jpeg')
+            print(f"✅ STREAMING: Gambar Foto Belakang disiapkan -> {path_belakang}")
+
+    m = MultipartEncoder(fields=multipart_fields)
+    headers["Content-Type"] = m.content_type
+
     try:
         print("=========================================")
         print("PENGIRIMAN DATA PENIMBANGAN KENDARAAN:")
@@ -162,7 +184,7 @@ def send_penimbangan_to_pusat(row):
         # return {"success": False, "data": {}}
 
         timeout=(5, 30)
-        response = requests.post(end_point, json=payload, headers=headers, timeout=timeout)
+        response = requests.post(end_point, data=m, headers=headers, timeout=timeout)
 
         print("\nRESPON DARI SERVER:")
         print("===================================")

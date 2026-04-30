@@ -3,11 +3,10 @@ from django.http import HttpResponse, JsonResponse
 from app.models import LokasiUppkb, DataPenimbangan, MasterPelanggaran, DataPelanggaran, MasterJenisPelanggaran, MasterKomoditi, DataKotaKab, MasterTimbangan, MasterRegu, MasterShift, MasterJenisKendaraan, UserSystem, DataPenindakan, Pengadilan, Sanksi, Sitaan, SubSanksi, DataSdm
 from django.templatetags.static import static
 from django.db.models import Q
-from datetime import date
-from .utils import json_response, convert_timezone
+from datetime import date, datetime, time
+from .utils import json_response
 import locale, os
-from datetime import datetime, date, time
-from django.utils.timezone import now, make_aware, get_current_timezone
+from django.utils.timezone import now
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 from django.template.loader import render_to_string
@@ -47,8 +46,8 @@ def show(request):
         print(f"Tanggal   : {filter_date or '-'}")
         print("="*40)
         
-        tz = get_current_timezone()
         def parse_id_datetime(s: str, is_end: bool = False) -> datetime:
+            """Parse datetime dari format Indonesian DD/MM/YYYY tanpa timezone"""
             s = s.strip()
             for fmt in ("%d/%m/%Y %H:%M", "%d/%m/%Y"):
                 try:
@@ -66,11 +65,8 @@ def show(request):
         # ============================
         start_str, end_str = filter_date.split(" - ")
 
-        start_naive = parse_id_datetime(start_str, is_end=False)
-        end_naive   = parse_id_datetime(end_str, is_end=True)
-
-        start_datetime = make_aware(start_naive, timezone=tz)
-        end_datetime   = make_aware(end_naive, timezone=tz)
+        start_datetime = parse_id_datetime(start_str, is_end=False)
+        end_datetime   = parse_id_datetime(end_str, is_end=True)
 
         # ============================
         # QUERY
@@ -131,8 +127,7 @@ def show(request):
                             onclick="_printSuratTilang('Y', '{penimbangan.id}');">
                         <i class="ki-solid ki-printer fs-6"></i>Blanko
                     </button>
-                """
-            tgl_penindakan = convert_timezone(penindakan.tgl_penindakan, request.COOKIES.get('timezone'))            
+                """        
             
             pelanggaran = 'TIDAK MELANGGAR'
             if penimbangan.is_melanggar == 'Y':
@@ -170,7 +165,7 @@ def show(request):
             data.append({
                 'sink': statusPengiriman,
                 'action': action,
-                'waktu': tgl_penindakan.strftime('%d/%m/%Y %H:%M'),
+                'waktu': penindakan.tgl_penindakan.strftime('%d/%m/%Y %H:%M'),
                 'no_kendaraan': penimbangan.no_kendaraan,
                 'nama_pengemudi': penindakan.nama_pengemudi,
                 'alamat_pengemudi': penindakan.alamat_pengemudi,
@@ -209,7 +204,6 @@ def export(request):
 
     lokasi = LokasiUppkb.objects.first()
 
-    tz = get_current_timezone()
     def parse_id_datetime(s: str, is_end: bool = False) -> datetime:
         s = s.strip()
         for fmt in ("%d/%m/%Y %H:%M", "%d/%m/%Y"):
@@ -231,8 +225,8 @@ def export(request):
     start_naive = parse_id_datetime(start_str, is_end=False)
     end_naive   = parse_id_datetime(end_str, is_end=True)
 
-    start_datetime = make_aware(start_naive, timezone=tz)
-    end_datetime   = make_aware(end_naive, timezone=tz)
+    start_datetime = parse_id_datetime(start_str, is_end=False)
+    end_datetime   = parse_id_datetime(end_str, is_end=True)
 
     # ============================
     # QUERY
@@ -263,8 +257,7 @@ def export(request):
     # ============================
     data = []
     for penindakan in query:
-        penimbangan = DataPenimbangan.objects.filter(kode_trx=penindakan.kode_trx).first()
-        tgl_penindakan = convert_timezone(penindakan.tgl_penindakan, request.COOKIES.get('timezone'))            
+        penimbangan = DataPenimbangan.objects.filter(kode_trx=penindakan.kode_trx).first()         
         pelanggaran = 'TIDAK MELANGGAR'
         if penimbangan.is_melanggar == 'Y':
             pelanggaran_qs = DataPelanggaran.objects.filter(kode_trx=penimbangan.kode_trx)
@@ -299,7 +292,7 @@ def export(request):
                 sanksi_tambahan = ", ".join(s.keterangan for s in sanksi_tambahan_qs)
 
         data.append({
-            'waktu': tgl_penindakan.strftime('%d/%m/%Y %H:%M'),
+            'waktu': penindakan.tgl_penindakan.strftime('%d/%m/%Y %H:%M'),
             'no_kendaraan': penimbangan.no_kendaraan,
             'nama_pengemudi': penindakan.nama_pengemudi,
             'alamat_pengemudi': penindakan.alamat_pengemudi,

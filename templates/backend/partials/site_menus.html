@@ -16,6 +16,26 @@
     <!--begin::Menu item-->
     <div class="menu-item mb-3">
         <!--begin::Marked-->
+        <a href="{% url 'manage_shift' %}" class="menu-link text-dark {% if active_menu == 'manage_shift' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26 fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Shift</span>
+        </a>
+        <!--end::Marked-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Marked-->
+        <a href="{% url 'manage_regu' %}" class="menu-link text-dark {% if active_menu == 'manage_regu' %}active{% endif %}">
+            <span class="menu-icon"><i class="ki-solid ki-abstract-26 fs-2 me-3"></i></span>
+            <span class="menu-title fw-bold">Regu</span>
+        </a>
+        <!--end::Marked-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Marked-->
         <a href="{% url 'data_sdm' %}" class="menu-link text-dark {% if active_menu == 'data_sdm' %}active{% endif %}">
             <span class="menu-icon"><i class="ki-solid ki-profile-user fs-2 me-3"></i></span>
             <span class="menu-title fw-bold">Pusat Data SDM</span>
@@ -39,6 +59,16 @@
         <a href="{% url 'setting_tools' %}" class="menu-link text-dark {% if active_menu == 'setting_tools' %}active{% endif %}">
             <span class="menu-icon"><i class="bi bi-tools fs-3 me-3"></i></span>
             <span class="menu-title fw-bold">Konfigurasi Alat</span>
+        </a>
+        <!--end::Marked-->
+    </div>
+    <!--end::Menu item-->
+    <!--begin::Menu item-->
+    <div class="menu-item mb-3">
+        <!--begin::Marked-->
+        <a href="{% url 'sync_data_pusat' %}" class="menu-link text-dark {% if active_menu == 'sync_data_pusat' %}active{% endif %}">
+            <span class="menu-icon"><i class="las la-cloud-download-alt fs-3 me-3"></i></span>
+            <span class="menu-title fw-bold">Sinkronisasi</span>
         </a>
         <!--end::Marked-->
     </div>

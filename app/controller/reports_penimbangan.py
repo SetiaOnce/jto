@@ -4,10 +4,10 @@ from app.models import LokasiUppkb, DataPenimbangan, MasterPelanggaran, DataPela
 from django.templatetags.static import static
 from django.db.models import Q
 from datetime import date
-from .utils import json_response, convert_timezone
+from .utils import json_response
 import locale, os
 from datetime import datetime, date, time
-from django.utils.timezone import now, make_aware, get_current_timezone
+from django.utils.timezone import now
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill, Border, Side
 from django.template.loader import render_to_string
@@ -34,14 +34,13 @@ def show(request):
         filter_date = str(request.GET.get('filter_date') or '')
         search = request.GET.get('search')
 
-        tz = get_current_timezone()
-
         def parse_id_datetime(s: str, is_end=False):
+            """Parse datetime dari format Indonesian DD/MM/YYYY tanpa timezone"""
             s = s.strip()
             for fmt in ("%d/%m/%Y %H:%M", "%d/%m/%Y"):
                 try:
                     dt = datetime.strptime(s, fmt)
-                    # kalau hanya tanggal
+                    # Kalau hanya tanggal
                     if fmt == "%d/%m/%Y":
                         if is_end:
                             dt = datetime.combine(dt.date(), time.max)
@@ -55,12 +54,8 @@ def show(request):
         # ===== parsing filter =====
         start_str, end_str = filter_date.split(" - ")
 
-        start_naive = parse_id_datetime(start_str, is_end=False)
-        end_naive   = parse_id_datetime(end_str, is_end=True)
-
-        # jadikan timezone aware
-        start_datetime = make_aware(start_naive, timezone=tz)
-        end_datetime   = make_aware(end_naive, timezone=tz)
+        start_datetime = parse_id_datetime(start_str, is_end=False)
+        end_datetime = parse_id_datetime(end_str, is_end=True)
 
         # ===== Query =====
         base_filter = DataPenimbangan.objects.filter(
@@ -124,13 +119,13 @@ def show(request):
             print(f"Tanggal   : {filter_date or '-'}")
             print("="*40)
 
-            tz = get_current_timezone()
             def parse_id_datetime(s: str) -> datetime:
+                """Parse datetime dari format Indonesian DD/MM/YYYY tanpa timezone"""
                 s = (s or "").strip()
                 for fmt in ("%d/%m/%Y %H:%M", "%d/%m/%Y"):
                     try:
                         dt = datetime.strptime(s, fmt)
-                        # kalau cuma tanggal, set jam default
+                        # Kalau cuma tanggal, set jam default
                         if fmt == "%d/%m/%Y":
                             dt = datetime.combine(dt.date(), time.min)
                         return dt
@@ -140,14 +135,11 @@ def show(request):
             
             start_str, end_str = [x.strip() for x in filter_date.split(" - ")]
 
-            start_naive = parse_id_datetime(start_str)
-            end_naive   = parse_id_datetime(end_str)
+            start_datetime = parse_id_datetime(start_str)
+            end_datetime = parse_id_datetime(end_str)
 
-            # kalau end hanya sampai menit dan kamu mau include 59 detik:
-            end_naive = end_naive.replace(second=59, microsecond=999999)
-
-            start_datetime = make_aware(start_naive, timezone=tz)
-            end_datetime   = make_aware(end_naive, timezone=tz)
+            # Set end time ke 23:59:59.999999 untuk include full day
+            end_datetime = end_datetime.replace(hour=23, minute=59, second=59, microsecond=999999)
 
             query = DataPenimbangan.objects.order_by("-tgl_penimbangan").filter(
                 tgl_penimbangan__range=(start_datetime, end_datetime)
@@ -215,7 +207,6 @@ def show(request):
                         <img src="{foto_belakang}" class="rounded" alt="foto-penimbangan1" title="FOTO PENIMBANGAN - 2" width="72px">
                     </a>
                 '''
-                tgl_penimbangan = convert_timezone(penimbangan.tgl_penimbangan, request.COOKIES.get('timezone'))
                 
                 pelanggaran = 'TIDAK MELANGGAR'
                 if penimbangan.is_melanggar == 'Y':
@@ -246,7 +237,7 @@ def show(request):
                     'status': statusPengiriman,
                     'melanggar': melanggarCustom,
                     'action': action,
-                    'waktu': tgl_penimbangan.strftime('%d/%m/%Y %H:%M'),
+                    'waktu': penimbangan.tgl_penimbangan.strftime('%d/%m/%Y %H:%M'),
                     'timbangan': timbangan.nama if timbangan else '-',
                     'foto_depan': foto_depan,
                     'foto_belakang': foto_belakang,
@@ -302,10 +293,6 @@ def export(request):
 
     lokasi = LokasiUppkb.objects.first()
 
-    # ============================
-    # FILTER TANGGAL + JAM (AMAN)
-    # ============================
-    tz = get_current_timezone()
 
     def parse_id_datetime(s: str, is_end: bool = False) -> datetime:
         s = s.strip()
@@ -325,9 +312,8 @@ def export(request):
     start_naive = parse_id_datetime(start_str, is_end=False)
     end_naive   = parse_id_datetime(end_str, is_end=True)
 
-    start_dt = make_aware(start_naive, timezone=tz)
-    end_dt   = make_aware(end_naive, timezone=tz)
-
+    start_dt = datetime.combine(start_naive, time.min)
+    end_dt = datetime.combine(end_naive, time.max)
     # ============================
     # QUERY DASAR
     # ============================
@@ -362,9 +348,7 @@ def export(request):
     for p in query:
         melanggar = "TIDAK MELANGGAR" if p.is_melanggar == "N" else "MELANGGAR"
         
-        tgl_local = convert_timezone(
-            p.tgl_penimbangan, request.COOKIES.get("timezone")
-        ).strftime('%d-%m-%Y %H:%M:%S')
+        tgl_local = p.tgl_penimbangan.strftime('%d-%m-%Y %H:%M:%S')
 
         # Ambil Pelanggaran
         pelanggaran = "TIDAK MELANGGAR"

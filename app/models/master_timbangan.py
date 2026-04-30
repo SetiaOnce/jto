@@ -49,7 +49,17 @@ class MasterTimbangan(models.Model):
     password_camera_lpr = models.CharField(max_length=250)
     ip_camera_lpr = models.CharField(max_length=250)
     is_rfid = models.CharField(max_length=1)
-
+    ip_rfid = models.CharField(max_length=50, null=True, blank=True)
+    # --- FIELD BARU: GATE / PINTU ---
+    is_gate = models.CharField(max_length=1, default='N') # <-- Baru
+    ip_pintu_antrian = models.CharField(max_length=255, null=True, blank=True)
+    port_pintu_antrian = models.IntegerField(default=5801)
+    addr_ibg_antrian = models.CharField(max_length=30, null=True, blank=True)
+    ip_pintu_penimbangan = models.CharField(max_length=255, null=True, blank=True)
+    port_pintu_penimbangan = models.IntegerField(default=5801)
+    addr_ibg_penimbangan = models.CharField(max_length=30, null=True, blank=True)
+    is_lidar = models.CharField(max_length=1, default='N')
+    api_url_sensor_dim = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.nama
     

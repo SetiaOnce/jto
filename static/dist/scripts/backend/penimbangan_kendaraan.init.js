@@ -384,7 +384,7 @@ const loadDimentionsResults = (value) => {
         tinggi_kendaraan = +$('#tinggi_utama').val();
 
         if (panjang_kendaraan === 0 && lebar_kendaraan === 0 && tinggi_kendaraan === 0) {
-            is_melanggar_dimensi = true;
+            is_melanggar_dimensi = false;
             return false;
         }
 
@@ -548,6 +548,10 @@ const _clearFormPenimbangan = () => {
     vms_plat_nomor = ''; vms_jbi = '0'; vms_berat = '0';
     vms_lebih = '0'; vms_persentase = '0'; vms_tilang = '';
     is_form_pengemudi = true;
+    
+    // Tambahkan 2 baris ini:
+    is_melanggar_daya_angkut = false;
+    is_melanggar_dimensi = false;
 
     $("#form-penimbangan")[0].reset();
     $('#no_kendaraan').focus();
@@ -629,26 +633,26 @@ $("#btn-save").on("click", function(e) {
     if (!fields.pemilik_komoditi.val()) return errMsg('Pemilik komoditi masih kosong...', fields.pemilik_komoditi);
     if (!fields.alamat_pemilik_komoditi.val()) return errMsg('Alamat pemilik komoditi masih kosong...', fields.alamat_pemilik_komoditi);
 
-    if (is_form_pengemudi) {
-        const drv = {
-            nama: $("#nama_pengemudi"),
-            alamat: $("#alamat_pengemudi"),
-            jk: $("#jenis_kelamin_pengemudi"),
-            umur: $("#umur_pengemudi"),
-            telp: $("#no_telepon"),
-            warna: $("#warna_kendaraan"),
-            sim: $("#gol_sim_id"),
-            no_id: $("#no_identitas"),
-        };
-        if (!drv.nama.val()) return errMsg('Nama pengemudi masih kosong...', drv.nama);
-        if (!drv.alamat.val()) return errMsg('Alamat pengemudi masih kosong...', drv.alamat);
-        if (!drv.jk.val()) return errMsg('Jenis kelamin masih kosong...', drv.jk);
-        if (!drv.umur.val()) return errMsg('Umur pengemudi masih kosong...', drv.umur);
-        if (!drv.telp.val()) return errMsg('Nomor telepon masih kosong...', drv.telp);
-        if (!drv.warna.val()) return errMsg('Warna kendaraan masih kosong...', drv.warna);
-        if (!drv.sim.val()) return errMsg('Gol SIM/Identitas masih kosong...', drv.sim);
-        if (!drv.no_id.val()) return errMsg('Nomor SIM/Identitas masih kosong...', drv.no_id);
-    }
+    // if (is_form_pengemudi) {
+    //     const drv = {
+    //         nama: $("#nama_pengemudi"),
+    //         alamat: $("#alamat_pengemudi"),
+    //         jk: $("#jenis_kelamin_pengemudi"),
+    //         umur: $("#umur_pengemudi"),
+    //         telp: $("#no_telepon"),
+    //         warna: $("#warna_kendaraan"),
+    //         sim: $("#gol_sim_id"),
+    //         no_id: $("#no_identitas"),
+    //     };
+    //     if (!drv.nama.val()) return errMsg('Nama pengemudi masih kosong...', drv.nama);
+    //     if (!drv.alamat.val()) return errMsg('Alamat pengemudi masih kosong...', drv.alamat);
+    //     if (!drv.jk.val()) return errMsg('Jenis kelamin masih kosong...', drv.jk);
+    //     if (!drv.umur.val()) return errMsg('Umur pengemudi masih kosong...', drv.umur);
+    //     if (!drv.telp.val()) return errMsg('Nomor telepon masih kosong...', drv.telp);
+    //     if (!drv.warna.val()) return errMsg('Warna kendaraan masih kosong...', drv.warna);
+    //     if (!drv.sim.val()) return errMsg('Gol SIM/Identitas masih kosong...', drv.sim);
+    //     if (!drv.no_id.val()) return errMsg('Nomor SIM/Identitas masih kosong...', drv.no_id);
+    // }
 
     Swal.fire({
         title: "", html: "Simpan Penimbangan ?", icon: "question",

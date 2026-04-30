@@ -91,6 +91,10 @@ DATABASES = {
         'PASSWORD': '',
         'HOST':'127.0.0.1',
         'PORT':'3306',
+        'OPTIONS': {
+            'init_command': "SET time_zone='+08:00'",
+            'charset': 'utf8mb4',
+        }
     }
 }
 
@@ -119,8 +123,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-USE_TZ = True
-TIME_ZONE = "Asia/Jakarta"
+USE_TZ = False
+TIME_ZONE = 'Asia/Makassar'
 
 USE_I18N = True
 

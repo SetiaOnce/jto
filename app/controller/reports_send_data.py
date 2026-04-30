@@ -4,10 +4,10 @@ from app.models import LokasiUppkb, DataPenimbangan, MasterPelanggaran, MasterKo
 from django.templatetags.static import static
 from django.db.models import Q
 from datetime import date, time
-from .utils import json_response, convert_timezone
+from .utils import json_response
 import locale, os
 from datetime import datetime, timedelta
-from django.utils.timezone import now, make_aware
+from django.utils.timezone import now
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from django.template.loader import render_to_string
@@ -42,20 +42,15 @@ def show(request):
         start_date_str, end_date_str = filter_date.split(" - ")
         start_date = datetime.strptime(start_date_str, "%d/%m/%Y").date()
         end_date = datetime.strptime(end_date_str, "%d/%m/%Y").date()
-        start_datetime = make_aware(datetime.combine(start_date, time.min))
-        end_datetime = make_aware(datetime.combine(end_date, time.max))
+
+        start_datetime = datetime.combine(start_date, time.min)
+        end_datetime = datetime.combine(end_date, time.max)
 
         query = DataPenindakan.objects.filter(
             # is_send_to_pusat='N',
         )
         if filter_date:
             query = query.filter(tgl_penindakan__range=(start_datetime, end_datetime))
-        # if filter_tujuan and filter_tujuan != 'ALL':
-        #     if filter_tujuan == 'BPTD':
-        #         query = query.filter(is_send_to_balai='N')
-        #     if filter_tujuan == 'KEMENHUB':
-        #         query = query.filter(is_send_to_pusat='N')
-        # else:
         query = query.filter(is_send_to_pusat='N')
 
         if filter_sanksi and filter_sanksi != 'ALL':
@@ -101,15 +96,10 @@ def show(request):
             action = f"""<button type="button" class="btn btn-sm btn-success mb-1 ms-1" data-bs-toggle="tooltip" title="Kirim penindakan!" onclick="sendDataPenindakan('{penindakan.id}');"><i class="ki-outline ki-send"></i>Kirim</button>
             """
 
-            tgl_penindakan = convert_timezone(
-                penindakan.tgl_penindakan,
-                request.COOKIES.get('timezone')
-            )
-
             data.append({
                 'no': f"{index:,}" if index else '-',
                 'no_kendaraan': penindakan.no_kendaraan,
-                'waktu': tgl_penindakan.strftime('%d/%m/%Y %H:%M'),
+                'waktu': penindakan.tgl_penindakan.strftime('%d/%m/%Y %H:%M'),
                 'nama_ppns': penindakan.nama_ppns,
                 'pelanggaran': pelanggaran,
                 'sanksi': sanksi_name,
@@ -148,9 +138,9 @@ def show(request):
             start_date_str, end_date_str = filter_date.split(" - ")
             start_date = datetime.strptime(start_date_str, "%d/%m/%Y").date()
             end_date = datetime.strptime(end_date_str, "%d/%m/%Y").date()
-            # Buat datetime aware
-            start_datetime = make_aware(datetime.combine(start_date, time.min))
-            end_datetime = make_aware(datetime.combine(end_date, time.max))
+
+            start_datetime = datetime.combine(start_date, time.min)
+            end_datetime = datetime.combine(end_date, time.max)
             # Query seperti biasa
             query = DataPenimbangan.objects.order_by('-tgl_penimbangan').filter(
                 is_transaksi=1,
@@ -219,7 +209,6 @@ def show(request):
                         <img src="{foto_belakang}" class="rounded" alt="foto-penimbangan1" title="FOTO PENIMBANGAN - 2" width="72px">
                     </a>
                 '''
-                tgl_penimbangan = convert_timezone(penimbangan.tgl_penimbangan, request.COOKIES.get('timezone'))
                 
                 pelanggaran = 'TIDAK MELANGGAR'
                 if penimbangan.is_melanggar == 'Y':
@@ -250,7 +239,7 @@ def show(request):
                     'status': statusPengiriman,
                     'melanggar': melanggarCustom,
                     'action': action,
-                    'waktu': tgl_penimbangan.strftime('%d/%m/%Y %H:%M'),
+                    'waktu': penimbangan.tgl_penimbangan.strftime('%d/%m/%Y %H:%M'),
                     'timbangan': timbangan.nama if timbangan else '-',
                     'foto_depan': foto_depan,
                     'foto_belakang': foto_belakang,
@@ -328,8 +317,9 @@ def send(request):
         if pelanggaran_ids:
             setattr(kendaraan, 'pelanggaran_ids', pelanggaran_ids)
 
-        tgl_penimbangan = convert_timezone(kendaraan.tgl_penimbangan, request.COOKIES.get('timezone'))
-        tgl_antrian = convert_timezone(kendaraan.tgl_antrian, request.COOKIES.get('timezone'))
+        tgl_penimbangan = kendaraan.tgl_penimbangan
+        tgl_antrian = kendaraan.tgl_antrian
+
         setattr(kendaraan, 'tgl_penimbangan', tgl_penimbangan)
         setattr(kendaraan, 'tgl_antrian', tgl_antrian)
         # ==============================

@@ -31,25 +31,30 @@ def index(request):
 
 def show(request):
     if 'is_show_laporan' in request.GET:
-        tz = timezone.get_current_timezone()
         filter_date = request.GET.get('filter_date')
 
-        if filter_date:
-            start_str, end_str = filter_date.split(" - ")
+        def parse_id_datetime(s: str, is_end: bool = False) -> datetime:
+            """Parse datetime dari format YYYY-MM-DD HH:MM tanpa timezone"""
+            s = (s or "").strip()
+            for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d"):
+                try:
+                    dt = datetime.strptime(s, fmt)
+                    if fmt == "%Y-%m-%d":
+                        dt = datetime.combine(dt.date(), time.max if is_end else time.min)
+                    return dt
+                except ValueError:
+                    continue
+            raise ValueError(f"Format tanggal tidak valid: {s}")
 
-            start_dt = timezone.make_aware(
-                datetime.strptime(start_str, "%Y-%m-%d %H:%M"),
-                tz
-            )
-            end_dt = timezone.make_aware(
-                datetime.strptime(end_str, "%Y-%m-%d %H:%M"),
-                tz
-            )
+        if filter_date:
+            start_str, end_str = [x.strip() for x in filter_date.split(" - ")]
+            start_dt = parse_id_datetime(start_str, is_end=False)
+            end_dt = parse_id_datetime(end_str, is_end=True)
         else:
-            # fallback hari ini
-            today = timezone.now()
-            start_dt = today.replace(hour=0, minute=0, second=0, microsecond=0)
-            end_dt   = today.replace(hour=23, minute=59, second=59, microsecond=999999)
+            # fallback hari ini (naive datetime)
+            today = now().replace(hour=0, minute=0, second=0, microsecond=0)
+            start_dt = today
+            end_dt = today.replace(hour=23, minute=59, second=59, microsecond=999999)
 
         # ===== Query utama =====
         summary = (
@@ -111,27 +116,32 @@ def show(request):
 
 def export(request):
     lokasi = LokasiUppkb.objects.first()
-    tz = timezone.get_current_timezone()
 
     export_type = request.GET.get('export_type')
     filter_date = request.GET.get('filter_date')
 
-    if filter_date:
-        start_str, end_str = filter_date.split(" - ")
+    def parse_id_datetime(s: str, is_end: bool = False) -> datetime:
+        """Parse datetime dari format YYYY-MM-DD HH:MM tanpa timezone"""
+        s = (s or "").strip()
+        for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d"):
+            try:
+                dt = datetime.strptime(s, fmt)
+                if fmt == "%Y-%m-%d":
+                    dt = datetime.combine(dt.date(), time.max if is_end else time.min)
+                return dt
+            except ValueError:
+                continue
+        raise ValueError(f"Format tanggal tidak valid: {s}")
 
-        start_dt = timezone.make_aware(
-            datetime.strptime(start_str, "%Y-%m-%d %H:%M"),
-            tz
-        )
-        end_dt = timezone.make_aware(
-            datetime.strptime(end_str, "%Y-%m-%d %H:%M"),
-            tz
-        )
+    if filter_date:
+        start_str, end_str = [x.strip() for x in filter_date.split(" - ")]
+        start_dt = parse_id_datetime(start_str, is_end=False)
+        end_dt = parse_id_datetime(end_str, is_end=True)
     else:
-        # fallback hari ini
-        today = timezone.now()
-        start_dt = today.replace(hour=0, minute=0, second=0, microsecond=0)
-        end_dt   = today.replace(hour=23, minute=59, second=59, microsecond=999999)
+        # fallback hari ini (naive datetime)
+        today = now().replace(hour=0, minute=0, second=0, microsecond=0)
+        start_dt = today
+        end_dt = today.replace(hour=23, minute=59, second=59, microsecond=999999)
 
     # ===== Query utama =====
     summary = (

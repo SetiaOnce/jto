@@ -26,7 +26,7 @@ const _loadDtLaporan = () => {
                 bodyContent += `
                     <tr class="${bg_secondary}">
                         <td class="text-center" width="20%">${row.time}</td>
-                        <td class="text-center">0</td>
+                        <td class="text-center">${row.kendaraan_under}</td>
                         ${tbodyKelebihanMuatan}
                         <td class="text-center">${row.kendaraan_melanggar}</td>
                     </tr>

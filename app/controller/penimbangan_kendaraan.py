@@ -5,10 +5,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
 from django.conf import settings
 from app.models import DataPenimbangan, MasterKendaraan, LokasiUppkb, DataPelanggaran, MasterJenisPelanggaran, MasterKomoditi, MasterSumbu, MasterJenisKendaraan, DataKotaKab, MasterTimbangan, KomoditiAsalTujuanPengemudi, MasterRegu, LprBlue, SensorDimensi, KendaraanBodong
-from django.utils import timezone
 from django.db.models import Q
 from django.utils.text import slugify
-from .utils import json_response, get_device_ip, generate_kode_trx, convert_timezone, play_combined_voices, generate_voice, convertMp3, generate_kode_trx_bodong
+from .utils import json_response, get_device_ip, generate_kode_trx, play_combined_voices, generate_voice, convertMp3, generate_kode_trx_bodong
 from .common import save_kendaraan, save_komoditi_asaltujuan_pengemudi
 from escpos.printer import Network
 from escpos.image import Image
@@ -280,14 +279,11 @@ def show(request):
                 no_kendaraan=no_kendaraan
             ).order_by('-tgl_penimbangan')
 
-            timezone_user = request.COOKIES.get('timezone')
-
             kendaraan_list = []
 
             for r in queryset:
-                tgl_penimbangan = convert_timezone(r.tgl_penimbangan, request.COOKIES.get('timezone'))
-                tanggal_timbang =  tgl_penimbangan.strftime('%d/%m/%Y');
-                jam_timbang = tgl_penimbangan.strftime('%H:%M:%S');
+                tanggal_timbang =  r.tgl_penimbangan.strftime('%d/%m/%Y');
+                jam_timbang = r.tgl_penimbangan.strftime('%H:%M:%S');
                 kendaraan_list.append({
                     'id': str(r.id),
                     'kode_trx': r.kode_trx,
@@ -447,15 +443,14 @@ def show(request):
                 tujuan_kota = DataKotaKab.objects.filter(id=penimbangan.tujuan_kota_id).first()
                 if not tujuan_kota:
                     return json_response(status=False, message="Tujuan kota tidak ditemukan", code=400)
-                tgl_penimbangan = convert_timezone(penimbangan.tgl_penimbangan, request.COOKIES.get('timezone'))
                 row = {
                     'id_penimbangan': penimbangan.id,
                     'kode_trx': penimbangan.kode_trx,
                     'noken': penimbangan.no_kendaraan,
                     'nouji': penimbangan.no_uji,
                     'masa_akhir_uji': penimbangan.tgl_masa_berlaku.strftime('%d/%m/%Y'),
-                    'tanggal_timbang': tgl_penimbangan.strftime('%d/%m/%Y'),
-                    'jam_timbang': tgl_penimbangan.strftime('%H:%M:%S'),
+                    'tanggal_timbang': penimbangan.tgl_penimbangan.strftime('%d/%m/%Y'),
+                    'jam_timbang': penimbangan.tgl_penimbangan.strftime('%H:%M:%S'),
                     'jbi': penimbangan.jbi_uji,
                     'berat_timbangan': penimbangan.berat_timbang,
                     'kelebihan_berat': penimbangan.kelebihan_berat,
@@ -522,7 +517,6 @@ def show(request):
             return json_response(status=True, message='Success', data=count)
         if 'is_load_lpr' in request.GET:
             timbangan_id = int(request.COOKIES.get('timbangan_id', 0))
-            time_zone = int(request.COOKIES.get('timezone', 8))
             
             kendaraan_found = (
                 LprBlue.objects
@@ -573,9 +567,8 @@ def show(request):
 
                 asal_kota = DataKotaKab.objects.filter(id=r.asal_kota_id).first()
                 tujuan_kota = DataKotaKab.objects.filter(id=r.tujuan_kota_id).first()
-                tgl_penimbangan = convert_timezone(r.tgl_penimbangan, request.COOKIES.get('timezone'))
-                tanggal_timbang =  tgl_penimbangan.strftime('%d/%m/%Y');
-                jam_timbang = tgl_penimbangan.strftime('%H:%M:%S');
+                tanggal_timbang =  r.tgl_penimbangan.strftime('%d/%m/%Y');
+                jam_timbang = r.tgl_penimbangan.strftime('%H:%M:%S');
 
                 # ==============================
                 # GET PELANGGARAN
@@ -660,6 +653,7 @@ def show(request):
             return json_response(status=True, message='Success', data=row)
         else:
             current_time = datetime.now()
+
             timbangan_id = request.COOKIES.get('timbangan_id')
             timbangan = MasterTimbangan.objects.filter(id=timbangan_id).first()
             # Params datatables
@@ -669,12 +663,11 @@ def show(request):
             search = request.GET.get('search[value]', '').strip()
             
             # Ambil waktu lokal sekarang (WITA)
-            now_local = timezone.localtime(timezone.now())
-            date_today = now_local.date()
+            date_today = datetime.now().date()
 
             # Gabungkan dengan time min/max
-            start_datetime = timezone.make_aware(datetime.combine(date_today, time.min), timezone.get_current_timezone())
-            end_datetime = timezone.make_aware(datetime.combine(date_today, time.max), timezone.get_current_timezone())
+            start_datetime = datetime.combine(date_today, time.min)
+            end_datetime = datetime.combine(date_today, time.max)
 
             query = DataPenimbangan.objects.filter(
                 is_transaksi=1,
@@ -706,12 +699,11 @@ def show(request):
                         <button type="button" class="btn btn-icon btn-circle btn-sm btn-danger mb-1 ms-1" data-bs-toggle="tooltip" title="Hapus data!" onclick="_deleteData('{penimbangan.id}');"><i class="las la-trash fs-3"></i></button>
                     '''
 
-                tgl_penimbangan = convert_timezone(penimbangan.tgl_penimbangan, request.COOKIES.get('timezone'))
                 data.append({
                     'no': f"{index:,}" if index else '-',
                     'no_kendaraan': penimbangan.no_kendaraan,
                     'no_uji': penimbangan.no_uji,
-                    'waktu': tgl_penimbangan.strftime('%H:%M'),
+                    'waktu': penimbangan.tgl_penimbangan.strftime('%H:%M'),
                     'nama_pemilik': penimbangan.nama_pemilik,
                     'jbi_uji': penimbangan.jbi_uji,
                     'berat_timbang': penimbangan.berat_timbang,
@@ -752,6 +744,7 @@ def store(request):
             # USER AND DATETIME
             # ==============================
             current_time = datetime.now()
+
             user = request.user
             
             no_kendaraan       = (request.POST.get('no_kendaraan_bd') or "").replace(" ", "").upper()
@@ -872,6 +865,7 @@ def store(request):
             timbangan = MasterTimbangan.objects.filter(id=timbangan_id).first()
             # User Penimbangan
             current_time = datetime.now()
+
             user = request.user
             is_from_antrian = request.POST.get('is_from_antrian')
             lokasi = LokasiUppkb.objects.first()
@@ -956,7 +950,7 @@ def store(request):
             umur_pengemudi              = request.POST.get('umur_pengemudi') or 0
             no_telepon                  = request.POST.get('no_telepon') or 0
             warna_kendaraan             = request.POST.get('warna_kendaraan') or '-'
-            gol_sim_id                  = request.POST.get('gol_sim_id')
+            gol_sim_id                  = request.POST.get('gol_sim_id') or 0
             no_identitas                = request.POST.get('no_identitas') or 0
             # ==============================
             # KOMODITI, SUMBU, JENIS KENDARAAN, ASAL, TUJUAN
@@ -1085,7 +1079,7 @@ def store(request):
                 penimbangan.sumbu_id=sumbu.id
                 penimbangan.pemilik_komoditi=pemilik_komoditi
                 penimbangan.alamat_pemilik_komoditi=alamat_pemilik_komoditi
-                # penimbangan.tgl_penimbangan=current_time
+                penimbangan.tgl_penimbangan=current_time
                 penimbangan.no_surat_jalan=nomor_surat_jalan
                 penimbangan.panjang_utama=panjang_utama
                 penimbangan.panjang_toleransi=lokasi.toleransi_panjang or 0
@@ -1193,7 +1187,7 @@ def store(request):
                     kode_trx=kode_trx,
                     kode_uppkb=lokasi.kode,
                     timbangan_id=timbangan_id,
-                    # tgl_penimbangan=current_time,
+                    tgl_penimbangan=current_time,
                     no_kendaraan=no_kendaraan,
                     no_uji=no_uji,
                     tgl_uji=tanggal_uji,
@@ -1226,7 +1220,7 @@ def store(request):
                     sumbu_id=sumbu.id,
                     pemilik_komoditi=pemilik_komoditi,
                     alamat_pemilik_komoditi=alamat_pemilik_komoditi,
-                    # tgl_antrian=current_time,
+                    tgl_antrian=current_time,
                     no_surat_jalan=nomor_surat_jalan,
                     
                     panjang_utama=panjang_utama,
@@ -1327,9 +1321,6 @@ def print_struk(request):
     if not penimbangan:
         return json_response(status=False, message="Data penimbangan tidak ditemukan", code=400)
 
-    # convertMp3()
-    # asyncio.run(generate_voice('DAN', 'DAN.mp3'))
-    # return json_response(status=False, message="Data penimbangan tidak ditemukan", code=400)
     play_voices = []
     status_melanggar = "TIDAK MELANGGAR"
 
@@ -1359,17 +1350,10 @@ def print_struk(request):
     play_voices += ["AMBIL_STRUK.mp3", "TERIMA_KASIH.mp3"]
 
     # ==============================
-    # PLAY VOICE (JIKA AKTIF)
-    # ==============================
-    # if timbangan and timbangan.is_voice == "Y":
-    #     audio_url = play_combined_voices(play_voices)
-    # else:
-    #     audio_url = None
-
-    # ==============================
     # CETAK STRUK (JIKA AKTIF)
     # ==============================
     if timbangan and timbangan.is_print_struk == "Y":
+        
         # Ambil data relasi
         komoditi = MasterKomoditi.objects.filter(id=penimbangan.komoditi_id).select_related("kategori_komoditi").first()
         asal_kota = DataKotaKab.objects.filter(id=penimbangan.asal_kota_id).first()
@@ -1404,9 +1388,8 @@ def print_struk(request):
             printer.text(f"{lokasi.nama.upper()}\n")
             printer.set(bold=False)
             printer.text("------------------------------------------------\n")
-            tgl_penimbangan = convert_timezone(penimbangan.tgl_penimbangan, request.COOKIES.get('timezone'))
-            tanggal_timbang =  tgl_penimbangan.strftime('%d/%m/%Y');
-            jam_timbang = tgl_penimbangan.strftime('%H:%M:%S');
+            tanggal_timbang =  penimbangan.tgl_penimbangan.strftime('%d/%m/%Y');
+            jam_timbang = penimbangan.tgl_penimbangan.strftime('%H:%M:%S');
             # ==============================
             # BODY STRUK
             # ==============================

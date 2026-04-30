@@ -21,7 +21,10 @@ from .controller import (
     reports_penimbangan,
     reports_penindakan,
     reports_komoditi,
-    reports_kendaraan_bodong
+    reports_kendaraan_bodong,
+    sync_data_pusat,
+    manage_shift,
+    manage_regu
 )
 
 urlpatterns = [
@@ -41,6 +44,7 @@ urlpatterns = [
                 path('dashboard', dashboard.index, name='dashboard'),
                 path('users_access', users_access.index, name='users_access'),
                 path('setting_tools', setting_tools.index, name='setting_tools'),
+                path('sync_data_pusat', sync_data_pusat.index, name='sync_data_pusat'),
                 path('data_sdm', data_sdm.index, name='data_sdm'),
                 path('manage_site_info', manage_site_info.index, name='manage_site_info'),
                 path('pendataan', pendataan_kendaraan.index, name='pendataan_kendaraan'),
@@ -145,4 +149,44 @@ urlpatterns = [
     # Send Data
     path('api/send_data/show', reports_send_data.show, name='show_send_data'),
     path('api/send_data/send', reports_send_data.send, name='send_send_data'),
+
+    path('api/sync_pusat/bptd', sync_data_pusat.sync_bptd, name='api_sync_bptd'),
+    path('api/sync_pusat/lokasi', sync_data_pusat.sync_lokasi, name='api_sync_lokasi'),
+    path('api/sync_pusat/jeniskendaraan', sync_data_pusat.sync_jenis_kendaraan, name='api_sync_jenis_kendaraan'),
+    path('api/sync_pusat/sumbu', sync_data_pusat.sync_sumbu, name='api_sync_sumbu'),
+    path('api/sync_pusat/golsim', sync_data_pusat.sync_gol_sim, name='api_sync_gol_sim'),
+    path('api/sync_pusat/toleransikomoditi', sync_data_pusat.sync_toleransi_komoditi, name='api_sync_toleransi_komoditi'),
+    path('api/sync_pusat/toleransidimensi', sync_data_pusat.sync_toleransi_dimensi, name='api_sync_toleransi_dimensi'),
+    path('api/sync_pusat/kategorikepemilikan', sync_data_pusat.sync_kategori_kepemilikan, name='api_sync_kategori_kepemilikan'),
+    path('api/sync_pusat/dokumen', sync_data_pusat.sync_dokumen, name='api_sync_dokumen'),
+    path('api/sync_pusat/jenispelanggaran', sync_data_pusat.sync_jenispelanggaran, name='api_sync_jenispelanggaran'),
+    path('api/sync_pusat/sanksi', sync_data_pusat.sync_sanksi, name='api_sync_sanksi'),
+    path('api/sync_pusat/subsanksi', sync_data_pusat.sync_subsanksi, name='api_sync_subsanksi'),
+    path('api/sync_pusat/sitaan', sync_data_pusat.sync_sitaan, name='api_sync_sitaan'),
+    path('api/sync_pusat/pasal', sync_data_pusat.sync_pasal, name='api_sync_pasal'),
+    path('api/sync_pusat/provinsi', sync_data_pusat.sync_provinsi, name='api_sync_provinsi'),
+    path('api/sync_pusat/kotakab', sync_data_pusat.sync_kotakab, name='api_sync_kotakab'),
+    path('api/sync_pusat/kategorikomoditi', sync_data_pusat.sync_kategori_komoditi, name='api_sync_kategori_komoditi'),
+    path('api/sync_pusat/komoditi/metadata', sync_data_pusat.get_komoditi_metadata, name='api_sync_komoditi_metadata'),
+    path('api/sync_pusat/komoditi/page', sync_data_pusat.sync_komoditi_page, name='api_sync_komoditi_page'),
+    path('api/sync_pusat/kendaraan/metadata', sync_data_pusat.get_kendaraan_metadata, name='api_sync_kendaraan_metadata'),
+    path('api/sync_pusat/kendaraan/page', sync_data_pusat.sync_kendaraan_page, name='api_sync_kendaraan_page'),
+
+    path('api/sync_pusat/data_bptd', sync_data_pusat.show_bptd, name='api_show_bptd'),
+    path('api/sync_pusat/data_lokasi', sync_data_pusat.show_lokasi, name='api_show_lokasi'),
+    path('api/sync_pusat/data_kategori', sync_data_pusat.show_kategori_komoditi, name='api_show_kategori'),
+    path('api/sync_pusat/data_komoditi', sync_data_pusat.show_master_komoditi, name='api_show_komoditi'),
+    path('api/sync_pusat/data_kendaraan', sync_data_pusat.show_data_kendaraan, name='api_show_data_kendaraan'),
+
+    path('manage_shift', manage_shift.index, name='manage_shift'),
+    path('api/manage_shift/list', manage_shift.list_data, name='list_manage_shift'),
+    path('api/manage_shift/show', manage_shift.show, name='show_manage_shift'),
+    path('api/manage_shift/store', manage_shift.store, name='store_manage_shift'),
+    path('api/manage_shift/delete', manage_shift.delete, name='delete_manage_shift'),
+
+    path('manage_regu', manage_regu.index, name='manage_regu'),
+    path('api/manage_regu/list', manage_regu.list_data, name='list_manage_regu'),
+    path('api/manage_regu/show', manage_regu.show, name='show_manage_regu'),
+    path('api/manage_regu/store', manage_regu.store, name='store_manage_regu'),
+    path('api/manage_regu/delete', manage_regu.delete, name='delete_manage_regu'),
 ]

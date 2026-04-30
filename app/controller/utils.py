@@ -47,11 +47,15 @@ def addToLog(desc):
     return True
 
 def time_ago(datetime_obj, full=False):
-    # Pastikan datetime_obj aware
-    if datetime_obj.tzinfo is None:
-        datetime_obj = make_aware(datetime_obj)
+    # Pastikan datetime_obj NAIVE dengan membuang tzinfo-nya
+    if datetime_obj.tzinfo is not None:
+        datetime_obj = datetime_obj.replace(tzinfo=None)
 
-    current_time = now()  # Gunakan timezone-aware datetime
+    # now() di sini akan mereturn naive local time karena USE_TZ=False
+    current_time = now()
+    if current_time.tzinfo is not None:
+         current_time = current_time.replace(tzinfo=None)
+
     time_difference = current_time - datetime_obj
     seconds = time_difference.total_seconds()
 
@@ -100,27 +104,63 @@ def get_device_ip(request):
 def get_datetimenow(dt: datetime = None) -> datetime:
     from .common import get_site_info 
     site_info = get_site_info()
+    
     if dt is None:
-        dt = datetime.utcnow().replace(tzinfo=timezone.utc)
+        # Gunakan utcnow() yang menghasilkan naive datetime secara natural
+        dt = datetime.utcnow()
 
-    target_timezone = timezone(timedelta(hours=site_info['timezone']))
-    return dt.astimezone(target_timezone)
+    # Hitung waktu lokal dengan manipulasi timedelta biasa
+    # Ini menjaga hasil akhirnya tetap naive (tidak ada benturan USE_TZ=False)
+    target_time = dt + timedelta(hours=site_info['timezone'])
+    return target_time
 
 def convert_timezone(dt, tz_value):
     if not dt:
         return None
 
-    # pastikan aware UTC
+    # Pastikan aware UTC untuk proses konversi
     if timezone_utils.is_naive(dt):
         dt = timezone_utils.make_aware(dt, dt_timezone.utc)
 
-    try:
-        offset = int(tz_value)  # misal "7"
-        tz = pytz.FixedOffset(offset * 60)
-    except Exception:
-        tz = pytz.UTC
+    tz = None
 
-    return timezone_utils.localtime(dt, tz)
+    # Coba sebagai nama timezone dulu (e.g. "Asia/Makassar")
+    try:
+        tz = pytz.timezone(str(tz_value))
+    except pytz.exceptions.UnknownTimeZoneError:
+        pass
+
+    # Fallback: coba sebagai integer offset (e.g. "8")
+    if tz is None:
+        try:
+            offset = int(tz_value)
+            tz = pytz.FixedOffset(offset * 60)
+        except (ValueError, TypeError):
+            pass
+
+    # Last resort fallback ke Asia/Makassar
+    if tz is None:
+        tz = pytz.timezone('Asia/Makassar')
+
+    # Konversi ke lokal, LALU copot tzinfo-nya agar menjadi naive
+    local_dt = timezone_utils.localtime(dt, tz)
+    return local_dt.replace(tzinfo=None)
+
+# def convert_timezone(dt, tz_value):
+#     if not dt:
+#         return None
+
+#     # pastikan aware UTC
+#     if timezone_utils.is_naive(dt):
+#         dt = timezone_utils.make_aware(dt, dt_timezone.utc)
+
+#     try:
+#         offset = int(tz_value)  # misal "7"
+#         tz = pytz.FixedOffset(offset * 60)
+#     except Exception:
+#         tz = pytz.UTC
+
+#     return timezone_utils.localtime(dt, tz)
 
 RED = "\033[91m"
 YELLOW = "\033[93m"

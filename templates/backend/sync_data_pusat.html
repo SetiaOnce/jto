@@ -1,0 +1,821 @@
+{% extends 'backend/layouts.html' %}
+{% load static %}
+{% block mainContent %}
+<div class="d-flex flex-column flex-lg-row">
+    <!-- Sidebar -->
+    <div class="d-none d-lg-flex flex-column flex-lg-row-auto w-100 w-lg-275px" data-kt-drawer="true" data-kt-drawer-name="inbox-aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_inbox_aside_toggle"> 
+        <div class="card card-flush mb-0 shadow" data-kt-sticky="true" data-kt-sticky-name="inbox-aside-sticky" data-kt-sticky-offset="{default: false, xl: '100px'}" data-kt-sticky-width="{lg: '275px'}" data-kt-sticky-left="auto" data-kt-sticky-top="100px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+            <div class="card-body">
+                {% include 'backend/partials/site_menus.html' %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+        <div class="card shadow">
+            <div class="card-body">
+                <!-- Header -->
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-7">
+                    <div class="mb-3 mb-md-0">
+                        <h3 class="fw-bolder m-0"><i class="las la-sync fs-2 me-2"></i>Sinkronisasi Data Pusat</h3>
+                        <span class="text-muted fs-7">Kelola sinkronisasi dan tampilkan data dari API pusat</span>
+                    </div>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#kt_tab_sync_buttons" role="tab">
+                            <span class="d-flex align-items-center">
+                                <i class="la la-cloud-upload-alt fs-3 me-2"></i>Sinkronisasi
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_bptd_table" role="tab">
+                            <span class="d-flex align-items-center">
+                                <i class="la la-building fs-3 me-2"></i>Data BPTD <span class="badge badge-light-primary ms-2" id="badge-bptd">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_lokasi_table" role="tab">
+                            <span class="d-flex align-items-center">
+                                <i class="la la-map-marker-alt fs-3 me-2"></i>Lokasi UPPKB <span class="badge badge-light-success ms-2" id="badge-lokasi">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_kategori_table" role="tab">
+                            <span class="d-flex align-items-center">
+                                <i class="la la-folder-open fs-3 me-2"></i>Kategori Komoditi <span class="badge badge-light-warning ms-2" id="badge-kategori">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_komoditi_table" role="tab">
+                            <span class="d-flex align-items-center">
+                                <i class="la la-boxes fs-3 me-2"></i>Master Komoditi <span class="badge badge-light-danger ms-2" id="badge-komoditi">0</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="myTabContent">
+
+                    <!-- TAB 1: SINKRONISASI BUTTONS -->
+                    <div class="tab-pane fade show active" id="kt_tab_sync_buttons" role="tabpanel">
+
+                        <!-- ── Section 1: Sinkronisasi Utama ────────────────────── -->
+                        <div class="mb-8">
+                            <div class="d-flex align-items-center mb-4">
+                                <span class="bullet bullet-vertical h-30px bg-primary me-3"></span>
+                                <h5 class="fw-bold text-gray-800 m-0">Sinkronisasi Utama</h5>
+                                <span class="badge badge-light-primary ms-3 fs-8">2 item</span>
+                            </div>
+                            <div class="row g-4">
+
+                                <!-- BPTD -->
+                                <div class="col-md-6">
+                                    <div class="card border border-2 border-primary bg-light-primary h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-between gap-4">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="symbol symbol-50px">
+                                                    <span class="symbol-label bg-primary">
+                                                        <i class="la la-building fs-2x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="text-gray-900 fw-bolder m-0">Sinkronisasi Data BPTD</h6>
+                                                    <span class="text-muted fs-8">Tarik data terbaru dari API pusat</span>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-sm btn-sync flex-shrink-0" data-type="BPTD" style="min-width:140px">
+                                                <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sinkronisasi</span>
+                                                <span class="indicator-progress">Proses... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- LOKASI -->
+                                <div class="col-md-6">
+                                    <div class="card border border-2 border-success bg-light-success h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-between gap-4">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="symbol symbol-50px">
+                                                    <span class="symbol-label bg-success">
+                                                        <i class="la la-map-marker-alt fs-2x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="text-gray-900 fw-bolder m-0">Sinkronisasi Lokasi UPPKB</h6>
+                                                    <span class="text-muted fs-8">Limit 300 data per sinkronisasi</span>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-success btn-sm btn-sync flex-shrink-0" data-type="LOKASI" style="min-width:140px">
+                                                <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sinkronisasi</span>
+                                                <span class="indicator-progress">Proses... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ── Section 2: Master Data Referensi ─────────────────── -->
+                        <div class="mb-8">
+                            <div class="d-flex align-items-center mb-4">
+                                <span class="bullet bullet-vertical h-30px bg-warning me-3"></span>
+                                <h5 class="fw-bold text-gray-800 m-0">Master Data Referensi</h5>
+                                <span class="badge badge-light-warning ms-3 fs-8">15 item</span>
+                            </div>
+
+                            <div class="card border border-2 border-warning">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-row-bordered table-row-gray-200 align-middle gs-5 gy-0 mb-0">
+                                            <thead class="bg-light-warning">
+                                                <tr class="fw-semibold text-gray-600 fs-8 text-uppercase">
+                                                    <th class="py-3">Nama Data</th>
+                                                    <th class="py-3 text-muted">Keterangan</th>
+                                                    <th class="py-3 text-end pe-5">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <!-- Row helper macro:
+                                                    data-type | label | keterangan
+                                                -->
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Jenis Kendaraan</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data jenis kendaraan</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="JENIS_KENDARAAN">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Sumbu</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data sumbu</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="SUMBU">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Golongan SIM</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data golongan SIM</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="GOL_SIM">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Toleransi Komoditi</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data toleransi komoditi</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="TOLERANSI_KOMODITI">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Toleransi Dimensi</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data toleransi dimensi</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="TOLERANSI_DIMENSI">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Kategori Kepemilikan</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data kategori kepemilikan</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="KATEGORI_KEPEMILIKAN">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Dokumen</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data dokumen</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="DOKUMEN">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Jenis Pelanggaran</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data jenis pelanggaran</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="JENIS_PELANGGARAN">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Sanksi</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data sanksi</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="SANKSI">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Sub Sanksi</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data sub sanksi</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="SUBSANKSI">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Sitaan</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data sitaan</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="SITAAN">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Pasal</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data pasal</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="PASAL">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Provinsi</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data provinsi</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="PROVINSI">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Kabupaten / Kota</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data kabupaten kota</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="KOTAKAB">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <i class="la la-folder-open text-warning fs-4"></i>
+                                                            <span class="fw-semibold text-gray-800">Kategori Komoditi</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted fs-8">Referensi master data komoditi</td>
+                                                    <td class="text-end pe-5">
+                                                        <button type="button" class="btn btn-sm btn-light-warning btn-sync" data-type="KATEGORI_KOMODITI">
+                                                            <span class="indicator-label"><i class="la la-cloud-download-alt me-1"></i>Sync</span>
+                                                            <span class="indicator-progress"><span class="spinner-border spinner-border-sm align-middle"></span></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ── Section 3: Sinkronisasi Besar ────────────────────── -->
+                        <div class="mb-8">
+                            <div class="d-flex align-items-center mb-4">
+                                <span class="bullet bullet-vertical h-30px bg-danger me-3"></span>
+                                <h5 class="fw-bold text-gray-800 m-0">Sinkronisasi Data Besar</h5>
+                                <span class="badge badge-light-danger ms-3 fs-8">Paginated · 100 data/halaman</span>
+                            </div>
+                            <div class="row g-4">
+
+                                <!-- KOMODITI -->
+                                <div class="col-md-6">
+                                    <div class="card border border-2 border-danger bg-light-danger h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-between gap-4">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="symbol symbol-50px">
+                                                    <span class="symbol-label bg-danger">
+                                                        <i class="la la-boxes fs-2x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="text-gray-900 fw-bolder m-0">Master Komoditi</h6>
+                                                    <span class="text-muted fs-8">100 data/halaman · multi-page sync</span>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-danger btn-sm btn-sync-large flex-shrink-0" data-type="KOMODITI" style="min-width:140px">
+                                                <span class="indicator-label"><i class="la la-sync me-1"></i>Sinkronisasi</span>
+                                                <span class="indicator-progress">Proses... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- KENDARAAN -->
+                                <div class="col-md-6">
+                                    <div class="card border border-2 border-info bg-light-info h-100">
+                                        <div class="card-body d-flex align-items-center justify-content-between gap-4">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="symbol symbol-50px">
+                                                    <span class="symbol-label bg-info">
+                                                        <i class="la la-truck fs-2x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="text-gray-900 fw-bolder m-0">Basis Data Kendaraan</h6>
+                                                    <span class="text-muted fs-8">100 data/halaman · multi-page sync</span>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-info btn-sm btn-sync-large flex-shrink-0" data-type="KENDARAAN" style="min-width:140px">
+                                                <span class="indicator-label"><i class="la la-sync me-1"></i>Sinkronisasi</span>
+                                                <span class="indicator-progress">Proses... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ── Progress Bar (TIDAK DIUBAH strukturnya) ───────────── -->
+                        <div id="progress-container" class="card d-none">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold m-0">Progress Sinkronisasi</h5>
+                                    <span class="fw-bold text-danger" id="sync-percent">0%</span>
+                                </div>
+                                <div class="progress h-30px mb-3 bg-light-danger">
+                                    <div id="sync-progress-bar" class="progress-bar bg-danger fw-bold" role="progressbar" style="width: 0%;"></div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="fs-7">
+                                            <strong>Status:</strong> <span id="sync-status" class="badge badge-light-info">Menghubungkan...</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fs-7 text-end">
+                                            <strong>Detail:</strong> <span id="sync-detail" class="text-muted">Halaman 0 dari 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- TAB 2: DATA BPTD TABLE -->
+                    <div class="tab-pane fade" id="kt_tab_bptd_table" role="tabpanel">
+                        <div class="d-flex gap-2 justify-content-between align-items-center mb-5 flex-wrap">
+                            <!-- Left: Dropdown & Search -->
+                            <div class="d-flex gap-2 align-items-center">
+                                <select class="form-select form-select-sm" id="length-bptd" style="width: 80px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <!-- Right: Search & Reload -->
+                            <div class="d-flex gap-2 align-items-center">
+                                <div class="d-flex align-items-center position-relative">
+                                    <i class="la la-search position-absolute ms-3 text-muted"></i>
+                                    <input type="text" id="search-bptd" class="form-control form-control-sm ps-10" placeholder="Pencarian..." style="width: 250px;">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-light" id="reload-bptd">
+                                    <i class="la la-redo fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="table-bptd-container">
+                            <div class="text-center py-10">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: DATA LOKASI TABLE -->
+                    <div class="tab-pane fade" id="kt_tab_lokasi_table" role="tabpanel">
+                        <div class="d-flex gap-2 justify-content-between align-items-center mb-5 flex-wrap">
+                            <div class="d-flex gap-2 align-items-center">
+                                <select class="form-select form-select-sm" id="length-lokasi" style="width: 80px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2 align-items-center">
+                                <div class="d-flex align-items-center position-relative">
+                                    <i class="la la-search position-absolute ms-3 text-muted"></i>
+                                    <input type="text" id="search-lokasi" class="form-control form-control-sm ps-10" placeholder="Pencarian..." style="width: 250px;">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-light" id="reload-lokasi">
+                                    <i class="la la-redo fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="table-lokasi-container">
+                            <div class="text-center py-10">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: KATEGORI KOMODITI TABLE -->
+                    <div class="tab-pane fade" id="kt_tab_kategori_table" role="tabpanel">
+                        <div class="d-flex gap-2 justify-content-between align-items-center mb-5 flex-wrap">
+                            <div class="d-flex gap-2 align-items-center">
+                                <select class="form-select form-select-sm" id="length-kategori" style="width: 80px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2 align-items-center">
+                                <div class="d-flex align-items-center position-relative">
+                                    <i class="la la-search position-absolute ms-3 text-muted"></i>
+                                    <input type="text" id="search-kategori" class="form-control form-control-sm ps-10" placeholder="Pencarian..." style="width: 250px;">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-light" id="reload-kategori">
+                                    <i class="la la-redo fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="table-kategori-container">
+                            <div class="text-center py-10">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: MASTER KOMODITI TABLE -->
+                    <div class="tab-pane fade" id="kt_tab_komoditi_table" role="tabpanel">
+                        <div class="d-flex gap-2 justify-content-between align-items-center mb-5 flex-wrap">
+                            <div class="d-flex gap-2 align-items-center">
+                                <select class="form-select form-select-sm" id="length-komoditi" style="width: 80px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2 align-items-center">
+                                <div class="d-flex align-items-center position-relative">
+                                    <i class="la la-search position-absolute ms-3 text-muted"></i>
+                                    <input type="text" id="search-komoditi" class="form-control form-control-sm ps-10" placeholder="Pencarian..." style="width: 250px;">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-light" id="reload-komoditi">
+                                    <i class="la la-redo fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="table-komoditi-container">
+                            <div class="text-center py-10">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ MODERN TABLE STYLING ============ */
+
+/* Table Container */
+.modern-table-wrapper {
+    background: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Table Styling */
+.modern-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+/* Header Styling */
+.modern-table thead th {
+    background-color: #F5F5F5;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 12px 15px;
+    border-bottom: 2px solid #E5E5E5;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Body Styling */
+.modern-table tbody td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #F0F0F0;
+    vertical-align: middle;
+    color: #555;
+}
+
+/* Row Hover */
+.modern-table tbody tr:hover {
+    background-color: #FAFAFA;
+    transition: background-color 0.2s ease;
+}
+
+/* Highlight Column - Number/Badge Column */
+.modern-table td.highlight-column {
+    background-color: #FFC107;
+    font-weight: 600;
+    color: #000;
+    padding: 14px 15px;
+    border-radius: 4px;
+}
+
+/* Status Badge Styling */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-badge.danger {
+    background-color: #E74C3C;
+    color: #fff;
+}
+
+.status-badge.warning {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.status-badge.success {
+    background-color: #27AE60;
+    color: #fff;
+}
+
+.status-badge.info {
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.status-badge.dark {
+    background-color: #2C3E50;
+    color: #fff;
+}
+
+/* Active Status - Green */
+.modern-table td.active-status {
+    color: #27AE60;
+    font-weight: 600;
+}
+
+/* Inactive Status - Red */
+.modern-table td.inactive-status {
+    color: #E74C3C;
+    font-weight: 600;
+}
+
+/* No. Column */
+.modern-table td.no-column {
+    font-weight: 600;
+    color: #333;
+    width: 50px;
+    text-align: center;
+}
+
+/* Table Responsiveness */
+@media (max-width: 768px) {
+    .modern-table {
+        font-size: 0.85rem;
+    }
+    
+    .modern-table thead th {
+        padding: 10px 8px;
+        font-size: 0.75rem;
+    }
+    
+    .modern-table tbody td {
+        padding: 10px 8px;
+    }
+}
+
+/* No Data Message */
+.no-data-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+
+.no-data-icon {
+    font-size: 3rem;
+    color: #DDD;
+    margin-bottom: 10px;
+}
+
+/* Pagination Controls */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-top: 1px solid #F0F0F0;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.pagination-info strong {
+    color: #333;
+}
+
+/* Pagination Buttons */
+.pagination {
+    margin: 0;
+}
+
+.pagination .page-link {
+    color: #3498DB;
+    border: 1px solid #E5E5E5;
+    background-color: #fff;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.pagination .page-link:hover:not(.disabled) {
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3498DB;
+    border-color: #3498DB;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #CCC;
+    cursor: not-allowed;
+}
+
+/* Form Controls */
+.form-control-sm,
+.form-select-sm {
+    height: 36px;
+    font-size: 0.9rem;
+}
+
+.form-control-sm::placeholder {
+    color: #999;
+}
+</style>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'dist/scripts/backend/time_realtime.init.js' %}"></script>
+<script src="{% static 'dist/scripts/backend/sync_data_pusat.init.js' %}"></script>
+{% endblock %}
